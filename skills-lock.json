@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "skills": {
+    "fastapi": {
+      "source": "fastapi/fastapi",
+      "sourceType": "autoskills-registry",
+      "computedHash": "d1fed430cc3ebe2aa91cb1652d559faa9dc8f2971caaaf4ddd78032881f96cb7"
+    },
+    "fastapi-python": {
+      "source": "mindrally/skills",
+      "sourceType": "autoskills-registry",
+      "computedHash": "7cb81c0e99e34cb1e6b36f02542ebbc689d267bac8e3bc9d0782403cff4f606d"
+    },
+    "fastapi-templates": {
+      "source": "wshobson/agents",
+      "sourceType": "autoskills-registry",
+      "computedHash": "879e20a1640cb1a979adca769e196295466b1810c848673ca939c3fe7c06f5f5"
+    },
+    "pydantic": {
+      "source": "bobmatnyc/claude-mpm-skills",
+      "sourceType": "autoskills-registry",
+      "computedHash": "2173a5225be78c1392ec157dbb1bcfaf8c206aa36f0df35bad5af9461e386dd6"
+    },
+    "python-executor": {
+      "source": "inferen-sh/skills",
+      "sourceType": "autoskills-registry",
+      "computedHash": "2e6c3a689e19bee7533b10d3b9954e38873e6dc3d0db73ff4e693e627f8c92cb"
+    },
+    "python-testing-patterns": {
+      "source": "wshobson/agents",
+      "sourceType": "autoskills-registry",
+      "computedHash": "c8f806cc10a5b3daeb0f5fd31bfaa751019e23e78e2708b7f4de470d6b7ad4e9"
+    }
+  }
+}

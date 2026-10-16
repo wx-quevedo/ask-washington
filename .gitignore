@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+
+# Secrets
+.env
+
+# Source documents and generated data stay local
+data/*
+!data/README.md
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
