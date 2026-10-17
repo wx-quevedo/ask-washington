@@ -14,6 +14,8 @@ dist/
 # Source documents and generated data stay local
 data/*
 !data/README.md
+!data/papers_seed.yaml
+!data/papers.yaml
 
 # Editors and OS
 .vscode/

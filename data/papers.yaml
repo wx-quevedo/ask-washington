@@ -1,0 +1,256 @@
+# Publications for Ask Washington, enriched version (source: publisher pages - Springer, ACM, IEEE - via DOI/Crossref; enriched 2026-10-17).
+# Base list from Google Scholar profile, sorted by citations, snapshot 2026-10-17.
+# Profile totals: 640 citations, h-index 14, i10-index 21, 40 entries.
+# doi, url, venue and abstract filled from publisher pages only; abstracts copied verbatim. Empty = not found. Do not invent.
+profile_url: https://scholar.google.com/citations?user=zPNPhwkAAAAJ
+papers:
+  - id: p01
+    title: "Unity3D-MatLab simulator in real time for robotics applications"
+    year: 2016
+    citations: 88
+    venue: "International Conference on Augmented Reality, Virtual Reality and Computer Graphics (AVR, Springer LNCS)"
+    doi: "10.1007/978-3-319-40621-3_19"
+    url: "https://doi.org/10.1007/978-3-319-40621-3_19"
+    abstract: "This paper presents the implementation of a new 3D simulator applied to the area of robotics. The simulator allows to analyze the performance of different schemes of autonomous and/or tele-operated control in structured environments, partially structured and unstructured. For robot-environment interaction is considered virtual reality software Unity3D, this software exchanges information with MATLAB to execute different control algorithms proposed through the use of shared memory. The exchange of information in real time between the two software is essential because the advanced control algorithms require a feedback from the robot-environment interaction to close the control loop, while the simulated robot updates its kinematic and dynamic parameters depending on controllability variables calculated by MATLAB. Finally, the 3D simulator is evaluated by implementing an autonomous control scheme to solve the problem of path following of a 6DOF robot arm, also the results obtained by implementing the tele-operation scheme for said robot are presented."
+    abstract_source: "https://link.springer.com/chapter/10.1007/978-3-319-40621-3_19"
+    notes: ""
+  - id: p02
+    title: "Augmented reality as a new marketing strategy"
+    year: 2018
+    citations: 55
+    venue: "International Conference on Augmented Reality, Virtual Reality and Computer Graphics (AVR, Springer LNCS)"
+    doi: "10.1007/978-3-319-95270-3_29"
+    url: "https://doi.org/10.1007/978-3-319-95270-3_29"
+    abstract: "This article proposes the development of an augmented reality application that allows the user to preview in real time the product you want to buy, in the same way you can modify the characteristics you want to adjust it to your tastes and needs before making the purchase. The proposal includes the design of the application that incorporates a catalog of living room, dining room and bedroom furniture; the user will be able to modify characteristics of size, color and texture in a way that emphasizes the interaction with the consumer, to this is added the possibility of showing relevant information about the furniture as they are visualized and modified, it allows to reduce the uncertainty of the user and at the same time allow a participatory action where the user is the protagonist. The augmented reality application My Style AR can be used in handheld devices that have support for augmented reality level 2.0."
+    abstract_source: "https://link.springer.com/chapter/10.1007/978-3-319-95270-3_29"
+    notes: ""
+  - id: p03
+    title: "Virtual reality on e-Tourism"
+    year: 2017
+    citations: 54
+    venue: "IT Convergence and Security 2017 (Springer LNEE)"
+    doi: "10.1007/978-981-10-6454-8_13"
+    url: "https://doi.org/10.1007/978-981-10-6454-8_13"
+    abstract: "This article proposes the develop of a dynamic virtual environment that with the consumption of real time data about the state of a place, offer an immersion to the tourist like be at the desired location. The development implements a communication and loader structure from many information sources, manual information data loaded from mobile devices and data loader from collecting equipment that get environmental and atmospheric data. The virtual reality application use Google Maps, and worldwide heightmap to get 3D geographic map models; HTC VIVE and Oculus SDK for support virtual reality experience; and weather API to show the weather information from the desired location in real time. In addition, the proposed virtual reality application emphasizes user interaction on the virtual environment by displaying dynamic and up-to-date information about tourism services."
+    abstract_source: "https://link.springer.com/chapter/10.1007/978-981-10-6454-8_13"
+    notes: "abstract on publisher page is identical to the ACM abstract of p22 (Tourism marketing through virtual environment experience)"
+  - id: p04
+    title: "Virtual reality system for training in automotive mechanics"
+    year: 2017
+    citations: 50
+    venue: "International Conference on Augmented Reality, Virtual Reality and Computer Graphics (AVR, Springer LNCS)"
+    doi: "10.1007/978-3-319-60922-5_14"
+    url: "https://doi.org/10.1007/978-3-319-60922-5_14"
+    abstract: "This article describes a virtual training system for recognition and assembly of automotive components is proposed. The system consists of a virtual reality environment developed with Unity 3D graphics engine, the same one that allows the user to have greater immersion in the teaching-learning process in order to optimize materials, infrastructure, time resources, among other benefits. The proposed system allows the user to select the work environment and the level of difficulty during the training process. The experimental results show the efficiency of the system generated by the man-machine interaction oriented to develop skills in the area of automotive mechanical."
+    abstract_source: "https://link.springer.com/chapter/10.1007/978-3-319-60922-5_14"
+    notes: ""
+  - id: p05
+    title: "Multi-user industrial training and education environment"
+    year: 2018
+    citations: 41
+    venue: "International Conference on Augmented Reality, Virtual Reality and Computer Graphics (AVR, Springer LNCS)"
+    doi: "10.1007/978-3-319-95282-6_38"
+    url: "https://doi.org/10.1007/978-3-319-95282-6_38"
+    abstract: "Currently, virtual reality is presented as a solution to the difficulties for teaching and training in industrial processes in the technical area, so a virtual environment was developed where trainers, users, teachers and students interact as the case may be to carry out processes in the automotive industry such as engine assembly and car body assembly. By carrying out these processes in a virtual environment, the aim is for users to gain skills and become familiar with the activities to be carried out in real life. The easy usability of accessories and the user-friendliness of the immersion in the virtual environment makes the participants have a good experience and in the future show their interest in continuing to use a virtual environment for training or acquiring new knowledge."
+    abstract_source: "https://link.springer.com/chapter/10.1007/978-3-319-95282-6_38"
+    notes: ""
+  - id: p06
+    title: "Transparency of a bilateral tele-operation scheme of a mobile manipulator robot"
+    year: 2016
+    citations: 36
+    venue: "International Conference on Augmented Reality, Virtual Reality and Computer Graphics (AVR, Springer LNCS)"
+    doi: "10.1007/978-3-319-40621-3_18"
+    url: "https://doi.org/10.1007/978-3-319-40621-3_18"
+    abstract: "This work presents the design of a bilateral tele-operation system for a mobile manipulator robot, allowing a human operator to perform complex tasks in remote environments. In the tele-operation system it is proposed that the human operator is immersed in an augmented reality environment to have greater transparency of the remote site. The transparency of a tele-operation system indicates a measure of how the human feels the remote system. In the local site an environment of augmented reality developed in Unity3D is implemented, which through input devices recreates the sensations that the human would feel if he were in the remote site, for which is considered the senses of sight, touch and hearing. These senses help the human operator to “transmit” their ability and experience to the robot to perform a task. Finally, experimental results are reported to verify the performance of the proposed system."
+    abstract_source: "https://link.springer.com/chapter/10.1007/978-3-319-40621-3_18"
+    notes: ""
+  - id: p07
+    title: "Teaching-learning process through VR applied to automotive engineering"
+    year: 2017
+    citations: 30
+    venue: "Proceedings of the 9th International Conference on Education Technology and Computers (ICETC '17, ACM)"
+    doi: "10.1145/3175536.3175580"
+    url: "https://doi.org/10.1145/3175536.3175580"
+    abstract: "This article proposes the implementation of a virtual tool applied to the field of Automotive Engineering, with the aim of strengthening the processes of teaching-learning, so that the student can achieve meaningful learning. The system consists of the implementation of a virtual automotive laboratory, in which you can take guided classes, specific practices and evaluations in the automotive field, allowing greater immersion and interaction during the teaching-learning process in order to optimize resources, materials, infrastructure, time, among other benefits. The system allows to select the working environment and the level of difficulty during the teaching-learning process. At the end of the article we present the results of a usability test of the proposed tool, applied to teachers and students, in order to feed back the application."
+    abstract_source: "https://dl.acm.org/doi/10.1145/3175536.3175580"
+    notes: ""
+  - id: p08
+    title: "Virtual reality integration with force feedback in upper limb rehabilitation"
+    year: 2016
+    citations: 29
+    venue: "International Symposium on Visual Computing (ISVC)"
+    doi: "10.1007/978-3-319-50832-0_25"
+    url: "https://doi.org/10.1007/978-3-319-50832-0_25"
+    abstract: "In this article, it presents an alternative rehabilitation system for upper extremity fine motor skills by using haptic devices implemented in a virtual reality interface. The proposed rehabilitation system develops 3D shapes and textures observed in virtual reality environments, interaction with environments generate specific rehabilitation exercises for conditions in patients to treat their conditions in the upper extremities; the system presents different rehabilitation environments focused on the use of virtual reality. The system is implemented through bilateral Unity3D software interaction with the Novint Falcon device further Oculus Rift and Leap motion is used for total immersion of the patient with the development of virtual reality. The patient performs a path, based in a rehabilitation entertainment brought about by the displacement and force feedback paths, which are based on physiotherapist’s exercises. Developed experimental results show the efficiency of the system, which generates the human interaction-machine, oriented to develop the human ability."
+    abstract_source: "https://link.springer.com/chapter/10.1007/978-3-319-50832-0_25"
+    notes: ""
+  - id: p09
+    title: "Haptic stimulation glove for fine motor rehabilitation in virtual reality environments"
+    year: 2018
+    citations: 28
+    venue: "International Conference on Augmented Reality, Virtual Reality and Computer Graphics (AVR, Springer LNCS)"
+    doi: "10.1007/978-3-319-95282-6_16"
+    url: "https://doi.org/10.1007/978-3-319-95282-6_16"
+    abstract: "This paper presents a fine motor rehabilitation system for upper limbs by using a virtual reality environment. For this purpose, a glove of stimulating bilateral haptic is built, which allows directly to determine the finger’s position through flexibility sensors. Also stimulate the medium and ulnar nerves of hand’s palm by using vibratory actuators in charge of feedback to contact with virtual surfaces. This system is based on bilateral communication between the virtual environment in the Unity 3D graphics engine and the haptic glove. It is responsible for analyzing the movements used by the patient and interact with the Oculus Rift and Leap Motion for an increased immersion of the patient in the virtual rehabilitation environment. In addition, it generates vibrating feedback submitted to contact with virtual objects. The connection and transmission of data is done through wireless technologies in charge of creating a reliable and real time communication. The patient performs exercises based on fine motor rehabilitation which they are feedback with haptic glove and validated by algorithms based on Euclidean distance. The experimental results show the correct operation of the glove and the virtual environments oriented to virtual rehabilitation systems."
+    abstract_source: "https://link.springer.com/chapter/10.1007/978-3-319-95282-6_16"
+    notes: ""
+  - id: p10
+    title: "Virtual training for industrial automation processes through pneumatic controls"
+    year: 2018
+    citations: 26
+    venue: "International Conference on Augmented Reality, Virtual Reality and Computer Graphics (AVR, Springer LNCS)"
+    doi: "10.1007/978-3-319-95282-6_37"
+    url: "https://doi.org/10.1007/978-3-319-95282-6_37"
+    abstract: "This work presents the implementation of virtual environments oriented to managing pneumatic controls applied to industrial processes in order to strengthen training and teaching-learning processes. The implemented application enables the multi-user immersion and interaction with the aim to accomplish predefined tasks to be developed within lab environments and virtualized sceneries for industrial processes. Obtained results show how easy it is to interact with the proposed multi-user environment."
+    abstract_source: "https://link.springer.com/chapter/10.1007/978-3-319-95282-6_37"
+    notes: ""
+  - id: p11
+    title: "Assistance system for rehabilitation and valuation of motor skills"
+    year: 2017
+    citations: 20
+    venue: "International Conference on Augmented Reality, Virtual Reality and Computer Graphics (AVR, Springer LNCS)"
+    doi: "10.1007/978-3-319-60928-7_14"
+    url: "https://doi.org/10.1007/978-3-319-60928-7_14"
+    abstract: "This article proposes a non-invasive system to stimulate the rehabilitation of motor skills, both of the upper limbs and lower limbs. The system contemplates two ambiances for human-computer interaction, depending on the type of motor deficiency that the patient possesses, i.e., for patients with chronic injuries, an augmented reality environment is considered, while virtual reality environments are used in people with minor injuries. In the cases mentioned, the interface allows visualizing both the routine of movements performed by the patient and the actual movement executed by him. This information is relevant for the purpose of (i) stimulating the patient during the execution of rehabilitation, and (ii) evaluation of the movements made so that the therapist can diagnose the progress of the patient’s rehabilitation process. The visual environment developed for this type of rehabilitation provides a systematic application in which the user first analyzes and generates the necessary movements in order to complete the defined task. The results show the efficiency of the system generated by the human-computer interaction oriented to the development of motor skills."
+    abstract_source: "https://link.springer.com/chapter/10.1007/978-3-319-60928-7_14"
+    notes: ""
+  - id: p12
+    title: "Unity3D virtual animation of robots with coupled and uncoupled mechanism"
+    year: 2016
+    citations: 20
+    venue: "International Conference on Augmented Reality, Virtual Reality and Computer Graphics (AVR, Springer LNCS)"
+    doi: "10.1007/978-3-319-40621-3_6"
+    url: "https://doi.org/10.1007/978-3-319-40621-3_6"
+    abstract: "This paper presents the development of the animation of robots in virtual reality environments, whose mechanisms can be coupled -the movement relies on mechanical principles-; and uncoupled mechanisms, i.e., the degrees of freedom are controlled independently via a control unit. Additionally, the present phases to transfer the design of a robot developed in a CAD tool to a virtual simulation environment without being lost the physical characteristics of the original design are showed, for which it is considered the various types of motions that the robot can perform depending on the design. Finally, shows the results obtained from the simulation of motion of a robot hexapod 18DOF and Theo Jansen mechanism."
+    abstract_source: "https://link.springer.com/chapter/10.1007/978-3-319-40621-3_6"
+    notes: ""
+  - id: p13
+    title: "Training for bus bodywork in virtual reality environments"
+    year: 2018
+    citations: 16
+    venue: "International Conference on Augmented Reality, Virtual Reality and Computer Graphics (AVR, Springer LNCS)"
+    doi: "10.1007/978-3-319-95270-3_5"
+    url: "https://doi.org/10.1007/978-3-319-95270-3_5"
+    abstract: "This document presents a virtual training system oriented for learning of electric welding applied to automotive body assembly industry. The training tasks are developed in a virtual immersion environment created with Unity 3D graphic software, in order to improve the user’s skills and welding skills through a teaching-learning process that allows the virtual manipulation of industrial instruments. In this way, the experience in welding task is obtained, risks of industrial accidents are reduced and waste is eliminated. The experimental results show the behavior of the system and the evolution of the user’s skills."
+    abstract_source: "https://link.springer.com/chapter/10.1007/978-3-319-95270-3_5"
+    notes: ""
+  - id: p14
+    title: "Oil processes VR training"
+    year: 2018
+    citations: 15
+    venue: "Advances in Visual Computing - International Symposium on Visual Computing (ISVC, Springer LNCS)"
+    doi: "10.1007/978-3-030-03801-4_62"
+    url: "https://doi.org/10.1007/978-3-030-03801-4_62"
+    abstract: "In this paper a virtual reality solution is developed to emulate the environment and the operations of the pitching and receiving traps of pipe scrapers (PIG), with the aim of reinforcing the training of operators in oil camps. To develop this, the information was collected on various pitching and receiving traps of the real pipeline operating companies in the country, thus defining the basic and specific parameters for the virtual recreation of a typical trap model. The 3d models obtains from P&ID’s diagrams to interact with user. The environment, interaction and behavior of pipes was developed in a graphic engine, to make training tasks with real state procedures on the oil industry. The goal is save time, money, resources in the training and learning specific oil industry; and make available a base to simulate another complex process."
+    abstract_source: "https://link.springer.com/chapter/10.1007/978-3-030-03801-4_62"
+    notes: ""
+  - id: p15
+    title: "Immersive industrial process environment from a P&ID diagram"
+    year: 2016
+    citations: 14
+    venue: "Advances in Visual Computing - International Symposium on Visual Computing (ISVC, Springer LNCS)"
+    doi: "10.1007/978-3-319-50835-1_63"
+    url: "https://doi.org/10.1007/978-3-319-50835-1_63"
+    abstract: "This work presents the development of an interactive and intuitive three-dimensional Human Machine Interface, based on Virtual Reality, which emulates the operation of an industrial plant and contains a two-dimensional Human Machine Interface for control and monitoring a process of one or more variables, applying the concept of user immersion in the virtual environment. The application is performed by using Computer Aided Design software and a graphics engine. Furthermore, experimental results are presented and discussed to validate the proposed system applied to a real process of a plant."
+    abstract_source: "https://link.springer.com/chapter/10.1007/978-3-319-50835-1_63"
+    notes: ""
+  - id: p16
+    title: "Performance of WebGL standard for displaying 3D applications on mobile devices"
+    year: 2021
+    citations: 11
+    venue: "2021 16th Iberian Conference on Information Systems and Technologies (CISTI), IEEE"
+    doi: "10.23919/cisti52073.2021.9476391"
+    url: "https://doi.org/10.23919/cisti52073.2021.9476391"
+    abstract: "The development of 3D applications for consumption in browsers involves the use of the WebGL standard, whose performance determines the user experience and portability for mobile devices. In this context, this paper proposes to analyze the performance of a 3D application that uses the WebGL standard to run in browsers, taking into account mobile devices. Initial results show that the use of compression formats, connection speeds and browsers influence the loading times, performance and build size of the project. Thus, the user experience can be acceptable or deplorable."
+    abstract_source: "https://ieeexplore.ieee.org/document/9476391"
+    notes: ""
+  - id: p17
+    title: "Teaching-learning of basic language of signs through didactic games"
+    year: 2017
+    citations: 11
+    venue: "Proceedings of the 9th International Conference on Education Technology and Computers (ICETC '17, ACM)"
+    doi: "10.1145/3175536.3175584"
+    url: "https://doi.org/10.1145/3175536.3175584"
+    abstract: "This article presents the development of a didactic game for the teaching-learning of the basic language of Ecuadorian signs, for the hearing impaired and / or interested in learning the basic sign language of Ecuador. The input device is a Leap Motion, which detects the gestural signals in the Unity3D software. For the processing of the signals, there is a classification system implemented in MatLab for the two types of signal configuration: static and dynamic; correlation is used if the configuration is static (no motion signal) and the DTW algorithm is used for dynamic (motion signal) configurations. Communication between Unity3D and MatLab is done using shared memory. This development core acquires a didactic use with two games, implemented in Unity3D for single player and multiplayer."
+    abstract_source: "https://dl.acm.org/doi/10.1145/3175536.3175584"
+    notes: ""
+  - id: p18
+    title: "Realism in audiovisual stimuli for phobias treatments through virtual environments"
+    year: 2017
+    citations: 11
+    venue: "International Conference on Augmented Reality, Virtual Reality and Computer Graphics (AVR, Springer LNCS)"
+    doi: "10.1007/978-3-319-60928-7_16"
+    url: "https://doi.org/10.1007/978-3-319-60928-7_16"
+    abstract: "This article proposes a system of perception of the real world through audiovisual stimulation for the treatment of different types of phobias. The proposed system is made up of various virtual environments which will be selected according to the phobia to be treated, i.e., the user-environment integration depends on the type and degree of the phobia. The interface allows visualize the environment where the patient must comply with a predetermined therapy by the psychotherapist, in which the biometric signals of the patient are feed back in real time through wearables devices. This information is processed in order to ingest directly in the algorithm of the user’s behavior; algorithm that controls the audiovisual stimuli related to the phobia during the interaction of the virtual environment with the user. In addition, the parameters of the biometric signals are displayed graphically/numerically in the virtual environment in order for the patient to control their behavior and face their irrational fear-phobia. The results are validated based on the realism of the virtual environments developed, and the audio-visual stimuli applied to the patient based on the change of the parameters of the biometric signals acquired through wearable devices."
+    abstract_source: "https://link.springer.com/chapter/10.1007/978-3-319-60928-7_16"
+    notes: ""
+  - id: p19
+    title: "Virtual rehabilitation system for fine motor skills using a functional hand orthosis"
+    year: 2018
+    citations: 10
+    venue: "International Conference on Augmented Reality, Virtual Reality and Computer Graphics (AVR, Springer LNCS)"
+    doi: "10.1007/978-3-319-95282-6_6"
+    url: "https://doi.org/10.1007/978-3-319-95282-6_6"
+    abstract: "This article describes a virtual rehabilitation system with work and entertainment environments to treat fine motor injuries through an active orthosis. The system was developed in the Unity 3D graphic engine, which allows the patient greater immersion in the rehabilitation process through proposed activities; to identify the movement performed, the Myo armband is used, a device capable of receiving and sending the signals obtained to a mathematical algorithm which will classify these signals and activate the physical hand orthosis completing the desired movement. The benefits of the system is the optimization of resources, infrastructure and personnel, since the therapy will be assisted by the same virtual environment, in addition it allows selecting the virtual environment and the activity to be carried out according to the disability present in the patient. The results show the correct functioning of the system performed."
+    abstract_source: "https://link.springer.com/chapter/10.1007/978-3-319-95282-6_6"
+    notes: ""
+  - id: p20
+    title: "Virtual reality system for assistance in treating respiratory disorders"
+    year: 2018
+    citations: 10
+    venue: "International Conference on Augmented Reality, Virtual Reality and Computer Graphics (AVR, Springer LNCS)"
+    doi: "10.1007/978-3-319-95282-6_9"
+    url: "https://doi.org/10.1007/978-3-319-95282-6_9"
+    abstract: "This paper presents a virtual reality app for pulmonary diseases treatment in children through VR game, which consists of visual and auditory stimulation thus the therapy won’t be annoying to the patient. The procedure consists of a previous stage of respiratory training which the patient is asked for a deep inhalation followed by an exhalation, both within a period of 3 to 6 s and requested 3 times. The app will offer the patient different activities in a virtual environment depending on the inhalation and exhalation exercise required by the stages of their therapy, using HTC VIVE virtual reality glasses. Recognition of inhalation and exhalation exercises is performed using a DTW classifier running in real time in MATLAB and with a direct, two-way connection to Unity. Therefore, the app encourages the patient to perform the exercises therapy in an accurate and fun way and as a result respiratory signal graphs are shown for evaluation by the therapist."
+    abstract_source: "https://link.springer.com/chapter/10.1007/978-3-319-95282-6_9"
+    notes: ""
+  - id: p21
+    title: "Sales maximization based on neuro-marketing techniques in virtual environments"
+    year: 2018
+    citations: 10
+    venue: "International Conference on Augmented Reality, Virtual Reality and Computer Graphics (AVR, Springer LNCS)"
+    doi: "10.1007/978-3-319-95282-6_13"
+    url: "https://doi.org/10.1007/978-3-319-95282-6_13"
+    abstract: "This article describes an analysis of the merchandising techniques used in Neuromarketing through a virtual reality application to inquire the consumer behavior when purchasing mass consumption products. The results of the virtual test will affect the costs optimization, reduction of time, and logistics when studying the effectiveness of each technique. The application consists of a virtual environment replica of a real supermarket, which allows the user to interact with the products according to: the conscious and unconscious perception at a purchase and the influence of merchandising techniques (location of the products, assortment management and accessibility, and so on). The results of the experiment validate the merchandising techniques with product rotation processes and sales increase, without study them in a real supermarket."
+    abstract_source: "https://link.springer.com/chapter/10.1007/978-3-319-95282-6_13"
+    notes: ""
+  - id: p22
+    title: "Tourism marketing through virtual environment experience"
+    year: 2017
+    citations: 9
+    venue: "Proceedings of the 9th International Conference on Education Technology and Computers (ICETC '17, ACM)"
+    doi: "10.1145/3175536.3176651"
+    url: "https://doi.org/10.1145/3175536.3176651"
+    abstract: "This article proposes the develop of a dynamic virtual environment that with the consumption of real time data about the state of a place, offer an immersion to the tourist like be at the desired location. The development implements a communication and loader structure from many information sources, manual information data loaded from mobile devices and data loader from collecting equipment that get environmental and atmospheric data. The virtual reality application use Google Maps, and worldwide heightmap to get 3D geographic map models; HTC VIVE and Oculus SDK for support virtual reality experience; and weather API to show the weather information from the desired location in real time. In addition, the proposed virtual reality application emphasizes user interaction on the virtual environment by displaying dynamic and up-to-date information about tourism services."
+    abstract_source: "https://dl.acm.org/doi/10.1145/3175536.3176651"
+    notes: "abstract on publisher page is identical to the Springer abstract of p03 (Virtual reality on e-Tourism)"
+  - id: p23
+    title: "Performance evaluation of WebGL and WebVR apps in VR environments"
+    year: 2019
+    citations: 7
+    venue: "Advances in Visual Computing - International Symposium on Visual Computing (ISVC, Springer LNCS)"
+    doi: "10.1007/978-3-030-33723-0_46"
+    url: "https://doi.org/10.1007/978-3-030-33723-0_46"
+    abstract: "This paper presents an evaluation of devices and browsers performance when executing web applications in WebGL and WebVR. For this purpose, the measurement of several computational resources is performed to determine which technology optimizes hardware resources when working with this type of technologies. For the purpose of this study, an application has been developed in Unity 3D that provides the exact values that the computational resources consume. In this context objects and particle systems are used to give a stress behavior on hardware entities. As a result, it was determined that WebGL and WebVR have similar performances in executions on a PC while for WebVR mobile devices it has a remarkable performance compared to WebGL."
+    abstract_source: "https://link.springer.com/chapter/10.1007/978-3-030-33723-0_46"
+    notes: ""
+  - id: p24
+    title: "Real-time virtual reality visualizer for unmanned aerial vehicles"
+    year: 2018
+    citations: 7
+    venue: "International Conference on Augmented Reality, Virtual Reality and Computer Graphics (AVR, Springer LNCS)"
+    doi: "10.1007/978-3-319-95282-6_35"
+    url: "https://doi.org/10.1007/978-3-319-95282-6_35"
+    abstract: "The visualization of tele-operated and autonomous executions in the field becomes difficult if the real environments are located in remote areas or present potential dangers for visualizing clients. This work proposes an application based on virtual reality to recreate in real time the execution tasks of a UAV, which is operated remotely or autonomously on a real environment. To achieve a third level of immersion, the reconstruction of the real environment where the field tests are executed is considered, offering the possibility of knowing the real scenario where the tests are executed. The consideration of using commercial UAV development kits is taken into account to obtain internal information, as well as to control the drone from client devices. The results presented validate the unification of 3D models and the reconstruction of the environment, as well as the consumption of vehicle information and climate parameters."
+    abstract_source: "https://link.springer.com/chapter/10.1007/978-3-319-95282-6_35"
+    notes: ""
+  - id: p25
+    title: "System of evaluation for reading based on eye tracking"
+    year: 2017
+    citations: 6
+    venue: "Emerging Technologies for Education - International Symposium on Emerging Technologies for Education (Springer LNCS)"
+    doi: "10.1007/978-3-319-71084-6_26"
+    url: "https://doi.org/10.1007/978-3-319-71084-6_26"
+    abstract: "The present work aims to develop a non-invasive interactive system by using an eye sensor known as Tobii Eye Tracking to evaluate students in environments such as reading or visual appreciation. Finally, the results obtained are shown graphically showing the trajectories of what the person observes and a statistical weighting close to the normal standard."
+    abstract_source: "https://link.springer.com/chapter/10.1007/978-3-319-71084-6_26"
+    notes: ""

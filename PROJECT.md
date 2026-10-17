@@ -2,7 +2,7 @@
 
 ## Contexto
 
-Ask Washington es un chat RAG para el portafolio de Washington X. Quevedo (AI Engineer, XR + AI Engineer). Un reclutador pregunta sobre su experiencia y el sistema responde citando las fuentes de Washington: CV, PROFILE.md, READMEs de sus repos públicos y resúmenes de sus papers.
+Ask Washington es un chat RAG para el portafolio de Washington X. Quevedo (AI Engineer, XR + AI Engineer). Un reclutador pregunta sobre su experiencia y el sistema responde citando las fuentes públicas de Washington: CV, perfil de LinkedIn, READMEs de sus repos públicos y abstracts de sus papers. Desde P18·2 solo se ingieren fuentes públicas; PROFILE.md queda fuera.
 
 También es su proyecto para aprender RAG, bases vectoriales, LangChain y LlamaIndex.
 
@@ -27,11 +27,20 @@ Este proyecto es P18 dentro del plan de `C:\xampp\htdocs\enhanced-me`. El seguim
 | `scripts/dev-db-host.ps1` para la IP de la máquina de Podman | La máquina de Podman (WSL, rootful) no reenvía puertos a `localhost` de Windows y el modo de red de usuario no lo resolvió. El script reescribe solo `DATABASE_URL` en el `.env` local con la IP actual de la máquina; con Docker o en Linux se sigue usando `localhost`. |
 | Sin la skill python-executor | autoskills la propuso por detectar Python, pero manda el código a ejecutar al servicio en la nube inference.sh mediante su CLI `belt`. Este proyecto corre todo en local con uv, no queremos enviar código ni datos a un tercero, y sus palabras de activación ("python", "execute code") son tan genéricas que se dispararía en casi cualquier tarea. |
 | psycopg 3 directo en la base (sin ORM) | Para la base solo hace falta comprobar conexión y extensión; el acceso a vectores lo harán LlamaIndex y LangChain. |
+| Chunks de ~500 tokens con 60 de solape; primero por título Markdown | Partir por título mantiene juntas las piezas de un mismo puesto o sección y da la `section` para citar; 500 tokens caben bien en el contexto de bge-small (512) y el solape evita cortar una idea a la mitad. |
+| Un chunk por paper (título + venue + año + citas + abstract) | Un abstract cabe entero y es la unidad que se cita; partirlo solo diluiría la búsqueda. |
+| Hash de texto + metadatos + parámetros de chunking, en la tabla `ingested_documents` | Hace la ingesta idempotente y detecta también cambios de metadatos o de chunking, no solo de texto. Más simple y transparente que un docstore de LlamaIndex. |
+| Ids de chunk estables (`<doc_id>#NNN`) | Facilitan depurar y comparar resultados entre ejecuciones. |
+| Solo `title`, `section` y `doc_type` entran al embedding | Dan contexto a cada chunk sin meter URLs ni hashes en el vector. |
+| Se quitan email y teléfono de los CV, y se ingieren solo las secciones publicadas de LinkedIn | El chat responde a reclutadores sobre experiencia; los datos de contacto y las notas internas del archivo de trabajo de LinkedIn (privacidad, Open to Work, pendientes) no son públicos. |
+| `public_url` de los CV = perfil de LinkedIn | Los CV no están publicados en ninguna URL; LinkedIn es la fuente pública equivalente. |
+| `data/papers.yaml` versionado; `data/sources/` no | Los papers enriquecidos son datos públicos y costosos de reconstruir; las fuentes se copian o descargan de nuevo. |
+| Abstracts tomados de la página del editor (Springer, ACM, IEEE) vía Crossref y DOI | Son la fuente oficial y citable; no se usa Google Scholar ni sitios de terceros. |
 
 ## Plan de los 5 prompts
 
 1. **P18·1 base**: entorno, Postgres con pgvector en contenedor, app FastAPI con `/health`, pruebas, ruff, documentos y primer commit.
-2. **P18·2 ingesta**: cargar CV, PROFILE.md, READMEs y resúmenes de papers con LlamaIndex, generar embeddings con bge-small y guardarlos en pgvector.
+2. **P18·2 ingesta**: cargar CV, LinkedIn, READMEs y abstracts de papers con LlamaIndex, generar embeddings con bge-small y guardarlos en pgvector.
 3. **P18·3 respuestas**: cadena de LangChain que recupera fragmentos y responde con la API de Claude citando fuentes, con límites de uso y de gasto.
 4. **P18·4 evaluación**: set de unas 30 preguntas con respuestas esperadas y métricas de recuperación y de respuesta.
 5. **P18·5 interfaz y despliegue**: interfaz de chat y despliegue en el VPS.
@@ -73,8 +82,20 @@ Verificación con la solución adoptada (`.env` sin variables temporales, tras c
 
 Skills: se quitó python-executor (ver decisiones) de `.agents/skills`, `.claude/skills` y `skills-lock.json`.
 
+### 2026-10-17 - P18·2 ingesta
+
+Estado: terminado. Detalle completo en `reports/P18-2_ingesta.md`.
+
+- Fuentes copiadas a `data/sources/`: 2 CV en inglés y `LINKEDIN_EN.md` desde enhanced-me, y los README de los 6 repos públicos descargados con `gh api`.
+- `data/papers.yaml`: los 25 papers del seed con DOI, URL y abstract textual de la página del editor (21 Springer, 3 ACM, 1 IEEE); los 25 tienen abstract. p03 y p22 tienen el mismo abstract en sus editoriales y quedó anotado.
+- `app/ingestion.py` (carga, limpieza, chunking y metadatos, sin base de datos) y `app/vector_store.py` (bge-small, `PGVectorStore`, tabla `ingested_documents`).
+- `scripts/ingest.py` con `--reset` y `--only <doc_type>`, idempotente; `scripts/search_check.py` con 5 consultas de prueba.
+- Índice: 34 documentos y 132 chunks (cv 2/28, linkedin 1/15, repo_readme 6/64, paper 25/25). Ingesta completa desde cero en unos 22 s (11 s de embeddings y escritura).
+- Pruebas: 6 de chunking y metadatos sin base de datos; 9 en total aprobadas.
+- Búsqueda: buena para papers por tema y para repos; floja en "Production ML experience" (salen papers de entrenamiento industrial antes que la experiencia en Stanford) y en "Most cited paper" (la búsqueda semántica no ordena por citas).
+
 ## Próximos pasos
 
-- P18·2: reunir los documentos fuente en `data/` y construir la ingesta con LlamaIndex.
-- Decidir el tamaño de fragmento y los metadatos de cita (fuente, sección, URL).
+- P18·3: cadena de LangChain sobre `data_chunks` con citas por `public_url`; las preguntas de ranking ("most cited") deben resolverse con los metadatos `citations`/`year`, no solo por similitud.
+- Probar mejoras de recuperación con el set de evaluación de P18·4: búsqueda híbrida (texto completo + vector), reranker o consultas reescritas.
 - Elegir el modelo económico de Claude y definir los límites de uso y gasto antes de P18·3.

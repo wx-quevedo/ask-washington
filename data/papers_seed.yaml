@@ -1,0 +1,205 @@
+# Seed of publications for Ask Washington (source: Google Scholar profile, sorted by citations, snapshot 2026-10-17).
+# Profile totals: 640 citations, h-index 14, i10-index 21, 40 entries.
+# venue empty or abstract empty = to enrich from the publisher page (Springer/DOI). Do not invent.
+profile_url: https://scholar.google.com/citations?user=zPNPhwkAAAAJ
+papers:
+  - id: p01
+    title: "Unity3D-MatLab simulator in real time for robotics applications"
+    year: 2016
+    citations: 88
+    venue: "International Conference on Augmented Reality, Virtual Reality and Computer Graphics (AVR, Springer LNCS)"
+    doi: ""
+    url: ""
+    abstract: ""
+  - id: p02
+    title: "Augmented reality as a new marketing strategy"
+    year: 2018
+    citations: 55
+    venue: "International Conference on Augmented Reality, Virtual Reality and Computer Graphics (AVR, Springer LNCS)"
+    doi: ""
+    url: ""
+    abstract: ""
+  - id: p03
+    title: "Virtual reality on e-Tourism"
+    year: 2017
+    citations: 54
+    venue: "IT Convergence and Security 2017 (Springer LNEE)"
+    doi: ""
+    url: ""
+    abstract: ""
+  - id: p04
+    title: "Virtual reality system for training in automotive mechanics"
+    year: 2017
+    citations: 50
+    venue: "International Conference on Augmented Reality, Virtual Reality and Computer Graphics (AVR, Springer LNCS)"
+    doi: ""
+    url: ""
+    abstract: ""
+  - id: p05
+    title: "Multi-user industrial training and education environment"
+    year: 2018
+    citations: 41
+    venue: "International Conference on Augmented Reality, Virtual Reality and Computer Graphics (AVR, Springer LNCS)"
+    doi: ""
+    url: ""
+    abstract: ""
+  - id: p06
+    title: "Transparency of a bilateral tele-operation scheme of a mobile manipulator robot"
+    year: 2016
+    citations: 36
+    venue: "International Conference on Augmented Reality, Virtual Reality and Computer Graphics (AVR, Springer LNCS)"
+    doi: ""
+    url: ""
+    abstract: ""
+  - id: p07
+    title: "Teaching-learning process through VR applied to automotive engineering"
+    year: 2017
+    citations: 30
+    venue: ""
+    doi: ""
+    url: ""
+    abstract: ""
+  - id: p08
+    title: "Virtual reality integration with force feedback in upper limb rehabilitation"
+    year: 2016
+    citations: 29
+    venue: "International Symposium on Visual Computing (ISVC)"
+    doi: ""
+    url: ""
+    abstract: ""
+  - id: p09
+    title: "Haptic stimulation glove for fine motor rehabilitation in virtual reality environments"
+    year: 2018
+    citations: 28
+    venue: "International Conference on Augmented Reality, Virtual Reality and Computer Graphics (AVR, Springer LNCS)"
+    doi: ""
+    url: ""
+    abstract: ""
+  - id: p10
+    title: "Virtual training for industrial automation processes through pneumatic controls"
+    year: 2018
+    citations: 26
+    venue: "International Conference on Augmented Reality, Virtual Reality and Computer Graphics (AVR, Springer LNCS)"
+    doi: ""
+    url: ""
+    abstract: ""
+  - id: p11
+    title: "Assistance system for rehabilitation and valuation of motor skills"
+    year: 2017
+    citations: 20
+    venue: "International Conference on Augmented Reality, Virtual Reality and Computer Graphics (AVR, Springer LNCS)"
+    doi: ""
+    url: ""
+    abstract: ""
+  - id: p12
+    title: "Unity3D virtual animation of robots with coupled and uncoupled mechanism"
+    year: 2016
+    citations: 20
+    venue: "International Conference on Augmented Reality, Virtual Reality and Computer Graphics (AVR, Springer LNCS)"
+    doi: ""
+    url: ""
+    abstract: ""
+  - id: p13
+    title: "Training for bus bodywork in virtual reality environments"
+    year: 2018
+    citations: 16
+    venue: "International Conference on Augmented Reality, Virtual Reality and Computer Graphics (AVR, Springer LNCS)"
+    doi: ""
+    url: ""
+    abstract: ""
+  - id: p14
+    title: "Oil processes VR training"
+    year: 2018
+    citations: 15
+    venue: ""
+    doi: ""
+    url: ""
+    abstract: ""
+  - id: p15
+    title: "Immersive industrial process environment from a P&ID diagram"
+    year: 2016
+    citations: 14
+    venue: ""
+    doi: ""
+    url: ""
+    abstract: ""
+  - id: p16
+    title: "Performance of WebGL standard for displaying 3D applications on mobile devices"
+    year: 2021
+    citations: 11
+    venue: ""
+    doi: ""
+    url: ""
+    abstract: ""
+  - id: p17
+    title: "Teaching-learning of basic language of signs through didactic games"
+    year: 2017
+    citations: 11
+    venue: ""
+    doi: ""
+    url: ""
+    abstract: ""
+  - id: p18
+    title: "Realism in audiovisual stimuli for phobias treatments through virtual environments"
+    year: 2017
+    citations: 11
+    venue: ""
+    doi: ""
+    url: ""
+    abstract: ""
+  - id: p19
+    title: "Virtual rehabilitation system for fine motor skills using a functional hand orthosis"
+    year: 2018
+    citations: 10
+    venue: ""
+    doi: ""
+    url: ""
+    abstract: ""
+  - id: p20
+    title: "Virtual reality system for assistance in treating respiratory disorders"
+    year: 2018
+    citations: 10
+    venue: ""
+    doi: ""
+    url: ""
+    abstract: ""
+  - id: p21
+    title: "Sales maximization based on neuro-marketing techniques in virtual environments"
+    year: 2018
+    citations: 10
+    venue: ""
+    doi: ""
+    url: ""
+    abstract: ""
+  - id: p22
+    title: "Tourism marketing through virtual environment experience"
+    year: 2017
+    citations: 9
+    venue: ""
+    doi: ""
+    url: ""
+    abstract: ""
+  - id: p23
+    title: "Performance evaluation of WebGL and WebVR apps in VR environments"
+    year: 2019
+    citations: 7
+    venue: ""
+    doi: ""
+    url: ""
+    abstract: ""
+  - id: p24
+    title: "Real-time virtual reality visualizer for unmanned aerial vehicles"
+    year: 2018
+    citations: 7
+    venue: ""
+    doi: ""
+    url: ""
+    abstract: ""
+  - id: p25
+    title: "System of evaluation for reading based on eye tracking"
+    year: 2017
+    citations: 6
+    venue: ""
+    doi: ""
+    url: ""
+    abstract: ""
