@@ -1,0 +1,296 @@
+{
+  "total_cost_usd": 0.002014,
+  "results": [
+    {
+      "question": "What XR experience does Washington have?",
+      "status": 200,
+      "cost_usd": 0.00038,
+      "answer": "Washington has about 10 years of experience building VR/AR training, simulation and interactive experiences in Unity [2]. He shipped XR and game work for a social VR platform (Sansar, via BairesDev), an AR company (Merge) and a pharmaceutical sales force [2]. He also founded Inmersoft in 2018, with 200+ delivered projects [2].\n\nSelected XR projects include:\n- A synchronized 360° VR experience for 31 Meta Quest headsets, with a guided meditation and a head-movement rhythm game [4].\n- SkyNest, a multiplayer VR combat sandbox in development with Unity 6 and Meta Quest [4].\n- RayNeo Power, a HUD for RayNeo Air 4 Pro AR glasses, in development [4].\n- Earlier work including a VR maze game (VR Runner), a DJI Matrice 600 Pro VR simulator, and a Unity3D–MATLAB robotics simulator [4].\n\nHe has also published 30+ peer-reviewed papers in virtual reality [2]. For more detail, see his LinkedIn profile: https://www.linkedin.com/in/wxquevedo",
+      "sources": [
+        {
+          "n": 1,
+          "title": "CV - XR + AI Engineer",
+          "doc_type": "cv",
+          "section": "Overview",
+          "public_url": "https://www.linkedin.com/in/wxquevedo",
+          "score": 0.6182
+        },
+        {
+          "n": 2,
+          "title": "CV - XR + AI Engineer",
+          "doc_type": "cv",
+          "section": "Summary",
+          "public_url": "https://www.linkedin.com/in/wxquevedo",
+          "score": 0.5752
+        },
+        {
+          "n": 3,
+          "title": "CV - AI Engineer",
+          "doc_type": "cv",
+          "section": "Overview",
+          "public_url": "https://www.linkedin.com/in/wxquevedo",
+          "score": 0.5669
+        },
+        {
+          "n": 4,
+          "title": "CV - XR + AI Engineer",
+          "doc_type": "cv",
+          "section": "Selected XR Projects",
+          "public_url": "https://www.linkedin.com/in/wxquevedo",
+          "score": 0.5552
+        },
+        {
+          "n": 5,
+          "title": "CV - XR + AI Engineer",
+          "doc_type": "cv",
+          "section": "Earlier roles",
+          "public_url": "https://www.linkedin.com/in/wxquevedo",
+          "score": 0.5509
+        },
+        {
+          "n": 6,
+          "title": "CV - XR + AI Engineer",
+          "doc_type": "cv",
+          "section": "Education",
+          "public_url": "https://www.linkedin.com/in/wxquevedo",
+          "score": 0.5502
+        }
+      ],
+      "provider": "anthropic",
+      "model": "claude-haiku-5-5",
+      "latency_ms": 12219,
+      "usage": {
+        "input_tokens": 1863,
+        "output_tokens": 387
+      }
+    },
+    {
+      "question": "What is his most cited paper?",
+      "status": 200,
+      "cost_usd": 0.000174,
+      "answer": "Washington's most cited paper is \"Unity3D-MatLab simulator in real time for robotics applications\" (2016), presented at the International Conference on Augmented Reality, Virtual Reality and Computer Graphics (AVR, Springer LNCS). It has 88 citations on Google Scholar, as of a 2026-10-17 snapshot [1].\n\nHis next most cited papers are \"Augmented reality as a new marketing strategy\" (2018), with 55 citations [2], and \"Virtual reality on e-Tourism\" (2017), with 54 citations [3].",
+      "sources": [
+        {
+          "n": 1,
+          "title": "Unity3D-MatLab simulator in real time for robotics applications",
+          "doc_type": "paper",
+          "section": "Citations ranking",
+          "public_url": "https://doi.org/10.1007/978-3-319-40621-3_19",
+          "score": null
+        },
+        {
+          "n": 2,
+          "title": "Augmented reality as a new marketing strategy",
+          "doc_type": "paper",
+          "section": "Citations ranking",
+          "public_url": "https://doi.org/10.1007/978-3-319-95270-3_29",
+          "score": null
+        },
+        {
+          "n": 3,
+          "title": "Virtual reality on e-Tourism",
+          "doc_type": "paper",
+          "section": "Citations ranking",
+          "public_url": "https://doi.org/10.1007/978-981-10-6454-8_13",
+          "score": null
+        }
+      ],
+      "provider": "anthropic",
+      "model": "claude-haiku-5-5",
+      "latency_ms": 1193,
+      "usage": {
+        "input_tokens": 814,
+        "output_tokens": 186
+      }
+    },
+    {
+      "question": "Production ML experience",
+      "status": 200,
+      "cost_usd": 0.000411,
+      "answer": "Washington's sources describe several production ML projects:\n\n- **Buscapez (Stanford University marine research platform):** He is building the species-identification module, a YOLO detector trained in PyTorch (mAP50 0.96), served by a FastAPI + ONNX Runtime service at 49 ms per image on a 2-core VPS, and running offline on iOS and Android via ExecuTorch. The app is live on the App Store and Google Play [5].\n- **Laboratorios Bagó del Ecuador:** He built an AI campaign builder for product managers that generates campaign concepts grounded in expert product information, used at the company's MKT Attack event [4].\n\nHis profile also lists LLM application work with Claude, OpenAI and Gemini APIs, and local LLM serving with llama.cpp [5].\n\nFor more detail, see his LinkedIn profile: https://www.linkedin.com/in/wxquevedo",
+      "sources": [
+        {
+          "n": 1,
+          "title": "Virtual training for industrial automation processes through pneumatic controls",
+          "doc_type": "paper",
+          "section": "Abstract",
+          "public_url": "https://doi.org/10.1007/978-3-319-95282-6_37",
+          "score": 0.6519
+        },
+        {
+          "n": 2,
+          "title": "Multi-user industrial training and education environment",
+          "doc_type": "paper",
+          "section": "Abstract",
+          "public_url": "https://doi.org/10.1007/978-3-319-95282-6_38",
+          "score": 0.646
+        },
+        {
+          "n": 3,
+          "title": "Immersive industrial process environment from a P&ID diagram",
+          "doc_type": "paper",
+          "section": "Abstract",
+          "public_url": "https://doi.org/10.1007/978-3-319-50835-1_63",
+          "score": 0.6449
+        },
+        {
+          "n": 4,
+          "title": "CV - AI Engineer",
+          "doc_type": "cv",
+          "section": "Experience > Laboratorios Bagó del Ecuador — Digital Solutions & AI Developer",
+          "public_url": "https://www.linkedin.com/in/wxquevedo",
+          "score": 0.644
+        },
+        {
+          "n": 5,
+          "title": "LinkedIn profile",
+          "doc_type": "linkedin",
+          "section": "About",
+          "public_url": "https://www.linkedin.com/in/wxquevedo",
+          "score": 0.6359
+        },
+        {
+          "n": 6,
+          "title": "Oil processes VR training",
+          "doc_type": "paper",
+          "section": "Abstract",
+          "public_url": "https://doi.org/10.1007/978-3-030-03801-4_62",
+          "score": 0.6346
+        }
+      ],
+      "provider": "anthropic",
+      "model": "claude-haiku-5-5",
+      "latency_ms": 1730,
+      "usage": {
+        "input_tokens": 2619,
+        "output_tokens": 298
+      }
+    },
+    {
+      "question": "What is plan-vivo-kit?",
+      "status": 200,
+      "cost_usd": 0.000512,
+      "answer": "Plan-vivo-kit, known as Plan Vivo, is a project plan kept in one JSON file (`plan.json`) that AI coding agents keep up to date, along with a local live viewer that shows phases, real time spent per actor, and a calibrated projection of when the work will finish [1]. It answers questions such as what is done, what is waiting on a human, how long each step really took compared to the estimate, and when the work will finish [2].\n\nThe kit includes:\n\n- A plan format split into phases and items (`prompt`, `gate`, `unplanned`), described by a JSON Schema and a matching zod schema [2].\n- A localhost React viewer that reloads automatically when `plan.json` is saved, with a UI in Spanish and English [2].\n- A `tiempos` command that rebuilds time segments per actor from Claude Code session logs and `git log` [2].\n- Commands to validate and migrate plans, with `schema_version` for format versioning [2].\n\nWashington built it, and its repository is at github.com/wx-quevedo/plan-vivo-kit [6].",
+      "sources": [
+        {
+          "n": 1,
+          "title": "GitHub repository plan-vivo-kit",
+          "doc_type": "repo_readme",
+          "section": "Overview",
+          "public_url": "https://github.com/wx-quevedo/plan-vivo-kit",
+          "score": 0.7927
+        },
+        {
+          "n": 2,
+          "title": "GitHub repository plan-vivo-kit",
+          "doc_type": "repo_readme",
+          "section": "What problem it solves",
+          "public_url": "https://github.com/wx-quevedo/plan-vivo-kit",
+          "score": 0.7598
+        },
+        {
+          "n": 3,
+          "title": "GitHub repository plan-vivo-kit",
+          "doc_type": "repo_readme",
+          "section": "Architecture",
+          "public_url": "https://github.com/wx-quevedo/plan-vivo-kit",
+          "score": 0.7365
+        },
+        {
+          "n": 4,
+          "title": "GitHub repository plan-vivo-kit",
+          "doc_type": "repo_readme",
+          "section": "What I learned / key technical decisions",
+          "public_url": "https://github.com/wx-quevedo/plan-vivo-kit",
+          "score": 0.7227
+        },
+        {
+          "n": 5,
+          "title": "GitHub repository plan-vivo-kit",
+          "doc_type": "repo_readme",
+          "section": "Architecture",
+          "public_url": "https://github.com/wx-quevedo/plan-vivo-kit",
+          "score": 0.7214
+        },
+        {
+          "n": 6,
+          "title": "GitHub repository plan-vivo-kit",
+          "doc_type": "repo_readme",
+          "section": "Running locally",
+          "public_url": "https://github.com/wx-quevedo/plan-vivo-kit",
+          "score": 0.7211
+        }
+      ],
+      "provider": "anthropic",
+      "model": "claude-haiku-5-5",
+      "latency_ms": 1977,
+      "usage": {
+        "input_tokens": 3382,
+        "output_tokens": 348
+      }
+    },
+    {
+      "question": "¿Qué hizo en rehabilitación con realidad virtual?",
+      "status": 200,
+      "cost_usd": 0.000537,
+      "answer": "Washington trabajó en varios proyectos de rehabilitación con realidad virtual, principalmente para habilidades motoras de brazos y piernas. Por ejemplo:\n\n- Desarrolló un sistema no invasivo para rehabilitar habilidades motoras de extremidades superiores e inferiores, usando realidad aumentada para lesiones crónicas y realidad virtual para lesiones menores [1].\n- Creó un sistema de rehabilitación de motricidad fina de extremidades superiores con dispositivos hápticos, Unity3D, Novint Falcon, Oculus Rift y Leap Motion, basado en ejercicios de fisioterapeutas [2].\n- Diseñó un sistema de rehabilitación de motricidad fina que usa una ortesis activa de mano, con el brazalete Myo para identificar movimientos [4].\n- Construyó un guante de estimulación háptica para rehabilitación de motricidad fina en entornos de realidad virtual, con sensores de flexibilidad y actuadores vibratorios [5].\n\nEstos trabajos fueron publicados en conferencias como AVR (Springer LNCS) e ISVC [1][2][4][5]. Para más detalles, puede consultar su perfil de LinkedIn: https://www.linkedin.com/in/wxquevedo",
+      "sources": [
+        {
+          "n": 1,
+          "title": "Assistance system for rehabilitation and valuation of motor skills",
+          "doc_type": "paper",
+          "section": "Abstract",
+          "public_url": "https://doi.org/10.1007/978-3-319-60928-7_14",
+          "score": 0.6886
+        },
+        {
+          "n": 2,
+          "title": "Virtual reality integration with force feedback in upper limb rehabilitation",
+          "doc_type": "paper",
+          "section": "Abstract",
+          "public_url": "https://doi.org/10.1007/978-3-319-50832-0_25",
+          "score": 0.6668
+        },
+        {
+          "n": 3,
+          "title": "Realism in audiovisual stimuli for phobias treatments through virtual environments",
+          "doc_type": "paper",
+          "section": "Abstract",
+          "public_url": "https://doi.org/10.1007/978-3-319-60928-7_16",
+          "score": 0.6654
+        },
+        {
+          "n": 4,
+          "title": "Virtual rehabilitation system for fine motor skills using a functional hand orthosis",
+          "doc_type": "paper",
+          "section": "Abstract",
+          "public_url": "https://doi.org/10.1007/978-3-319-95282-6_6",
+          "score": 0.6617
+        },
+        {
+          "n": 5,
+          "title": "Haptic stimulation glove for fine motor rehabilitation in virtual reality environments",
+          "doc_type": "paper",
+          "section": "Abstract",
+          "public_url": "https://doi.org/10.1007/978-3-319-95282-6_16",
+          "score": 0.6523
+        },
+        {
+          "n": 6,
+          "title": "Sales maximization based on neuro-marketing techniques in virtual environments",
+          "doc_type": "paper",
+          "section": "Abstract",
+          "public_url": "https://doi.org/10.1007/978-3-319-95282-6_13",
+          "score": 0.6309
+        }
+      ],
+      "provider": "anthropic",
+      "model": "claude-haiku-5-5",
+      "latency_ms": 2364,
+      "usage": {
+        "input_tokens": 3135,
+        "output_tokens": 447
+      }
+    }
+  ]
+}

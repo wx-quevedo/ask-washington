@@ -36,6 +36,16 @@ Este proyecto es P18 dentro del plan de `C:\xampp\htdocs\enhanced-me`. El seguim
 | `public_url` de los CV = perfil de LinkedIn | Los CV no están publicados en ninguna URL; LinkedIn es la fuente pública equivalente. |
 | `data/papers.yaml` versionado; `data/sources/` no | Los papers enriquecidos son datos públicos y costosos de reconstruir; las fuentes se copian o descargan de nuevo. |
 | Abstracts tomados de la página del editor (Springer, ACM, IEEE) vía Crossref y DOI | Son la fuente oficial y citable; no se usa Google Scholar ni sitios de terceros. |
+| Claude Haiku 5.5 (`claude-haiku-5-5`) como modelo por defecto | Es el modelo económico actual de Anthropic ($0.10 / $0.50 por millón de tokens de entrada / salida); responder con citas a partir de 6 chunks no necesita un modelo mayor. Costo medido: unos USD 0.0004 por respuesta. |
+| Sin `temperature` (se pidió 0.2) | Claude Haiku 5.5 rechaza con un 400 cualquier valor de muestreo distinto del predeterminado. `LLM_TEMPERATURE` queda vacío (no se envía) y se puede fijar para modelos que lo acepten. |
+| Razonamiento (thinking) desactivado | En Haiku 5.5 viene activado por defecto y sus tokens cuentan contra `max_tokens` (600) y el presupuesto; para respuestas cortas con fuentes no aporta. |
+| Fábrica de proveedores en `app/llm.py` | La cadena solo recibe un `BaseChatModel` de LangChain; agregar Ollama o la API de Localia es escribir un constructor y registrarlo, sin tocar la cadena. |
+| Ruta de ranking determinista con expresiones regulares | "Más citado", "más reciente", "cuántos papers" o el h-index no se resuelven por similitud; se calculan desde `data/papers.yaml` y los totales del perfil, y el LLM solo redacta. Las regex (inglés y español) son predecibles y gratis. |
+| El retriever de LangChain envuelve el `PGVectorStore` de LlamaIndex | Reutiliza la misma tabla, el mismo modelo de embeddings y la misma instrucción de consulta de P18·2, sin una segunda integración con pgvector. |
+| Presupuesto diario en `usage_daily` y log en `qa_log` (Postgres) | Sobrevive reinicios y varios procesos; se calcula con los tokens reales de cada respuesta y precios configurables. La IP se guarda como hash SHA-256 con sal. |
+| Rate limit con slowapi en memoria | Suficiente para un solo proceso; se reinicia con la app. El gasto, que es lo que importa proteger, sí queda en Postgres. |
+| La pregunta va entre etiquetas `<question>` y las fuentes numeradas entre `<sources>` | Separa con claridad la entrada no confiable de las instrucciones y facilita que el modelo cite `[n]`. |
+| p22 sin abstract | Su página de ACM muestra, palabra por palabra, el mismo abstract que p03 en Springer. El texto describe una app de VR para turismo (sin marketing), así que se conservó en p03; p22 queda con título, venue, año y citas. |
 
 ## Plan de los 5 prompts
 
@@ -94,8 +104,25 @@ Estado: terminado. Detalle completo en `reports/P18-2_ingesta.md`.
 - Pruebas: 6 de chunking y metadatos sin base de datos; 9 en total aprobadas.
 - Búsqueda: buena para papers por tema y para repos; floja en "Production ML experience" (salen papers de entrenamiento industrial antes que la experiencia en Stanford) y en "Most cited paper" (la búsqueda semántica no ordena por citas).
 
+### 2026-10-17 - P18·3 respuestas
+
+Estado: terminado. Detalle completo en `reports/P18-3_respuestas.md`.
+
+- `POST /ask` con validación (3 a 500 caracteres), respuesta con `answer`, `sources` numeradas `[n]`, `provider`, `model`, `latency_ms` y `usage`.
+- `app/llm.py` (fábrica por `LLM_PROVIDER`, solo `anthropic`), `app/rag.py` (retriever sobre `data_chunks`, top_k 6, prompt de sistema en inglés), `app/ranking.py` (ruta determinista), `app/usage.py` (`usage_daily`, `qa_log`).
+- Límites: 10 por minuto y 100 por día por IP (slowapi) y tope diario de USD 1.00 con tokens reales; al superarlos, 429.
+- p03/p22: verificado en ambas editoriales; el abstract queda en p03 y p22 queda vacío. Re-ingesta con `--only paper`: 1 documento actualizado (p22), 24 sin cambios.
+- Pruebas: 31 aprobadas (22 nuevas de `/ask` con LLM simulado: formato y citas, longitud, rate limit, tope diario, ranking, fábrica de proveedores).
+- Prueba real con 5 preguntas y Claude Haiku 5.5: 11 813 tokens de entrada y 1 666 de salida, USD 0.0020 en total; las 5 respuestas citan fuentes correctas, incluida "Production ML experience" (Buscapez) y "most cited" (p01, 88 citas) por la ruta de ranking.
+
 ## Próximos pasos
 
-- P18·3: cadena de LangChain sobre `data_chunks` con citas por `public_url`; las preguntas de ranking ("most cited") deben resolverse con los metadatos `citations`/`year`, no solo por similitud.
-- Probar mejoras de recuperación con el set de evaluación de P18·4: búsqueda híbrida (texto completo + vector), reranker o consultas reescritas.
-- Elegir el modelo económico de Claude y definir los límites de uso y gasto antes de P18·3.
+- P18·4: set de unas 30 preguntas con respuestas esperadas; medir recuperación (fuente correcta en el top 6) y respuesta (citas correctas, sin inventar, idioma), y probar búsqueda híbrida o un reranker.
+- Ajustar el prompt: el modelo sugiere LinkedIn también cuando la respuesta es completa.
+- P18·5: interfaz de chat y despliegue; detrás de un proxy, tomar la IP real de `X-Forwarded-For` para el rate limit.
+
+## Mejoras futuras
+
+- **Proveedor local en la torre (Ollama):** constructor `ollama` en `app/llm.py` con `langchain-ollama`, para responder sin costo por token cuando la torre esté encendida.
+- **Servicio de inferencia vía la API de Localia:** constructor `openai_compatible` con `langchain-openai` apuntando a la API de Localia, para reutilizar la plataforma propia.
+- Rate limit en Postgres o Redis si la app corre con varios procesos.

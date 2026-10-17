@@ -33,7 +33,7 @@ papers:
     url: "https://doi.org/10.1007/978-981-10-6454-8_13"
     abstract: "This article proposes the develop of a dynamic virtual environment that with the consumption of real time data about the state of a place, offer an immersion to the tourist like be at the desired location. The development implements a communication and loader structure from many information sources, manual information data loaded from mobile devices and data loader from collecting equipment that get environmental and atmospheric data. The virtual reality application use Google Maps, and worldwide heightmap to get 3D geographic map models; HTC VIVE and Oculus SDK for support virtual reality experience; and weather API to show the weather information from the desired location in real time. In addition, the proposed virtual reality application emphasizes user interaction on the virtual environment by displaying dynamic and up-to-date information about tourism services."
     abstract_source: "https://link.springer.com/chapter/10.1007/978-981-10-6454-8_13"
-    notes: "abstract on publisher page is identical to the ACM abstract of p22 (Tourism marketing through virtual environment experience)"
+    notes: "Springer page shows this abstract verbatim; the ACM page of p22 (Tourism marketing through virtual environment experience) shows the identical text. Kept here because the text describes a VR application (HTC VIVE/Oculus, real-time data, immersion) with no marketing content, matching this title better; p22 abstract left empty."
   - id: p04
     title: "Virtual reality system for training in automotive mechanics"
     year: 2017
@@ -221,9 +221,9 @@ papers:
     venue: "Proceedings of the 9th International Conference on Education Technology and Computers (ICETC '17, ACM)"
     doi: "10.1145/3175536.3176651"
     url: "https://doi.org/10.1145/3175536.3176651"
-    abstract: "This article proposes the develop of a dynamic virtual environment that with the consumption of real time data about the state of a place, offer an immersion to the tourist like be at the desired location. The development implements a communication and loader structure from many information sources, manual information data loaded from mobile devices and data loader from collecting equipment that get environmental and atmospheric data. The virtual reality application use Google Maps, and worldwide heightmap to get 3D geographic map models; HTC VIVE and Oculus SDK for support virtual reality experience; and weather API to show the weather information from the desired location in real time. In addition, the proposed virtual reality application emphasizes user interaction on the virtual environment by displaying dynamic and up-to-date information about tourism services."
-    abstract_source: "https://dl.acm.org/doi/10.1145/3175536.3176651"
-    notes: "abstract on publisher page is identical to the Springer abstract of p03 (Virtual reality on e-Tourism)"
+    abstract: ""
+    abstract_source: ""
+    notes: "ACM page (dl.acm.org/doi/10.1145/3175536.3176651, checked 2026-10-17) shows exactly the same abstract as the Springer page of p03 (Virtual reality on e-Tourism); Crossref has no abstract. Neither page offers a distinct abstract. The text describes a VR application and contains no tourism-marketing content, so it was kept on p03 and left empty here rather than duplicated."
   - id: p23
     title: "Performance evaluation of WebGL and WebVR apps in VR environments"
     year: 2019
