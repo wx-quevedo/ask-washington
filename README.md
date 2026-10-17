@@ -56,7 +56,17 @@ podman compose ps
 
 Wait until the `db` service reports healthy.
 
-Podman on Windows: if the container is healthy but `localhost:5432` times out, the Podman machine is not forwarding ports to the Windows host. Either enable user-mode networking (`podman machine stop`, `podman machine set --user-mode-networking=true`, `podman machine start`) or point `DATABASE_URL` at the machine IP shown by `podman machine ssh "ip -4 addr show eth0"`.
+#### Windows with a rootful Podman machine
+
+A rootful Podman machine on WSL may not forward published ports to `localhost` on Windows: the container is healthy but `localhost:5432` times out. In that case, before starting the app, run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\dev-db-host.ps1
+```
+
+It reads the current IP of the Podman machine and rewrites only the `DATABASE_URL` line in `.env`, then prints the resulting URL with the password masked. The machine IP changes when the machine restarts, so run it again after every `podman machine start`.
+
+With Docker, or on Linux, keep `localhost` in `DATABASE_URL` and skip this step.
 
 ### 3. Enable pgvector
 
@@ -98,11 +108,20 @@ docker compose down     # or: podman compose down
 
 Data lives in the named volume `ask_washington_pgdata`. Add `-v` to `down` to delete it.
 
+## Known issues
+
+- **Rootful Podman machine on Windows does not forward ports to `localhost`.** Run `scripts\dev-db-host.ps1` before starting the app (see [Windows with a rootful Podman machine](#windows-with-a-rootful-podman-machine)). Enabling the machine's user-mode networking did not fix it with Podman 6.0.2.
+- **Containers fail to start with `aardvark-dns failed to start ... open resolv.conf: No such file or directory`.** This can happen after turning the Podman machine's user-mode networking off again: the machine loses its `/etc/resolv.conf` link. Restore it and start the containers again:
+
+  ```powershell
+  podman machine ssh "sudo ln -sf /mnt/wsl/resolv.conf /etc/resolv.conf"
+  ```
+
 ## Project layout
 
 ```
 app/        FastAPI app (main.py), settings (config.py), database helpers (db.py)
-scripts/    Command-line utilities (init_db.py)
+scripts/    Command-line utilities (init_db.py, dev-db-host.ps1)
 tests/      pytest suite
 data/       Local source documents, not committed (see data/README.md)
 ```
