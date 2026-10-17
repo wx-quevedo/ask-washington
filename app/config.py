@@ -20,6 +20,10 @@ class Settings(BaseSettings):
     # None means "do not send": Claude Haiku 5.5 rejects non-default sampling values.
     llm_temperature: float | None = None
     retrieval_top_k: int = 6
+    # vector | hybrid | rerank (see app/retrieval.py)
+    retrieval_mode: str = "hybrid"
+    retrieval_candidates: int = 20
+    reranker_model: str = "BAAI/bge-reranker-base"
 
     # Prices in USD per million tokens, used for the daily budget.
     llm_price_input_per_mtok: float = 0.10

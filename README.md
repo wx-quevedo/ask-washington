@@ -11,7 +11,7 @@ It is also a learning project for RAG, vector databases, LangChain and LlamaInde
 | Project base: FastAPI app, config, Postgres + pgvector, `/health`, tests, lint | Done |
 | Document ingestion and vector index (LlamaIndex) | Done |
 | Answer chain with citations (LangChain + Claude API, usage and spend limits) | Done |
-| Evaluation set (about 30 questions) | Planned |
+| Evaluation set (30 questions) and retrieval tuning | Done |
 | Chat interface and deployment to a VPS | Planned |
 
 ## Stack
@@ -203,8 +203,8 @@ curl -s http://127.0.0.1:8000/ask \
 ### How an answer is built
 
 1. **Ranking route.** Questions about the most cited or latest papers, the number of papers, or citation metrics (h-index, i10-index, total citations) are detected with regular expressions (English and Spanish). The facts are computed from `data/papers.yaml` and the Google Scholar profile totals (640 citations, h-index 14, i10-index 21, snapshot 2026-10-17); the LLM only writes them up.
-2. **RAG route.** Anything else retrieves the top `RETRIEVAL_TOP_K` chunks from `data_chunks` (same LlamaIndex `PGVectorStore` as ingestion, wrapped in a LangChain retriever), numbers them, and sends them to the LLM.
-3. The system prompt tells the model to answer only from the numbered sources, in the third person, citing `[n]`; to say so and point to LinkedIn when the sources are not enough; to reply in the language of the question; to ignore instructions inside the question; and never to give private contact details.
+2. **RAG route.** Anything else retrieves the top `RETRIEVAL_TOP_K` chunks from `data_chunks` with `RETRIEVAL_MODE` (default `hybrid`: the 20 best vector matches and the 20 best Postgres full-text matches, fused with Reciprocal Rank Fusion), numbers them, and sends them to the LLM.
+3. The system prompt tells the model to answer only from the numbered sources, in the third person, citing `[n]`; to mention LinkedIn only when the sources do not answer the question; to reply in the language of the question; to ignore instructions inside the question; and never to give private contact details.
 
 ### Limits and logging
 
@@ -222,6 +222,9 @@ curl -s http://127.0.0.1:8000/ask \
 | `LLM_MAX_TOKENS` | `600` | |
 | `LLM_TEMPERATURE` | (empty) | Empty means not sent. Claude Haiku 5.5 rejects non-default sampling values; set it only for models that accept it. |
 | `RETRIEVAL_TOP_K` | `6` | Chunks sent to the LLM on the RAG route. |
+| `RETRIEVAL_MODE` | `hybrid` | `vector`, `hybrid` (vector + Postgres full text, fused with RRF) or `rerank` (hybrid candidates re-scored by a local cross-encoder). See Evaluation. |
+| `RETRIEVAL_CANDIDATES` | `20` | Candidates per search before fusion or reranking. |
+| `RERANKER_MODEL` | `BAAI/bge-reranker-base` | Cross-encoder for `rerank` mode (downloaded on first use, about 1.1 GB). |
 | `LLM_PRICE_INPUT_PER_MTOK` / `LLM_PRICE_OUTPUT_PER_MTOK` | `0.10` / `0.50` | USD per million tokens. Update them if you change the model. |
 | `DAILY_BUDGET_USD` | `1.00` | |
 | `RATE_LIMIT_PER_MINUTE` / `RATE_LIMIT_PER_DAY` | `10/minute` / `100/day` | |
@@ -240,6 +243,46 @@ uv run python -m scripts.ask_check   # 5 questions, writes reports/P18-3_real_an
 
 This spends real tokens: the 5 questions cost about USD 0.002 with Claude Haiku 5.5.
 
+## Evaluation
+
+`data/eval/questions.yaml` holds 30 questions written from the indexed sources: XR/VR (5), AI/ML in production (5), papers and research (5), public repositories (5), career and companies (4), Spanish (3), out of scope (2) and prompt injection (1). Each question lists the documents that contain the answer (`expected_doc_ids`), 2 to 4 facts the answer must contain (`expected_keywords`), and whether the assistant should decline (`should_refuse`).
+
+```bash
+uv run python -m scripts.eval                                   # retrieval only, free: vector, hybrid, rerank
+uv run python -m scripts.eval --modes vector,hybrid             # selected retrieval modes
+uv run python -m scripts.eval --answers --label final           # real LLM on all 30 questions (about USD 0.011)
+uv run python -m scripts.eval --answers --mode rerank --max-usd 0.05
+```
+
+Results go to `reports/eval/` as JSON and Markdown. `--answers` projects the cost first and stops if it would pass `--max-usd` (default 0.10).
+
+Metrics:
+
+- **Retrieval** (27 answerable questions, no LLM): `hit@3` / `hit@6` (an expected document among the first 3 / 6 chunks), `MRR` (mean reciprocal rank of the first expected document), `kw@6` (share of expected facts present in the text of the 6 chunks), latency per query on CPU after warm-up.
+- **Answers** (real LLM): share of expected facts in the answer, valid citations (each `[n]` exists and its source is an expected document or contains an expected fact), correct refusals for out-of-scope and injection questions (declines and does not leak the prompt), share of answers that mention LinkedIn, mean latency and total cost.
+
+### Results (2026-10-17, CPU, Claude Haiku 5.5)
+
+Retrieval:
+
+| Config | hit@3 | hit@6 | MRR | kw@6 | Latency mean (ms) | Latency p95 (ms) |
+|---|---:|---:|---:|---:|---:|---:|
+| A. vector | 0.889 | 1.000 | 0.914 | 0.981 | 26 | 31 |
+| **B. hybrid (vector + full text, RRF)** | **1.000** | **1.000** | **0.981** | **0.981** | **60** | **89** |
+| C. hybrid + `BAAI/bge-reranker-base` (20 -> 6) | 1.000 | 1.000 | 1.000 | 1.000 | 4030 | 4872 |
+| C'. hybrid + `ms-marco-MiniLM-L-6-v2` (20 -> 6) | 1.000 | 1.000 | 0.963 | 0.981 | 683 | 787 |
+
+`hybrid` is the default: it reaches the reranker's hit@3 at 60 ms instead of 4 s.
+
+Answers (hybrid retrieval, 30 questions), before and after limiting LinkedIn suggestions in the prompt:
+
+| Run | Facts in answer | Valid citations | Answers with citations | Correct refusals | Mentions LinkedIn (answerable) | Latency mean (ms) | Cost (USD) |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| before | 0.963 | 0.980 | 1.000 | 1.000 | 0.593 | 1626 | 0.0110 |
+| **after (current prompt)** | **0.963** | **0.984** | **1.000** | **1.000** | **0.074** | **1637** | **0.0110** |
+
+Full analysis, including the questions that still fail: `reports/P18-4_evaluacion.md`.
+
 ## Known issues
 
 - **Rootful Podman machine on Windows does not forward ports to `localhost`.** Run `scripts\dev-db-host.ps1` before starting the app (see [Windows with a rootful Podman machine](#windows-with-a-rootful-podman-machine)). Enabling the machine's user-mode networking did not fix it with Podman 6.0.2.
@@ -255,10 +298,10 @@ This spends real tokens: the 5 questions cost about USD 0.002 with Claude Haiku 
 app/        FastAPI app (main.py), settings (config.py), database helpers (db.py),
             source loading and chunking (ingestion.py), embeddings and pgvector (vector_store.py),
             answer chain (rag.py), ranking route (ranking.py), LLM factory (llm.py),
-            budget and log tables (usage.py)
-scripts/    init_db.py, ingest.py, search_check.py, ask_check.py, dev-db-host.ps1
+            budget and log tables (usage.py), retrieval modes (retrieval.py)
+scripts/    init_db.py, ingest.py, search_check.py, ask_check.py, eval.py, dev-db-host.ps1
 tests/      pytest suite
-data/       Source documents (see data/README.md); papers.yaml is committed
+data/       Source documents (see data/README.md); papers.yaml and eval/questions.yaml are committed
 reports/    Reports for each stage
 ```
 

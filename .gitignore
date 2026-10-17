@@ -16,6 +16,7 @@ data/*
 !data/README.md
 !data/papers_seed.yaml
 !data/papers.yaml
+!data/eval/
 
 # Editors and OS
 .vscode/

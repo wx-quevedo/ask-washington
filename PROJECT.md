@@ -46,6 +46,9 @@ Este proyecto es P18 dentro del plan de `C:\xampp\htdocs\enhanced-me`. El seguim
 | Rate limit con slowapi en memoria | Suficiente para un solo proceso; se reinicia con la app. El gasto, que es lo que importa proteger, sí queda en Postgres. |
 | La pregunta va entre etiquetas `<question>` y las fuentes numeradas entre `<sources>` | Separa con claridad la entrada no confiable de las instrucciones y facilita que el modelo cite `[n]`. |
 | p22 sin abstract | Su página de ACM muestra, palabra por palabra, el mismo abstract que p03 en Springer. El texto describe una app de VR para turismo (sin marketing), así que se conservó en p03; p22 queda con título, venue, año y citas. |
+| Recuperación híbrida por defecto (`RETRIEVAL_MODE=hybrid`) | Vector + full-text de Postgres fusionados con RRF: hit@3 de 0.889 a 1.000 y MRR de 0.914 a 0.981 con 60 ms por consulta. El reranker bge-base logra MRR 1.000 pero tarda 4 s en CPU; queda como opción (`rerank`). |
+| Set de 30 preguntas versionado en `data/eval/questions.yaml` | Permite medir cada cambio de recuperación o prompt con el mismo criterio; la parte de recuperación es gratis y la de respuestas cuesta unos USD 0.011. |
+| LinkedIn solo cuando falta información, con 2 ejemplos en el prompt | Las menciones innecesarias bajaron del 59% al 7% sin perder keywords ni citas y con el mismo costo. |
 
 ## Plan de los 5 prompts
 
@@ -115,14 +118,27 @@ Estado: terminado. Detalle completo en `reports/P18-3_respuestas.md`.
 - Pruebas: 31 aprobadas (22 nuevas de `/ask` con LLM simulado: formato y citas, longitud, rate limit, tope diario, ranking, fábrica de proveedores).
 - Prueba real con 5 preguntas y Claude Haiku 5.5: 11 813 tokens de entrada y 1 666 de salida, USD 0.0020 en total; las 5 respuestas citan fuentes correctas, incluida "Production ML experience" (Buscapez) y "most cited" (p01, 88 citas) por la ruta de ranking.
 
+### 2026-10-17 - P18·4 evaluación
+
+Estado: terminado. Detalle completo en `reports/P18-4_evaluacion.md`.
+
+- `data/eval/questions.yaml`: 30 preguntas escritas desde las fuentes indexadas (XR/VR 5, IA/ML en producción 5, papers 5, repos 5, trayectoria 4, español 3, fuera de alcance 2, inyección 1), con documentos y hechos esperados.
+- `scripts/eval.py`: recuperación sin LLM (hit@3, hit@6, MRR, kw@6, latencia) y respuestas con LLM (keywords, citas válidas, rechazos, LinkedIn, latencia, costo) con tope de gasto; salida en `reports/eval/`.
+- `app/retrieval.py`: modos `vector`, `hybrid` (full-text con tsvector e índice GIN, fusión RRF) y `rerank` (cross-encoder local).
+- Recuperación: A vector hit@3 0.889 / MRR 0.914 / 26 ms; B híbrida 1.000 / 0.981 / 60 ms; C con bge-reranker-base 1.000 / 1.000 / 4030 ms. Se eligió B.
+- Respuestas (híbrida, prompt nuevo): keywords 0.963, citas válidas 0.984, 3/3 rechazos correctos, LinkedIn en 7% de las respuestas con contenido (antes 59%), 1.6 s de media, USD 0.0110 por corrida. Costo total de la evaluación: USD 0.0220.
+- Sigue fallando q20 (precisión del gaze tracker): el chunk con "2.51" solo lo recupera el reranker.
+- Pruebas: 37 aprobadas (RRF, puntuación de respuestas y eval en modo solo recuperación sin API).
+
 ## Próximos pasos
 
-- P18·4: set de unas 30 preguntas con respuestas esperadas; medir recuperación (fuente correcta en el top 6) y respuesta (citas correctas, sin inventar, idioma), y probar búsqueda híbrida o un reranker.
-- Ajustar el prompt: el modelo sugiere LinkedIn también cuando la respuesta es completa.
-- P18·5: interfaz de chat y despliegue; detrás de un proxy, tomar la IP real de `X-Forwarded-For` para el rate limit.
+- P18·5: interfaz de chat y despliegue en el VPS; detrás del proxy, tomar la IP real de `X-Forwarded-For` para el rate limit.
+- Volver a correr `scripts/eval.py` después de cada cambio de fuentes, chunking o prompt (la recuperación es gratis).
+- Sumar al set preguntas reales de `qa_log` cuando el chat esté en línea.
 
 ## Mejoras futuras
 
 - **Proveedor local en la torre (Ollama):** constructor `ollama` en `app/llm.py` con `langchain-ollama`, para responder sin costo por token cuando la torre esté encendida.
 - **Servicio de inferencia vía la API de Localia:** constructor `openai_compatible` con `langchain-openai` apuntando a la API de Localia, para reutilizar la plataforma propia.
 - Rate limit en Postgres o Redis si la app corre con varios procesos.
+- Reranker (`RETRIEVAL_MODE=rerank`) si la inferencia corre con GPU en la torre: es el único que recupera q20.

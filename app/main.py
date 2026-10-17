@@ -16,7 +16,8 @@ from slowapi.util import get_remote_address
 from app import db, usage
 from app.config import Settings, get_settings
 from app.llm import get_chat_model
-from app.rag import PGVectorRetriever, answer_question
+from app.rag import answer_question
+from app.retrieval import ChunkRetriever, ensure_fulltext_index
 
 logger = logging.getLogger("ask_washington")
 
@@ -26,6 +27,7 @@ async def lifespan(app: FastAPI):
     try:
         db.init_db()
         usage.ensure_tables()
+        ensure_fulltext_index()
         logger.info("Database ready: vector extension and usage tables")
     except psycopg.Error as exc:
         # Start anyway so /health can report the problem.
@@ -91,7 +93,12 @@ def get_llm(settings: Settings = Depends(get_settings)) -> BaseChatModel:
 
 
 def get_retriever(settings: Settings = Depends(get_settings)) -> BaseRetriever:
-    return PGVectorRetriever(top_k=settings.retrieval_top_k)
+    return ChunkRetriever(
+        mode=settings.retrieval_mode,
+        top_k=settings.retrieval_top_k,
+        candidates=settings.retrieval_candidates,
+        reranker_model=settings.reranker_model,
+    )
 
 
 def get_today() -> date:

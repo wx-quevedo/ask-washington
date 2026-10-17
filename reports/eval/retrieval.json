@@ -1,0 +1,1792 @@
+[
+  {
+    "spec": "vector",
+    "questions": 27,
+    "hit@3": 0.8888888888888888,
+    "hit@6": 1.0,
+    "mrr": 0.9135802469135803,
+    "kw@6": 0.9814814814814815,
+    "kw_misses": [
+      "q20"
+    ],
+    "latency_ms_mean": 25.56972222292744,
+    "latency_ms_p95": 30.745399999432266,
+    "misses": [],
+    "rows": [
+      {
+        "id": "q01",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q02",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "paper-p18",
+          "paper-p21",
+          "paper-p03"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q03",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "repo-localia-genai-platform",
+          "cv-xr-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q04",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "repo-riemann-hypothesis",
+          "repo-forex-trading-system",
+          "paper-p24",
+          "repo-plan-vivo-kit",
+          "repo-forex-trading-system"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q05",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "repo-agent-office-visualizer",
+          "linkedin-profile",
+          "repo-agent-office-visualizer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q06",
+        "doc_ids": [
+          "paper-p10",
+          "paper-p05",
+          "paper-p15",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "paper-p14"
+        ],
+        "kw@6": 1.0,
+        "hit@3": false,
+        "hit@6": true,
+        "rr": 0.25,
+        "first_rank": 4
+      },
+      {
+        "id": "q07",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "repo-focus",
+          "repo-focus"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q08",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "repo-focus",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "repo-plan-vivo-kit"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q09",
+        "doc_ids": [
+          "repo-localia-genai-platform",
+          "repo-plan-vivo-kit",
+          "repo-localia-genai-platform",
+          "repo-localia-genai-platform",
+          "repo-plan-vivo-kit",
+          "cv-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": false,
+        "hit@6": true,
+        "rr": 0.16666666666666666,
+        "first_rank": 6
+      },
+      {
+        "id": "q10",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "repo-agent-office-visualizer",
+          "repo-riemann-hypothesis"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q11",
+        "doc_ids": [
+          "paper-p09",
+          "paper-p08",
+          "paper-p11",
+          "paper-p18",
+          "paper-p19",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q12",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile",
+          "cv-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q13",
+        "doc_ids": [
+          "paper-p23",
+          "paper-p16",
+          "paper-p03",
+          "paper-p14",
+          "cv-xr-ai-engineer",
+          "repo-focus"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q14",
+        "doc_ids": [
+          "paper-p02",
+          "linkedin-profile",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q15",
+        "doc_ids": [
+          "repo-focus",
+          "repo-focus",
+          "paper-p25",
+          "repo-focus",
+          "linkedin-profile",
+          "repo-focus"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q16",
+        "doc_ids": [
+          "repo-plan-vivo-kit",
+          "repo-plan-vivo-kit",
+          "repo-plan-vivo-kit",
+          "repo-plan-vivo-kit",
+          "repo-plan-vivo-kit",
+          "repo-plan-vivo-kit"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q17",
+        "doc_ids": [
+          "repo-localia-genai-platform",
+          "repo-localia-genai-platform",
+          "repo-localia-genai-platform",
+          "cv-ai-engineer",
+          "repo-localia-genai-platform",
+          "repo-localia-genai-platform"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q18",
+        "doc_ids": [
+          "repo-forex-trading-system",
+          "repo-forex-trading-system",
+          "repo-forex-trading-system",
+          "repo-forex-trading-system",
+          "repo-forex-trading-system",
+          "repo-forex-trading-system"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q19",
+        "doc_ids": [
+          "repo-agent-office-visualizer",
+          "repo-agent-office-visualizer",
+          "repo-agent-office-visualizer",
+          "repo-agent-office-visualizer",
+          "repo-agent-office-visualizer",
+          "repo-agent-office-visualizer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q20",
+        "doc_ids": [
+          "repo-focus",
+          "repo-focus",
+          "paper-p25",
+          "repo-focus",
+          "repo-focus",
+          "repo-focus"
+        ],
+        "kw@6": 0.5,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q21",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "repo-forex-trading-system",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "cv-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q22",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile",
+          "cv-xr-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q23",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q24",
+        "doc_ids": [
+          "repo-localia-genai-platform",
+          "repo-agent-office-visualizer",
+          "repo-agent-office-visualizer",
+          "cv-xr-ai-engineer",
+          "repo-agent-office-visualizer",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "hit@3": false,
+        "hit@6": true,
+        "rr": 0.25,
+        "first_rank": 4
+      },
+      {
+        "id": "q25",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "repo-agent-office-visualizer",
+          "repo-forex-trading-system",
+          "repo-plan-vivo-kit"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q26",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q27",
+        "doc_ids": [
+          "repo-riemann-hypothesis",
+          "repo-riemann-hypothesis",
+          "repo-riemann-hypothesis",
+          "repo-riemann-hypothesis",
+          "repo-riemann-hypothesis",
+          "repo-riemann-hypothesis"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      }
+    ]
+  },
+  {
+    "spec": "hybrid",
+    "questions": 27,
+    "hit@3": 1.0,
+    "hit@6": 1.0,
+    "mrr": 0.9814814814814815,
+    "kw@6": 0.9814814814814815,
+    "kw_misses": [
+      "q20"
+    ],
+    "latency_ms_mean": 59.776385183795355,
+    "latency_ms_p95": 89.48090000194497,
+    "misses": [],
+    "rows": [
+      {
+        "id": "q01",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q02",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "paper-p05",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q03",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile",
+          "repo-forex-trading-system"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q04",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "repo-riemann-hypothesis",
+          "repo-forex-trading-system",
+          "paper-p24",
+          "repo-plan-vivo-kit",
+          "repo-forex-trading-system"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q05",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "repo-agent-office-visualizer",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q06",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "cv-ai-engineer",
+          "cv-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q07",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "repo-focus",
+          "repo-focus"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q08",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "paper-p16",
+          "repo-focus",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q09",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "repo-riemann-hypothesis",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q10",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "repo-forex-trading-system",
+          "repo-forex-trading-system"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q11",
+        "doc_ids": [
+          "paper-p09",
+          "paper-p08",
+          "paper-p11",
+          "linkedin-profile",
+          "paper-p19",
+          "cv-xr-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q12",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "cv-xr-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q13",
+        "doc_ids": [
+          "paper-p23",
+          "paper-p16",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "paper-p03"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q14",
+        "doc_ids": [
+          "linkedin-profile",
+          "paper-p02",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 0.5,
+        "first_rank": 2
+      },
+      {
+        "id": "q15",
+        "doc_ids": [
+          "paper-p25",
+          "repo-focus",
+          "repo-focus",
+          "repo-focus",
+          "linkedin-profile",
+          "cv-xr-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q16",
+        "doc_ids": [
+          "repo-plan-vivo-kit",
+          "repo-plan-vivo-kit",
+          "repo-plan-vivo-kit",
+          "repo-plan-vivo-kit",
+          "repo-plan-vivo-kit",
+          "repo-plan-vivo-kit"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q17",
+        "doc_ids": [
+          "repo-localia-genai-platform",
+          "repo-localia-genai-platform",
+          "repo-localia-genai-platform",
+          "repo-localia-genai-platform",
+          "cv-ai-engineer",
+          "repo-localia-genai-platform"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q18",
+        "doc_ids": [
+          "repo-forex-trading-system",
+          "repo-forex-trading-system",
+          "repo-forex-trading-system",
+          "repo-forex-trading-system",
+          "repo-forex-trading-system",
+          "repo-plan-vivo-kit"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q19",
+        "doc_ids": [
+          "repo-agent-office-visualizer",
+          "repo-agent-office-visualizer",
+          "repo-agent-office-visualizer",
+          "repo-agent-office-visualizer",
+          "repo-agent-office-visualizer",
+          "repo-agent-office-visualizer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q20",
+        "doc_ids": [
+          "repo-focus",
+          "repo-focus",
+          "repo-focus",
+          "repo-focus",
+          "repo-focus",
+          "linkedin-profile"
+        ],
+        "kw@6": 0.5,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q21",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q22",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile",
+          "linkedin-profile",
+          "cv-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q23",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "repo-riemann-hypothesis",
+          "linkedin-profile",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q24",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "repo-localia-genai-platform",
+          "repo-agent-office-visualizer",
+          "cv-ai-engineer",
+          "repo-agent-office-visualizer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q25",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "repo-agent-office-visualizer",
+          "repo-forex-trading-system",
+          "repo-plan-vivo-kit"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q26",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q27",
+        "doc_ids": [
+          "repo-riemann-hypothesis",
+          "repo-riemann-hypothesis",
+          "repo-riemann-hypothesis",
+          "repo-riemann-hypothesis",
+          "repo-riemann-hypothesis",
+          "repo-riemann-hypothesis"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      }
+    ]
+  },
+  {
+    "spec": "rerank",
+    "questions": 27,
+    "hit@3": 1.0,
+    "hit@6": 1.0,
+    "mrr": 1.0,
+    "kw@6": 1.0,
+    "kw_misses": [],
+    "latency_ms_mean": 4029.91204814828,
+    "latency_ms_p95": 4872.0869999961,
+    "misses": [],
+    "rows": [
+      {
+        "id": "q01",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q02",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "paper-p03",
+          "linkedin-profile",
+          "paper-p18",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q03",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q04",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "repo-forex-trading-system",
+          "repo-forex-trading-system",
+          "repo-focus",
+          "paper-p24"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q05",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile",
+          "cv-xr-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q06",
+        "doc_ids": [
+          "linkedin-profile",
+          "linkedin-profile",
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q07",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "cv-ai-engineer",
+          "repo-focus"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q08",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q09",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "cv-ai-engineer",
+          "repo-localia-genai-platform"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q10",
+        "doc_ids": [
+          "linkedin-profile",
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q11",
+        "doc_ids": [
+          "paper-p08",
+          "linkedin-profile",
+          "paper-p09",
+          "cv-xr-ai-engineer",
+          "paper-p19",
+          "cv-xr-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q12",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "cv-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q13",
+        "doc_ids": [
+          "paper-p23",
+          "paper-p16",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "paper-p14"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q14",
+        "doc_ids": [
+          "paper-p02",
+          "linkedin-profile",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "cv-xr-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q15",
+        "doc_ids": [
+          "repo-focus",
+          "repo-focus",
+          "cv-ai-engineer",
+          "paper-p25",
+          "repo-focus",
+          "repo-focus"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q16",
+        "doc_ids": [
+          "repo-plan-vivo-kit",
+          "repo-plan-vivo-kit",
+          "repo-plan-vivo-kit",
+          "repo-plan-vivo-kit",
+          "repo-plan-vivo-kit",
+          "repo-plan-vivo-kit"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q17",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "repo-localia-genai-platform",
+          "repo-localia-genai-platform",
+          "repo-localia-genai-platform",
+          "repo-localia-genai-platform",
+          "repo-localia-genai-platform"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q18",
+        "doc_ids": [
+          "repo-forex-trading-system",
+          "repo-forex-trading-system",
+          "repo-forex-trading-system",
+          "repo-forex-trading-system",
+          "repo-forex-trading-system",
+          "repo-forex-trading-system"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q19",
+        "doc_ids": [
+          "repo-agent-office-visualizer",
+          "repo-agent-office-visualizer",
+          "repo-agent-office-visualizer",
+          "repo-agent-office-visualizer",
+          "repo-agent-office-visualizer",
+          "repo-agent-office-visualizer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q20",
+        "doc_ids": [
+          "repo-focus",
+          "repo-focus",
+          "cv-ai-engineer",
+          "repo-focus",
+          "linkedin-profile",
+          "cv-xr-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q21",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q22",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q23",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q24",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "repo-agent-office-visualizer",
+          "linkedin-profile",
+          "repo-agent-office-visualizer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q25",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile",
+          "cv-xr-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q26",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q27",
+        "doc_ids": [
+          "repo-riemann-hypothesis",
+          "repo-riemann-hypothesis",
+          "repo-riemann-hypothesis",
+          "repo-riemann-hypothesis",
+          "repo-riemann-hypothesis",
+          "repo-riemann-hypothesis"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      }
+    ]
+  },
+  {
+    "spec": "rerank:cross-encoder/ms-marco-MiniLM-L-6-v2",
+    "questions": 27,
+    "hit@3": 1.0,
+    "hit@6": 1.0,
+    "mrr": 0.9629629629629629,
+    "kw@6": 0.9814814814814815,
+    "kw_misses": [
+      "q20"
+    ],
+    "latency_ms_mean": 682.8606074074438,
+    "latency_ms_p95": 787.0968999923207,
+    "misses": [],
+    "rows": [
+      {
+        "id": "q01",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q02",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q03",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "repo-agent-office-visualizer",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q04",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "paper-p24",
+          "paper-p20",
+          "repo-riemann-hypothesis",
+          "repo-forex-trading-system",
+          "repo-riemann-hypothesis"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q05",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "cv-xr-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q06",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "cv-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q07",
+        "doc_ids": [
+          "linkedin-profile",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "repo-focus",
+          "repo-focus"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q08",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "repo-focus",
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "cv-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q09",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "repo-localia-genai-platform",
+          "repo-riemann-hypothesis"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q10",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q11",
+        "doc_ids": [
+          "paper-p08",
+          "paper-p09",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "paper-p19",
+          "cv-xr-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q12",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "repo-agent-office-visualizer",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q13",
+        "doc_ids": [
+          "paper-p23",
+          "paper-p16",
+          "repo-focus",
+          "repo-focus",
+          "cv-xr-ai-engineer",
+          "paper-p01"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q14",
+        "doc_ids": [
+          "paper-p02",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q15",
+        "doc_ids": [
+          "repo-focus",
+          "repo-focus",
+          "paper-p25",
+          "repo-focus",
+          "repo-focus",
+          "repo-plan-vivo-kit"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q16",
+        "doc_ids": [
+          "repo-plan-vivo-kit",
+          "repo-plan-vivo-kit",
+          "repo-plan-vivo-kit",
+          "repo-plan-vivo-kit",
+          "repo-plan-vivo-kit",
+          "repo-plan-vivo-kit"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q17",
+        "doc_ids": [
+          "repo-localia-genai-platform",
+          "repo-localia-genai-platform",
+          "repo-localia-genai-platform",
+          "cv-ai-engineer",
+          "repo-localia-genai-platform",
+          "repo-localia-genai-platform"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q18",
+        "doc_ids": [
+          "repo-forex-trading-system",
+          "repo-forex-trading-system",
+          "repo-forex-trading-system",
+          "repo-forex-trading-system",
+          "repo-forex-trading-system",
+          "repo-forex-trading-system"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q19",
+        "doc_ids": [
+          "repo-agent-office-visualizer",
+          "repo-agent-office-visualizer",
+          "repo-agent-office-visualizer",
+          "repo-agent-office-visualizer",
+          "repo-agent-office-visualizer",
+          "repo-agent-office-visualizer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q20",
+        "doc_ids": [
+          "repo-focus",
+          "repo-focus",
+          "repo-focus",
+          "repo-focus",
+          "repo-focus",
+          "repo-focus"
+        ],
+        "kw@6": 0.5,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q21",
+        "doc_ids": [
+          "repo-localia-genai-platform",
+          "cv-ai-engineer",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile",
+          "cv-xr-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 0.5,
+        "first_rank": 2
+      },
+      {
+        "id": "q22",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q23",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q24",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "repo-localia-genai-platform",
+          "repo-plan-vivo-kit",
+          "repo-forex-trading-system"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q25",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "repo-plan-vivo-kit",
+          "repo-plan-vivo-kit",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q26",
+        "doc_ids": [
+          "repo-riemann-hypothesis",
+          "linkedin-profile",
+          "linkedin-profile",
+          "repo-plan-vivo-kit",
+          "repo-localia-genai-platform",
+          "repo-forex-trading-system"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 0.5,
+        "first_rank": 2
+      },
+      {
+        "id": "q27",
+        "doc_ids": [
+          "repo-riemann-hypothesis",
+          "repo-riemann-hypothesis",
+          "repo-riemann-hypothesis",
+          "repo-riemann-hypothesis",
+          "repo-riemann-hypothesis",
+          "repo-riemann-hypothesis"
+        ],
+        "kw@6": 1.0,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      }
+    ]
+  }
+]

@@ -16,6 +16,7 @@ import time
 
 from app import db, vector_store
 from app.ingestion import DOC_TYPES, load_documents, split_document
+from app.retrieval import ensure_fulltext_index
 
 
 def parse_args() -> argparse.Namespace:
@@ -62,6 +63,7 @@ def main() -> None:
     for doc_id in removed:
         vector_store.delete_document(store, doc_id)
 
+    ensure_fulltext_index()
     elapsed = time.perf_counter() - started
     print(
         f"documents: {len(documents)} | added {added} | updated {updated} | "
