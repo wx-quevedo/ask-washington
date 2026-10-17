@@ -116,7 +116,9 @@ try {
     }
     $head = (git rev-parse --short HEAD).Trim()
     Write-Host "Packaging HEAD ($head) with git archive"
-    Invoke-Native "git archive" { git archive --format=tar.gz -o (Join-Path $tmp "app.tar.gz") HEAD }
+    # core.autocrlf=true (common on Windows) would make git archive emit CRLF, which breaks
+    # shell scripts and Dockerfile line continuations on the server.
+    Invoke-Native "git archive" { git -c core.autocrlf=false archive --format=tar.gz -o (Join-Path $tmp "app.tar.gz") HEAD }
     $shown = Get-NativeOutput { git show "HEAD:deploy/remote-deploy.sh" }
     $remoteScript = $shown.Output
     if ($shown.ExitCode -ne 0) {
