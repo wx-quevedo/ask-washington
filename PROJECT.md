@@ -150,6 +150,7 @@ Estado: código listo y validado en local; el despliegue al VPS lo ejecuta Washi
 - No se pudo construir la imagen en local: la máquina de Podman volvió a quedar sin `/etc/resolv.conf` y no resuelve DNS. El tamaño de la imagen queda por medir en el servidor.
 - Revisión de secretos del historial (gitleaks 8.30.1 y búsqueda propia): sin secretos, sin IP ni usuario del VPS, sin emails ni teléfonos privados.
 - Pruebas: 43 aprobadas.
+- Finales de línea: `git archive` con `core.autocrlf=true` empaquetaba CRLF; se fijó LF con `.gitattributes` y `git -c core.autocrlf=false archive`.
 
 ## Próximos pasos
 

@@ -66,14 +66,17 @@ Validación local sin tocar el VPS:
 | Parser de PowerShell sobre `deploy.ps1`, `rollback.ps1`, `dev-db-host.ps1` | 0 errores |
 | `bash -n deploy/remote-deploy.sh` | OK |
 | shellcheck 0.11.0 (vía `shellcheck-py`) | Limpio (un aviso informativo SC2024 revisado y documentado en el script) |
-| `deploy.ps1 -DryRun -AllowDirty` con un `.deploy.local` ficticio | OK: `app.tar.gz` 388 KB, `data.dump` 328 KB, `env.production` 533 bytes, `remote-deploy.sh`; directorio temporal borrado |
+| `deploy.ps1 -DryRun` con un `.deploy.local` ficticio, desde HEAD limpio | OK: `app.tar.gz` 1.0 MB (incluye las capturas; `.dockerignore` las deja fuera de la imagen), `data.dump` 328 KB, `env.production` 533 bytes, `remote-deploy.sh` tomado de HEAD; directorio temporal borrado |
 | `deploy.ps1 -DryRun` con cambios sin commitear | Se detiene con el mensaje de árbol sucio |
-| Contenido de `git archive HEAD` | Sin `data/sources`, `.env` ni `.deploy.local` |
+| Contenido de `git archive HEAD` | Sin `data/sources`, `.env` ni `.deploy.local`; finales de línea LF en `remote-deploy.sh`, `Dockerfile`, compose y código (0 bytes CR) |
 | `podman compose -p ask-washington -f docker-compose.prod.yml config` con `.env` ficticio | Válido: puertos, límites y red como se esperaba |
 | `pg_dump` + `pg_restore` dos veces en base de prueba | OK, idempotente |
 | Build de la imagen con Podman | No viable hoy (DNS de la máquina de Podman, ver arriba) |
 
-Un problema encontrado y corregido en la validación: en Windows PowerShell 5.1, con `$ErrorActionPreference = "Stop"`, cualquier línea que un programa nativo escribe en stderr se vuelve un error fatal (`ssh -t` imprime "Connection to ... closed" ahí, así que el deploy habría fallado aun saliendo bien). Las llamadas nativas ahora se juzgan por su código de salida.
+Dos problemas encontrados y corregidos en la validación:
+
+1. Con `core.autocrlf=true` (la configuración de Git for Windows en esta máquina), `git archive` entregaba los archivos con CRLF: `remote-deploy.sh`, el `Dockerfile` y el compose habrían llegado al servidor con CRLF, que rompe bash y las continuaciones de línea. Se agregó `.gitattributes` (`* text=auto eol=lf`, CRLF solo en `.ps1`) y `deploy.ps1` llama a `git -c core.autocrlf=false archive`. Verificado contando bytes CR dentro del tar: 0.
+2. En Windows PowerShell 5.1, con `$ErrorActionPreference = "Stop"`, cualquier línea que un programa nativo escribe en stderr se vuelve un error fatal (`ssh -t` imprime "Connection to ... closed" ahí, así que el deploy habría fallado aun saliendo bien). Las llamadas nativas ahora se juzgan por su código de salida.
 
 ## Revisión de secretos
 
