@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ask Washington</title>
+  <meta name="description" content="Ask about the experience of Washington X. Quevedo, AI Engineer and XR + AI Engineer. Answers cite his public CV, LinkedIn, repositories and papers.">
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#question">Skip to the question</a>
+
+  <header class="site-header">
+    <div class="container">
+      <h1>Ask Washington</h1>
+      <p class="subtitle">Ask about the experience of Washington X. Quevedo, AI Engineer and XR + AI Engineer. Every answer cites his public sources.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section aria-labelledby="suggested-title" class="suggested">
+      <h2 id="suggested-title" class="section-label">Try a question</h2>
+      <ul class="suggestions">
+        <li><button type="button" class="suggestion">What XR experience does Washington have?</button></li>
+        <li><button type="button" class="suggestion">What has he shipped with machine learning in production?</button></li>
+        <li><button type="button" class="suggestion">What is his most cited paper?</button></li>
+        <li><button type="button" class="suggestion">What is plan-vivo-kit?</button></li>
+      </ul>
+    </section>
+
+    <form id="ask-form" class="ask-form" novalidate>
+      <label for="question" class="section-label">Your question</label>
+      <textarea id="question" name="question" rows="3" minlength="3" maxlength="500" required
+        aria-describedby="question-help question-count"
+        placeholder="For example: What did he build at Stanford University?"></textarea>
+      <div class="form-row">
+        <p id="question-help" class="help">English or Spanish, 3 to 500 characters. Press Enter to send, Shift+Enter for a new line.</p>
+        <p id="question-count" class="help count" aria-live="polite">0 / 500</p>
+      </div>
+      <button type="submit" id="ask-button" class="primary">Ask</button>
+    </form>
+
+    <section id="result" class="result" aria-live="polite" aria-busy="false" tabindex="-1">
+      <div id="status" class="status" hidden></div>
+      <div id="answer-block" hidden>
+        <h2 class="section-label">Answer</h2>
+        <div id="answer" class="answer"></div>
+        <h2 class="section-label">Sources</h2>
+        <ol id="sources" class="sources"></ol>
+        <p id="meta" class="meta"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <nav aria-label="Profiles">
+        <ul class="footer-links">
+          <li><a href="https://www.linkedin.com/in/wxquevedo" rel="noopener" target="_blank">LinkedIn</a></li>
+          <li><a href="https://github.com/wx-quevedo" rel="noopener" target="_blank">GitHub</a></li>
+          <li><a href="https://scholar.google.com/citations?user=zPNPhwkAAAAJ" rel="noopener" target="_blank">Google Scholar</a></li>
+        </ul>
+      </nav>
+      <p class="disclaimer">Answers are generated from public sources and may contain errors.</p>
+    </div>
+  </footer>
+</body>
+</html>

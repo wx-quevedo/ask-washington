@@ -49,6 +49,14 @@ Este proyecto es P18 dentro del plan de `C:\xampp\htdocs\enhanced-me`. El seguim
 | Recuperación híbrida por defecto (`RETRIEVAL_MODE=hybrid`) | Vector + full-text de Postgres fusionados con RRF: hit@3 de 0.889 a 1.000 y MRR de 0.914 a 0.981 con 60 ms por consulta. El reranker bge-base logra MRR 1.000 pero tarda 4 s en CPU; queda como opción (`rerank`). |
 | Set de 30 preguntas versionado en `data/eval/questions.yaml` | Permite medir cada cambio de recuperación o prompt con el mismo criterio; la parte de recuperación es gratis y la de respuestas cuesta unos USD 0.011. |
 | LinkedIn solo cuando falta información, con 2 ejemplos en el prompt | Las menciones innecesarias bajaron del 59% al 7% sin perder keywords ni citas y con el mismo costo. |
+| Interfaz en HTML, CSS y JS sin framework, servida por la misma FastAPI | Una sola página no necesita build ni dependencias; sin scripts inline, funciona con una CSP estricta (`default-src 'self'`). |
+| `rerank_light` (MiniLM) no queda por defecto | No acierta q20, baja el MRR de 0.981 a 0.963 y tarda 779 ms (el límite era 250 ms). Queda disponible por env. |
+| Docker: multi-stage con uv, torch solo CPU y modelo de embeddings dentro de la imagen | Sin dependencias CUDA (unos 2.5 GB menos) y sin descargas en tiempo de ejecución (`HF_HUB_OFFLINE=1`). torch pasó a ser dependencia directa porque `[tool.uv.sources]` solo aplica a dependencias directas. |
+| Proyecto Compose propio, app solo en 127.0.0.1, db sin puertos, red y volumen propios | Regla dura: no afectar otros proyectos del VPS. Todo comando del deploy usa `-p ask-washington`. |
+| IP real con `ProxyHeadersMiddleware` en la app (además de `--proxy-headers` en uvicorn) | La lógica queda cubierta por pruebas. Se confía en `X-Forwarded-For` solo desde `FORWARDED_ALLOW_IPS`: 127.0.0.1 y los rangos privados de Docker, porque nginx llega al contenedor por el gateway del bridge. nginx sobrescribe la cabecera con `$remote_addr`, así que un cliente no puede falsificarla. |
+| Datos al servidor por `pg_dump -Fc` de `data_chunks` e `ingested_documents` | El servidor nunca recibe los CV ni las demás fuentes; el dump restaura también los índices HNSW y de texto completo. |
+| Host y usuario del VPS solo en `deploy/.deploy.local` (ignorado) | El repo será público. Los secretos de producción (contraseña de la db, sal del hash de IP) se generan una vez y se guardan en ese mismo archivo para que los redeploys no cambien la contraseña del volumen. |
+| El sitio nginx se instala solo la primera vez (o con `-ForceNginx`) | Después de certbot el archivo queda gestionado por certbot; sobrescribirlo en cada deploy quitaría el bloque HTTPS. |
 
 ## Plan de los 5 prompts
 
@@ -130,11 +138,25 @@ Estado: terminado. Detalle completo en `reports/P18-4_evaluacion.md`.
 - Sigue fallando q20 (precisión del gaze tracker): el chunk con "2.51" solo lo recupera el reranker.
 - Pruebas: 37 aprobadas (RRF, puntuación de respuestas y eval en modo solo recuperación sin API).
 
+### 2026-10-17 - P18·5 interfaz y despliegue
+
+Estado: código listo y validado en local; el despliegue al VPS lo ejecuta Washington con `deploy/deploy.ps1`. Detalle completo y comandos exactos en `reports/P18-5_deploy.md`.
+
+- Interfaz en `GET /` (`app/static/`): preguntas sugeridas, citas `[n]` enlazadas a las fuentes, estados de carga y error (429), accesible y usable en móvil. Capturas en `reports/screenshots/`.
+- `rerank_light` (ms-marco-MiniLM-L-6-v2, 20 a 6): hit@3 1.000, MRR 0.963, 779 ms; no acierta q20. Queda `hybrid` por defecto.
+- Producción: `Dockerfile` multi-stage (torch CPU, modelo dentro, usuario no root, healthcheck), `docker-compose.prod.yml` (proyecto `ask-washington`, app en `127.0.0.1:8710`, db sin puertos, límites 1.5 GB y 512 MB), sitio nginx con cabeceras de seguridad.
+- IP real detrás del proxy: `ProxyHeadersMiddleware` con `FORWARDED_ALLOW_IPS`; pruebas de IP real, de cabecera falsificada y de rate limit por cliente detrás del mismo proxy.
+- `deploy/deploy.ps1` (con `-DryRun`), `deploy/remote-deploy.sh` y `deploy/rollback.ps1`. Validado en local: sintaxis de PowerShell, `bash -n` y shellcheck, dry run completo (paquete, dump de 328 KB, `.env` de producción), restauración del dump dos veces en una base de prueba, compose de producción con `config`.
+- No se pudo construir la imagen en local: la máquina de Podman volvió a quedar sin `/etc/resolv.conf` y no resuelve DNS. El tamaño de la imagen queda por medir en el servidor.
+- Revisión de secretos del historial (gitleaks 8.30.1 y búsqueda propia): sin secretos, sin IP ni usuario del VPS, sin emails ni teléfonos privados.
+- Pruebas: 43 aprobadas.
+
 ## Próximos pasos
 
-- P18·5: interfaz de chat y despliegue en el VPS; detrás del proxy, tomar la IP real de `X-Forwarded-For` para el rate limit.
-- Volver a correr `scripts/eval.py` después de cada cambio de fuentes, chunking o prompt (la recuperación es gratis).
-- Sumar al set preguntas reales de `qa_log` cuando el chat esté en línea.
+- Washington: crear `deploy/.deploy.local`, correr `deploy.ps1 -DryRun` y luego `deploy.ps1`; verificar https://ask.inmersoft.com.
+- Medir en el servidor el tamaño de la imagen, la RAM real del contenedor y la latencia de `/ask`.
+- Publicar el repo en GitHub cuando el despliegue esté verificado.
+- Volver a correr `scripts/eval.py` tras cada cambio y sumar preguntas reales de `qa_log`.
 
 ## Mejoras futuras
 

@@ -1,0 +1,16 @@
+.git
+.venv
+.env
+.env.*
+!.env.example
+.pytest_cache
+.ruff_cache
+**/__pycache__
+.agents
+.claude
+data/sources
+data/eval
+reports
+tests
+deploy
+*.dump

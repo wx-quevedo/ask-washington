@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     # None means "do not send": Claude Haiku 5.5 rejects non-default sampling values.
     llm_temperature: float | None = None
     retrieval_top_k: int = 6
-    # vector | hybrid | rerank (see app/retrieval.py)
+    # vector | hybrid | rerank | rerank_light (see app/retrieval.py)
     retrieval_mode: str = "hybrid"
     retrieval_candidates: int = 20
     reranker_model: str = "BAAI/bge-reranker-base"
@@ -35,6 +35,9 @@ class Settings(BaseSettings):
     rate_limit_per_day: str = "100/day"
     # Salt for the IP hash stored in qa_log.
     ip_hash_salt: str = "ask-washington"
+    # Peers allowed to set X-Forwarded-For (comma-separated IPs or CIDRs). Only the local
+    # reverse proxy belongs here; in Docker that is the bridge gateway of the app network.
+    forwarded_allow_ips: str = "127.0.0.1"
 
     @field_validator("llm_temperature", mode="before")
     @classmethod

@@ -32,7 +32,7 @@ def test_rrf_fuse_ties_keep_first_appearance_and_handle_empty_lists():
 def test_unknown_retrieval_mode_is_rejected():
     with pytest.raises(ValueError, match="Unknown RETRIEVAL_MODE 'bm25'"):
         retrieve("anything", mode="bm25")
-    assert RETRIEVAL_MODES == ("vector", "hybrid", "rerank")
+    assert RETRIEVAL_MODES == ("vector", "hybrid", "rerank", "rerank_light")
 
 
 def test_retrieval_metrics():

@@ -4,7 +4,8 @@ and hybrid followed by a local cross-encoder reranker.
 Modes (RETRIEVAL_MODE):
 - vector: pgvector cosine similarity only (P18.2 behaviour).
 - hybrid: vector and Postgres full-text candidates fused with Reciprocal Rank Fusion.
-- rerank: hybrid candidates re-scored by a cross-encoder, keeping the best top_k.
+- rerank: hybrid candidates re-scored by a cross-encoder (RERANKER_MODEL), keeping the best top_k.
+- rerank_light: the same with a small cross-encoder (ms-marco-MiniLM-L-6-v2), faster on CPU.
 """
 
 import logging
@@ -17,7 +18,8 @@ from langchain_core.retrievers import BaseRetriever
 
 from app.db import connect
 
-RETRIEVAL_MODES = ("vector", "hybrid", "rerank")
+RETRIEVAL_MODES = ("vector", "hybrid", "rerank", "rerank_light")
+LIGHT_RERANKER = "cross-encoder/ms-marco-MiniLM-L-6-v2"
 RRF_K = 60
 
 # Title and section are searchable too, so "plan-vivo-kit" matches the repo chunks.
@@ -155,6 +157,8 @@ def retrieve(
         return hybrid_search(query, top_k, candidates)
     if mode == "rerank":
         return rerank(query, hybrid_search(query, candidates, candidates), top_k, reranker_model)
+    if mode == "rerank_light":
+        return rerank(query, hybrid_search(query, candidates, candidates), top_k, LIGHT_RERANKER)
     raise ValueError(f"Unknown RETRIEVAL_MODE '{mode}'. Supported: {', '.join(RETRIEVAL_MODES)}.")
 
 

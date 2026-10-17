@@ -1,0 +1,15 @@
+# Copy to deploy/.deploy.local (ignored by git) and fill in the real values.
+# Never commit the real host or user.
+
+# SSH target for the server.
+DEPLOY_HOST=deployer@203.0.113.10
+
+# Host port for the app, published on 127.0.0.1 only. The deploy aborts if it is taken.
+APP_PORT=8710
+
+# Optional: name of the local database container that holds the ingested data.
+LOCAL_DB_CONTAINER=ask-washington-db
+
+# Generated on the first deploy and reused afterwards (do not change once deployed):
+# POSTGRES_PASSWORD=...
+# IP_HASH_SALT=...

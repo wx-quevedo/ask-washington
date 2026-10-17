@@ -1,0 +1,49 @@
+# Production stack. Run with its own project name so nothing else on the host is touched:
+#   docker compose -p ask-washington -f docker-compose.prod.yml up -d --build
+# Values come from .env next to this file (see deploy/deploy.ps1, which generates it).
+name: ask-washington
+
+services:
+  app:
+    build: .
+    image: ask-washington-app:latest
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      # The app port is published on the host loopback only, so the peers that can reach
+      # the container are the host itself (nginx, through the bridge gateway) and this
+      # project's own network. X-Forwarded-For is trusted only from those.
+      FORWARDED_ALLOW_IPS: ${FORWARDED_ALLOW_IPS:-127.0.0.1,172.16.0.0/12,192.168.0.0/16}
+    ports:
+      - "127.0.0.1:${APP_PORT:-8710}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - internal
+    mem_limit: 1536m
+
+  db:
+    image: docker.io/pgvector/pgvector:pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - internal
+    mem_limit: 512m
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  pgdata:
+
+networks:
+  internal:

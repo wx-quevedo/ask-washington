@@ -17,6 +17,7 @@ dependencies = [
     "pydantic-settings>=2.16.0",
     "pyyaml>=6.0.3",
     "slowapi>=0.1.10",
+    "torch>=2.14",
     "uvicorn[standard]>=0.54.0",
 ]
 
@@ -39,3 +40,12 @@ extend-immutable-calls = ["fastapi.Depends"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+# CPU-only PyTorch on every platform (the default Linux wheels pull in CUDA, ~2.5 GB).
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu" }]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true

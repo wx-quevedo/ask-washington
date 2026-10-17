@@ -23,3 +23,7 @@ data/*
 .idea/
 .DS_Store
 Thumbs.db
+
+# Deploy settings with the real host and generated secrets stay local
+deploy/.deploy.local
+deploy/*.local

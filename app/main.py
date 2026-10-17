@@ -2,16 +2,19 @@ import logging
 import time
 from contextlib import asynccontextmanager
 from datetime import date
+from pathlib import Path
 
 import psycopg
 from fastapi import Depends, FastAPI, HTTPException, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 from langchain_core.language_models import BaseChatModel
 from langchain_core.retrievers import BaseRetriever
 from pydantic import BaseModel, Field, field_validator
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
+from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 
 from app import db, usage
 from app.config import Settings, get_settings
@@ -37,9 +40,24 @@ async def lifespan(app: FastAPI):
 
 limiter = Limiter(key_func=get_remote_address)
 
-app = FastAPI(title="Ask Washington", version="0.3.0", lifespan=lifespan)
+STATIC_DIR = Path(__file__).resolve().parent / "static"
+
+app = FastAPI(title="Ask Washington", version="0.5.0", lifespan=lifespan)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+# Behind nginx, take the client IP from X-Forwarded-For, but only when the request comes
+# from a trusted peer (the local proxy). The rightmost untrusted address wins, so a client
+# cannot spoof its IP by sending its own X-Forwarded-For header.
+app.add_middleware(
+    ProxyHeadersMiddleware,
+    trusted_hosts=[h.strip() for h in get_settings().forwarded_allow_ips.split(",") if h.strip()],
+)
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
+
+@app.get("/", include_in_schema=False)
+def index() -> FileResponse:
+    return FileResponse(STATIC_DIR / "index.html", media_type="text/html")
 
 
 @app.get("/health")

@@ -4,6 +4,34 @@ A retrieval-augmented (RAG) chat for the portfolio of Washington X. Quevedo, AI 
 
 It is also a learning project for RAG, vector databases, LangChain and LlamaIndex.
 
+**Demo: https://ask.inmersoft.com**
+
+![Ask Washington answering a question, with numbered citations linked to the source list](reports/screenshots/desktop-answer.png)
+
+## Architecture
+
+```mermaid
+flowchart LR
+    U[Browser] -->|HTTPS| N[nginx<br/>TLS, security headers]
+    N -->|127.0.0.1 only| A[FastAPI app<br/>web page, POST /ask]
+    A --> R{Ranking question?}
+    R -->|yes: most cited, latest,<br/>how many, h-index| P[(data/papers.yaml)]
+    R -->|no| H[Hybrid retrieval<br/>vector + full text, RRF]
+    H --> E[bge-small-en-v1.5<br/>local embeddings]
+    H --> D[(Postgres 16 + pgvector<br/>data_chunks)]
+    P --> L[Claude Haiku 5.5<br/>writes the cited answer]
+    H --> L
+    A --> G[(usage_daily, qa_log<br/>budget and log)]
+    subgraph Offline ingestion
+        S[CVs, LinkedIn,<br/>repo READMEs, papers] --> I[LlamaIndex<br/>clean, chunk, embed]
+        I --> D
+    end
+```
+
+- **Ingestion** (offline): public sources are cleaned (contact details removed), split by heading into chunks of about 500 tokens, embedded locally and stored in pgvector with citation metadata.
+- **Answering**: questions about rankings and counts are computed from the publication list; everything else retrieves 6 chunks with hybrid search. Claude writes a short answer that cites `[n]` sources, in the language of the question.
+- **Safety and cost**: per-IP rate limits, a daily USD budget stored in Postgres, untrusted-input rules in the prompt, and a log with hashed IPs.
+
 ## Status
 
 | Part | Status |
@@ -12,7 +40,7 @@ It is also a learning project for RAG, vector databases, LangChain and LlamaInde
 | Document ingestion and vector index (LlamaIndex) | Done |
 | Answer chain with citations (LangChain + Claude API, usage and spend limits) | Done |
 | Evaluation set (30 questions) and retrieval tuning | Done |
-| Chat interface and deployment to a VPS | Planned |
+| Web interface and production deployment (Docker, nginx, certbot) | Done |
 
 ## Stack
 
@@ -25,6 +53,8 @@ It is also a learning project for RAG, vector databases, LangChain and LlamaInde
 - Local embeddings with `BAAI/bge-small-en-v1.5` (384 dimensions, runs on CPU)
 - LangChain for the answer chain, with the Anthropic Claude API (`claude-haiku-5-5` by default) through `langchain-anthropic`
 - slowapi for per-IP rate limits
+- Plain HTML, CSS and JavaScript for the web page (no framework, no build step)
+- Docker multi-stage image (CPU-only PyTorch, models baked in), Docker Compose, nginx and certbot in production
 
 ## Run locally
 
@@ -222,13 +252,14 @@ curl -s http://127.0.0.1:8000/ask \
 | `LLM_MAX_TOKENS` | `600` | |
 | `LLM_TEMPERATURE` | (empty) | Empty means not sent. Claude Haiku 5.5 rejects non-default sampling values; set it only for models that accept it. |
 | `RETRIEVAL_TOP_K` | `6` | Chunks sent to the LLM on the RAG route. |
-| `RETRIEVAL_MODE` | `hybrid` | `vector`, `hybrid` (vector + Postgres full text, fused with RRF) or `rerank` (hybrid candidates re-scored by a local cross-encoder). See Evaluation. |
+| `RETRIEVAL_MODE` | `hybrid` | `vector`, `hybrid` (vector + Postgres full text, fused with RRF), `rerank` (hybrid candidates re-scored by `RERANKER_MODEL`) or `rerank_light` (same with `ms-marco-MiniLM-L-6-v2`). See Evaluation. |
 | `RETRIEVAL_CANDIDATES` | `20` | Candidates per search before fusion or reranking. |
 | `RERANKER_MODEL` | `BAAI/bge-reranker-base` | Cross-encoder for `rerank` mode (downloaded on first use, about 1.1 GB). |
 | `LLM_PRICE_INPUT_PER_MTOK` / `LLM_PRICE_OUTPUT_PER_MTOK` | `0.10` / `0.50` | USD per million tokens. Update them if you change the model. |
 | `DAILY_BUDGET_USD` | `1.00` | |
 | `RATE_LIMIT_PER_MINUTE` / `RATE_LIMIT_PER_DAY` | `10/minute` / `100/day` | |
 | `IP_HASH_SALT` | `ask-washington` | Set your own value. |
+| `FORWARDED_ALLOW_IPS` | `127.0.0.1` | Peers allowed to set `X-Forwarded-For` (IPs or CIDRs). Only the local reverse proxy; see Deployment. |
 
 ### Providers
 
@@ -272,7 +303,7 @@ Retrieval:
 | C. hybrid + `BAAI/bge-reranker-base` (20 -> 6) | 1.000 | 1.000 | 1.000 | 1.000 | 4030 | 4872 |
 | C'. hybrid + `ms-marco-MiniLM-L-6-v2` (20 -> 6) | 1.000 | 1.000 | 0.963 | 0.981 | 683 | 787 |
 
-`hybrid` is the default: it reaches the reranker's hit@3 at 60 ms instead of 4 s.
+`hybrid` is the default: it reaches the reranker's hit@3 at 60 ms instead of 4 s. C' is available as `RETRIEVAL_MODE=rerank_light`; a re-run on 2026-10-17 gave the same quality (MRR 0.963, q20 still missed) at 779 ms, so it did not replace `hybrid`.
 
 Answers (hybrid retrieval, 30 questions), before and after limiting LinkedIn suggestions in the prompt:
 
@@ -282,6 +313,44 @@ Answers (hybrid retrieval, 30 questions), before and after limiting LinkedIn sug
 | **after (current prompt)** | **0.963** | **0.984** | **1.000** | **1.000** | **0.074** | **1637** | **0.0110** |
 
 Full analysis, including the questions that still fail: `reports/P18-4_evaluacion.md`.
+
+## Web interface
+
+`GET /` serves a single page (`app/static/`: HTML, CSS and JavaScript, no framework): four suggested questions, a question box, the answer with `[n]` markers linked to the source list, loading and error states (including a clear message on `429`), and links to LinkedIn, GitHub and Google Scholar. It works with keyboard and screen readers (labels, focus handling, `aria-live`) and on phones. There is no inline script, so it runs under a strict Content Security Policy.
+
+| Desktop | Mobile |
+|---|---|
+| ![Desktop](reports/screenshots/desktop-initial.png) | ![Mobile](reports/screenshots/mobile-initial.png) |
+
+## Deployment
+
+Production runs as one Docker Compose project behind the host's nginx:
+
+- `Dockerfile`: multi-stage build on `python:3.12-slim` with uv, CPU-only PyTorch, the embedding model downloaded at build time (offline at runtime), a non-root user and a health check on `/health`.
+- `docker-compose.prod.yml`: project `ask-washington` with its own network and volume; the app is published on `127.0.0.1:<APP_PORT>` only and the database has no published ports; `restart: unless-stopped`; memory limits of 1.5 GB (app) and 512 MB (database).
+- Uvicorn runs with `--proxy-headers`, and the app trusts `X-Forwarded-For` only from `FORWARDED_ALLOW_IPS` (the local proxy). nginx overwrites that header with the real client address, so clients cannot spoof it and the rate limit counts real clients.
+- `deploy/nginx/ask.inmersoft.com.conf`: reverse proxy with `X-Forwarded-*` headers, request size limits and basic security headers (CSP, `X-Frame-Options`, `nosniff`, referrer and permissions policies). certbot adds HTTPS.
+- Data: the server never receives the source documents. The deploy dumps the `data_chunks` and `ingested_documents` tables with `pg_dump -Fc` and restores them on the server.
+
+One command deploys from a Windows machine with SSH access to the server:
+
+```powershell
+copy deploy\.deploy.local.example deploy\.deploy.local   # set DEPLOY_HOST=user@host (ignored by git)
+powershell -ExecutionPolicy Bypass -File deploy\deploy.ps1 -DryRun   # local check, sends nothing
+powershell -ExecutionPolicy Bypass -File deploy\deploy.ps1
+```
+
+`deploy.ps1` packages `HEAD` with `git archive`, dumps the vector store, writes a production `.env` (mode 600, only the needed variables, `ANTHROPIC_API_KEY` read from the local `.env` without printing it), uploads them with `scp`, and runs `deploy/remote-deploy.sh` in one `ssh -t` session that asks for the sudo password once. On the server it installs the code in `/var/www/ask-washington`, aborts if the app port is used by something else, runs `docker compose -p ask-washington up -d --build`, waits for `/health`, restores the dump, installs the nginx site, reloads nginx only if `nginx -t` passes, and runs certbot. It is idempotent: re-running it updates the same project. `deploy/rollback.ps1` stops only this project's containers and removes only its nginx site.
+
+The same steps by hand, without the scripts:
+
+```bash
+docker compose -p ask-washington -f docker-compose.prod.yml up -d --build
+docker compose -p ask-washington -f docker-compose.prod.yml exec -T db \
+  pg_restore --clean --if-exists --no-owner -U askw -d ask_washington < data.dump
+```
+
+The interactive API docs (`/docs`) load assets from a CDN, which the production Content Security Policy blocks; use them locally.
 
 ## Known issues
 
@@ -298,8 +367,10 @@ Full analysis, including the questions that still fail: `reports/P18-4_evaluacio
 app/        FastAPI app (main.py), settings (config.py), database helpers (db.py),
             source loading and chunking (ingestion.py), embeddings and pgvector (vector_store.py),
             answer chain (rag.py), ranking route (ranking.py), LLM factory (llm.py),
-            budget and log tables (usage.py), retrieval modes (retrieval.py)
-scripts/    init_db.py, ingest.py, search_check.py, ask_check.py, eval.py, dev-db-host.ps1
+            budget and log tables (usage.py), retrieval modes (retrieval.py), web page (static/)
+scripts/    init_db.py, ingest.py, search_check.py, ask_check.py, eval.py, download_models.py,
+            dev-db-host.ps1
+deploy/     deploy.ps1, rollback.ps1, remote-deploy.sh, nginx site, .deploy.local.example
 tests/      pytest suite
 data/       Source documents (see data/README.md); papers.yaml and eval/questions.yaml are committed
 reports/    Reports for each stage
