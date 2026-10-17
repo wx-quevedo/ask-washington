@@ -5,10 +5,15 @@ FROM docker.io/library/python:3.12-slim AS builder
 
 COPY --from=ghcr.io/astral-sh/uv:0.11.32 /uv /uvx /bin/
 
+# Every model cache lives under /app/models, in both stages, so the files downloaded here
+# are the ones the app reads at runtime. LlamaIndex passes its own cache folder to
+# sentence-transformers (by default a per-user directory), so it must be pinned too.
 ENV UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy \
     UV_PYTHON_DOWNLOADS=never \
-    HF_HOME=/app/models
+    HF_HOME=/app/models/huggingface \
+    LLAMA_INDEX_CACHE_DIR=/app/models/llama_index \
+    TIKTOKEN_CACHE_DIR=/app/models/tiktoken
 
 WORKDIR /app
 
@@ -20,7 +25,7 @@ COPY app ./app
 COPY scripts ./scripts
 COPY data/papers.yaml ./data/papers.yaml
 
-# Bake the embedding model (and optional rerankers) into the image: no downloads at runtime.
+# Bake the embedding model (and optional rerankers) into the image with the app's own loaders.
 ARG RERANKER_MODELS=""
 RUN .venv/bin/python -m scripts.download_models ${RERANKER_MODELS}
 
@@ -34,12 +39,19 @@ COPY --from=builder --chown=app:app /app /app
 
 ENV PATH="/app/.venv/bin:${PATH}" \
     PYTHONUNBUFFERED=1 \
-    HF_HOME=/app/models \
+    HF_HOME=/app/models/huggingface \
+    LLAMA_INDEX_CACHE_DIR=/app/models/llama_index \
+    TIKTOKEN_CACHE_DIR=/app/models/tiktoken \
     HF_HUB_OFFLINE=1 \
     TRANSFORMERS_OFFLINE=1 \
     FORWARDED_ALLOW_IPS=127.0.0.1
 
 USER app
+
+# Fail the build if the models cannot be loaded offline by the runtime user.
+ARG RERANKER_MODELS=""
+RUN python -m scripts.download_models --verify ${RERANKER_MODELS}
+
 EXPOSE 8000
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \

@@ -14,11 +14,16 @@
   powershell -ExecutionPolicy Bypass -File deploy\rollback.ps1 -Purge   # also delete the data volume
 #>
 [CmdletBinding()]
-param([switch]$Purge)
+param(
+    [switch]$Purge,
+    [string]$ConfigPath
+)
 
 $ErrorActionPreference = "Stop"
-$LocalConfig = Join-Path $PSScriptRoot ".deploy.local"
-if (-not (Test-Path $LocalConfig)) { throw "Missing deploy/.deploy.local with DEPLOY_HOST=user@host." }
+# Computed in the body: Windows PowerShell 5.1 leaves $PSScriptRoot empty in param() defaults.
+$ScriptDir = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+$LocalConfig = if ($ConfigPath) { $ConfigPath } else { Join-Path $ScriptDir ".deploy.local" }
+if (-not (Test-Path $LocalConfig)) { throw "Missing $LocalConfig with DEPLOY_HOST=user@host." }
 
 $DeployHost = $null
 foreach ($line in [System.IO.File]::ReadAllLines($LocalConfig)) {

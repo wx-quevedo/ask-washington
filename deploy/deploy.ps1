@@ -26,17 +26,22 @@ param(
     [switch]$ForceNginx,
     [switch]$AllowDirty,
     [switch]$DryRun,
-    [string]$ConfigPath = (Join-Path $PSScriptRoot ".deploy.local")
+    [string]$ConfigPath
 )
 
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
 
+# Windows PowerShell 5.1 leaves $PSScriptRoot empty inside param() defaults, so the
+# default path is computed here, in the script body.
+$ScriptDir = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+if (-not $ConfigPath) { $ConfigPath = Join-Path $ScriptDir ".deploy.local" }
+
 $Domain = "ask.inmersoft.com"
 $CertbotEmail = "waxshoxp@gmail.com"
 $RemoteStage = "ask-washington-deploy"   # relative to the remote user's home
 
-$Root = Split-Path $PSScriptRoot -Parent
+$Root = Split-Path $ScriptDir -Parent
 $LocalConfig = $ConfigPath
 $Utf8NoBom = New-Object System.Text.UTF8Encoding $false
 
@@ -124,7 +129,7 @@ try {
     if ($shown.ExitCode -ne 0) {
         if (-not $DryRun) { throw "deploy/remote-deploy.sh is not committed." }
         Write-Warning "deploy/remote-deploy.sh is not in HEAD yet; the dry run uses the working tree copy."
-        $remoteScript = [System.IO.File]::ReadAllLines((Join-Path $PSScriptRoot "remote-deploy.sh"))
+        $remoteScript = [System.IO.File]::ReadAllLines((Join-Path $ScriptDir "remote-deploy.sh"))
     }
     [System.IO.File]::WriteAllText((Join-Path $tmp "remote-deploy.sh"), (($remoteScript -join "`n") + "`n"), $Utf8NoBom)
 

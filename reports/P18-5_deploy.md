@@ -45,7 +45,7 @@ Criterio: acertar q20 sin bajar hit@3 ni MRR y quedar bajo 250 ms. `rerank_light
 
 **Puerto elegido: 8710** (configurable con `APP_PORT` en `deploy/.deploy.local`). No conozco los puertos ocupados del VPS; el deploy verifica con `ss` y `docker ps` que esté libre o que sea de este mismo proyecto, y si no, aborta sin cambiar nada.
 
-**Tamaño de la imagen: no medido.** El build local con Podman no pudo empezar: la máquina de Podman volvió a quedar sin `/etc/resolv.conf` (el mismo problema de P18·1) y no resuelve DNS (`lookup registry-1.docker.io: Temporary failure in name resolution`), aunque la conectividad IP funciona. No restauré el enlace porque es un cambio en la máquina que antes no tuve permiso de hacer. Se mide en el servidor con `sudo docker image ls ask-washington-app` después del deploy, o en local tras arreglar la máquina con `podman machine ssh "sudo ln -sf /mnt/wsl/resolv.conf /etc/resolv.conf"` y `podman build -t ask-washington-app:local .`.
+**Tamaño de la imagen: 1.93 GB** (medido después, ver "Corrección del deploy" al final). En el primer intento no se pudo medir: El build local con Podman no pudo empezar: la máquina de Podman volvió a quedar sin `/etc/resolv.conf` (el mismo problema de P18·1) y no resuelve DNS (`lookup registry-1.docker.io: Temporary failure in name resolution`), aunque la conectividad IP funciona. No restauré el enlace porque es un cambio en la máquina que antes no tuve permiso de hacer. Se mide en el servidor con `sudo docker image ls ask-washington-app` después del deploy, o en local tras arreglar la máquina con `podman machine ssh "sudo ln -sf /mnt/wsl/resolv.conf /etc/resolv.conf"` y `podman build -t ask-washington-app:local .`.
 
 ## Datos en el servidor
 
@@ -137,3 +137,36 @@ sudo docker stats --no-stream ask-washington-app-1 ask-washington-db-1
 - **Podman local sin DNS:** falta `/etc/resolv.conf` en la máquina de Podman (comando de arreglo arriba). No afecta al deploy, que construye la imagen en el servidor.
 - Después de certbot, el sitio nginx queda gestionado por certbot; los redeploys no lo sobrescriben salvo `-ForceNginx`.
 - `/docs` de FastAPI no carga en producción por la CSP (usa un CDN); se usa en local.
+
+## Corrección del deploy: POST /ask respondía 502
+
+Fecha: 2026-10-17, después del primer deploy. El sitio quedó arriba (SSL, `/health` y 132 chunks restaurados), pero `POST /ask` respondía 502 en unos 135 ms.
+
+**Causa.** En el VPS, los logs mostraban que sentence-transformers no encontraba el modelo de embeddings (`OSError: We couldn't connect to 'https://huggingface.co' ... couldn't find them in the cached files`). El modelo sí se había descargado en el build, pero en otra carpeta:
+
+- `HuggingFaceEmbedding` de LlamaIndex no usa la caché de Hugging Face por defecto: le pasa a sentence-transformers su propia carpeta, `platformdirs.user_cache_dir("llama_index")`, que depende del usuario (`/root/.cache/llama_index` en el build, `/home/app/.cache/llama_index` en ejecución).
+- `scripts/download_models.py` descargaba con `SentenceTransformer` directamente, a `HF_HOME`, como root.
+- En ejecución, la app (usuario `app`, con `HF_HUB_OFFLINE=1`) buscaba en su carpeta de LlamaIndex, vacía, y no podía descargar. La excepción llegaba al endpoint como 502.
+
+**Corrección.**
+
+1. `Dockerfile`: todas las cachés quedan fijas dentro de `/app/models` y se declaran con `ENV` en los dos stages: `HF_HOME=/app/models/huggingface`, `LLAMA_INDEX_CACHE_DIR=/app/models/llama_index` y `TIKTOKEN_CACHE_DIR=/app/models/tiktoken`. `/app` se copia al stage final con dueño `app:app`; `HF_HUB_OFFLINE=1` y `TRANSFORMERS_OFFLINE=1` en ejecución.
+2. `scripts/download_models.py` usa los mismos cargadores que la app (`app.vector_store.get_embed_model`, `app.retrieval.get_reranker`) y precalienta la codificación de tiktoken, así que los archivos quedan exactamente donde la app los busca.
+3. Último paso del build, ya como usuario `app` y en modo offline: `python -m scripts.download_models --verify` carga el modelo y calcula un embedding de 384 dimensiones. Si falla, el build falla.
+4. `deploy/remote-deploy.sh` termina con una prueba de humo real: `POST /ask` a `127.0.0.1:<puerto>` con "What is plan-vivo-kit?". Si no responde 200 con fuentes, imprime las últimas 30 líneas del log de la app y marca el deploy como fallido, sin bajar el servicio.
+5. `deploy.ps1` y `rollback.ps1`: en Windows PowerShell 5.1, `$PSScriptRoot` vale vacío dentro de los valores por defecto de `param()`; la ruta de `.deploy.local` se calcula ahora en el cuerpo del script. Verificado: `powershell -File deploy\deploy.ps1 -DryRun` funciona sin `-ConfigPath`.
+
+**Verificación en local (Podman).**
+
+| Prueba | Resultado |
+|---|---|
+| Build de la imagen | OK en 222 s; el paso de verificación imprime `embedding model ok: BAAI/bge-small-en-v1.5 (dim 384)` y `offline load verified` como usuario `app` |
+| **Tamaño de la imagen** | **1.93 GB** (`localhost/ask-washington-app:local`) |
+| Compose de producción con `.env` ficticio y la clave real (proyecto aparte `askw-prodtest` para no tocar la base de desarrollo) | db healthy sin puertos; app en `127.0.0.1:8711`, usuario `app`, `HF_HUB_OFFLINE=1` |
+| Restauración del volcado | 132 chunks |
+| `POST /ask` "What is plan-vivo-kit?" | **HTTP 200**, citas [1] y [2] sobre 6 fuentes, 3613 tokens de entrada y 272 de salida, 9.3 s en la primera llamada (incluye la carga del modelo) |
+| Memoria | app 578 MB de 1.5 GB; db 52 MB de 512 MB |
+| Logs de la app | sin errores ni intentos de conexión a huggingface.co |
+| Limpieza | `down -v` del proyecto `askw-prodtest` (contenedores, volumen y red) y borrado del `.env` de prueba; la base de desarrollo quedó intacta |
+
+Nota del entorno local: la máquina de Podman sigue perdiendo `/etc/resolv.conf` poco después de restaurarlo (algún servicio que quedó del modo de red de usuario lo borra). Para la prueba bastó con restaurarlo un momento para descargar las imágenes base (`podman build --pull=never` después) y un archivo de override solo de prueba con `dns: [1.1.1.1, 8.8.8.8]` para la app. No afecta al VPS.

@@ -1,25 +1,47 @@
-"""Download the local models into the Hugging Face cache (used at image build time).
+"""Download the local models at image build time, or verify that they load offline.
 
-Usage: python -m scripts.download_models [extra cross-encoder model names ...]
+Usage:
+    python -m scripts.download_models [cross-encoder model ...]   # download (build stage)
+    python -m scripts.download_models --verify [cross-encoder ...]  # load offline (final stage)
 
-Always downloads EMBEDDING_MODEL. Rerankers are optional: pass their names to bake them
-into the image (only needed for RETRIEVAL_MODE=rerank or rerank_light).
+It uses the same loaders as the app (app.vector_store.get_embed_model and
+app.retrieval.get_reranker), so the files land exactly where the app looks for them at
+runtime: HF_HOME for Hugging Face files and LLAMA_INDEX_CACHE_DIR for the folder that
+LlamaIndex passes to sentence-transformers. The tiktoken encoding used by LlamaIndex is
+cached too (TIKTOKEN_CACHE_DIR).
 """
 
+import os
 import sys
-
-from app.config import get_settings
 
 
 def main() -> None:
-    from sentence_transformers import CrossEncoder, SentenceTransformer
+    args = sys.argv[1:]
+    verify = "--verify" in args
+    rerankers = [a for a in args if a != "--verify"]
 
-    embedding = get_settings().embedding_model
-    SentenceTransformer(embedding)
-    print(f"embedding model ready: {embedding}")
-    for name in sys.argv[1:]:
-        CrossEncoder(name)
-        print(f"reranker ready: {name}")
+    if verify and os.environ.get("HF_HUB_OFFLINE") != "1":
+        raise SystemExit("--verify must run with HF_HUB_OFFLINE=1")
+    for name in ("HF_HOME", "LLAMA_INDEX_CACHE_DIR", "TIKTOKEN_CACHE_DIR"):
+        print(f"{name}={os.environ.get(name, '(not set)')}")
+
+    from llama_index.core.utils import get_tokenizer
+
+    from app.config import get_settings
+    from app.retrieval import get_reranker
+    from app.vector_store import get_embed_model
+
+    get_tokenizer()("warm up the tiktoken cache")
+    vector = get_embed_model().get_text_embedding("Ask Washington model check")
+    if len(vector) != 384:
+        raise SystemExit(f"unexpected embedding size {len(vector)}")
+    print(f"embedding model ok: {get_settings().embedding_model} (dim {len(vector)})")
+
+    for name in rerankers:
+        score = get_reranker(name).predict([("query", "passage")])
+        print(f"reranker ok: {name} (score {float(score[0]):.3f})")
+
+    print("offline load verified" if verify else "models downloaded")
 
 
 if __name__ == "__main__":

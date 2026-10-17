@@ -118,5 +118,23 @@ log "Requesting or renewing the certificate with certbot"
 sudo certbot --nginx -d "${DOMAIN}" --non-interactive --agree-tos --redirect \
   --keep-until-expiring -m "${EMAIL}"
 
+log "Smoke test: POST /ask on 127.0.0.1:${APP_PORT}"
+# A real question through retrieval and the LLM (costs a fraction of a cent). On failure the
+# service is left running so it can be inspected; only the deploy is marked as failed.
+smoke_body="$(mktemp)"
+smoke_code="$(curl -s -o "${smoke_body}" -w '%{http_code}' --max-time 90 \
+  -H 'Content-Type: application/json' -d '{"question": "What is plan-vivo-kit?"}' \
+  "http://127.0.0.1:${APP_PORT}/ask" || true)"
+if [[ "${smoke_code}" != "200" ]] || ! grep -q '"sources":\[{' "${smoke_body}"; then
+  echo "POST /ask returned HTTP ${smoke_code:-no response}:" >&2
+  head -c 600 "${smoke_body}" >&2; echo >&2
+  echo "--- last 30 lines of the app logs ---" >&2
+  sudo "${COMPOSE[@]}" logs --no-color --tail 30 app >&2
+  rm -f "${smoke_body}"
+  fail "smoke test failed: the service is still up, but /ask does not answer with sources"
+fi
+echo "POST /ask: HTTP 200 with sources"
+rm -f "${smoke_body}"
+
 log "Done"
 sudo "${COMPOSE[@]}" ps

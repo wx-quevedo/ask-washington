@@ -56,6 +56,7 @@ Este proyecto es P18 dentro del plan de `C:\xampp\htdocs\enhanced-me`. El seguim
 | IP real con `ProxyHeadersMiddleware` en la app (además de `--proxy-headers` en uvicorn) | La lógica queda cubierta por pruebas. Se confía en `X-Forwarded-For` solo desde `FORWARDED_ALLOW_IPS`: 127.0.0.1 y los rangos privados de Docker, porque nginx llega al contenedor por el gateway del bridge. nginx sobrescribe la cabecera con `$remote_addr`, así que un cliente no puede falsificarla. |
 | Datos al servidor por `pg_dump -Fc` de `data_chunks` e `ingested_documents` | El servidor nunca recibe los CV ni las demás fuentes; el dump restaura también los índices HNSW y de texto completo. |
 | Host y usuario del VPS solo en `deploy/.deploy.local` (ignorado) | El repo será público. Los secretos de producción (contraseña de la db, sal del hash de IP) se generan una vez y se guardan en ese mismo archivo para que los redeploys no cambien la contraseña del volumen. |
+| Cachés de modelos fijas en `/app/models` y verificación offline en el build | LlamaIndex usa una carpeta de caché por usuario distinta de `HF_HOME`; fijarlas todas y cargar el modelo como el usuario final durante el build evita que el error aparezca recién en producción. |
 | El sitio nginx se instala solo la primera vez (o con `-ForceNginx`) | Después de certbot el archivo queda gestionado por certbot; sobrescribirlo en cada deploy quitaría el bloque HTTPS. |
 
 ## Plan de los 5 prompts
@@ -147,14 +148,21 @@ Estado: código listo y validado en local; el despliegue al VPS lo ejecuta Washi
 - Producción: `Dockerfile` multi-stage (torch CPU, modelo dentro, usuario no root, healthcheck), `docker-compose.prod.yml` (proyecto `ask-washington`, app en `127.0.0.1:8710`, db sin puertos, límites 1.5 GB y 512 MB), sitio nginx con cabeceras de seguridad.
 - IP real detrás del proxy: `ProxyHeadersMiddleware` con `FORWARDED_ALLOW_IPS`; pruebas de IP real, de cabecera falsificada y de rate limit por cliente detrás del mismo proxy.
 - `deploy/deploy.ps1` (con `-DryRun`), `deploy/remote-deploy.sh` y `deploy/rollback.ps1`. Validado en local: sintaxis de PowerShell, `bash -n` y shellcheck, dry run completo (paquete, dump de 328 KB, `.env` de producción), restauración del dump dos veces en una base de prueba, compose de producción con `config`.
-- No se pudo construir la imagen en local: la máquina de Podman volvió a quedar sin `/etc/resolv.conf` y no resuelve DNS. El tamaño de la imagen queda por medir en el servidor.
+- La imagen de producción pesa 1.93 GB (medida en la corrección posterior).
 - Revisión de secretos del historial (gitleaks 8.30.1 y búsqueda propia): sin secretos, sin IP ni usuario del VPS, sin emails ni teléfonos privados.
 - Pruebas: 43 aprobadas.
 - Finales de línea: `git archive` con `core.autocrlf=true` empaquetaba CRLF; se fijó LF con `.gitattributes` y `git -c core.autocrlf=false archive`.
 
+### 2026-10-17 - P18·5 corrección del deploy (502 en /ask)
+
+- Síntoma en el VPS: `/health` ok y datos restaurados, pero `POST /ask` daba 502 en unos 135 ms; el log mostraba que sentence-transformers no encontraba el modelo y no podía descargarlo (modo offline).
+- Causa: `HuggingFaceEmbedding` de LlamaIndex usa su propia carpeta de caché por usuario (`platformdirs`), distinta de `HF_HOME`, donde el build había descargado el modelo como root.
+- Corrección: `HF_HOME`, `LLAMA_INDEX_CACHE_DIR` y `TIKTOKEN_CACHE_DIR` fijos en `/app/models` en ambos stages; `download_models.py` usa los cargadores de la app; verificación offline como usuario `app` al final del build; prueba de humo `POST /ask` al final de `remote-deploy.sh`; `$PSScriptRoot` fuera de `param()` en los scripts de PowerShell 5.1.
+- Verificado en local con el compose de producción: `POST /ask` 200 con citas, imagen de 1.93 GB, app en 578 MB de RAM.
+
 ## Próximos pasos
 
-- Washington: crear `deploy/.deploy.local`, correr `deploy.ps1 -DryRun` y luego `deploy.ps1`; verificar https://ask.inmersoft.com.
+- Washington: redeploy con `deploy.ps1` (la prueba de humo confirma `/ask` en el servidor).
 - Medir en el servidor el tamaño de la imagen, la RAM real del contenedor y la latencia de `/ask`.
 - Publicar el repo en GitHub cuando el despliegue esté verificado.
 - Volver a correr `scripts/eval.py` tras cada cambio y sumar preguntas reales de `qa_log`.
