@@ -6,6 +6,7 @@ Nothing in this module touches the database, so it can be tested on its own.
 import hashlib
 import json
 import re
+from functools import lru_cache
 from pathlib import Path
 
 import yaml
@@ -16,6 +17,8 @@ from llama_index.core.schema import NodeRelationship, RelatedNodeInfo, TextNode
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 SOURCES_DIR = DATA_DIR / "sources"
 PAPERS_FILE = DATA_DIR / "papers.yaml"
+# Passages of sources outside this repository that are replaced at ingestion time.
+CORRECTIONS_FILE = DATA_DIR / "source_corrections.yaml"
 
 CHUNK_SIZE = 500
 CHUNK_OVERLAP = 60
@@ -95,6 +98,49 @@ def redact_contacts(text: str) -> str:
     return PHONE_RE.sub("", text)
 
 
+@lru_cache
+def load_corrections(path: Path = CORRECTIONS_FILE) -> tuple[dict, ...]:
+    if not path.exists():
+        return ()
+    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    return tuple(data.get("corrections") or ())
+
+
+def _passage_pattern(find: str) -> re.Pattern:
+    """Match the passage with any whitespace between words (PDF text breaks lines)."""
+    return re.compile(r"\s+".join(re.escape(token) for token in find.split()))
+
+
+# Indexes of the corrections applied in this process (see unmatched_corrections).
+APPLIED_CORRECTIONS: set[int] = set()
+
+
+def apply_corrections(
+    doc_id: str, text: str, corrections: tuple[dict, ...] | None = None
+) -> tuple[str, list[int]]:
+    """Replace the passages listed for this document; return the text and the indexes used."""
+    if corrections is None:
+        corrections = load_corrections()
+    applied = []
+    for index, correction in enumerate(corrections):
+        if correction["doc_id"] != doc_id:
+            continue
+        replacement = correction["replace"]
+        text, count = _passage_pattern(correction["find"]).subn(lambda _, r=replacement: r, text)
+        if count:
+            applied.append(index)
+    return text, applied
+
+
+def unmatched_corrections(doc_ids: set[str]) -> list[dict]:
+    """Corrections for these documents that did not match: the original was probably fixed."""
+    return [
+        c
+        for i, c in enumerate(load_corrections())
+        if c["doc_id"] in doc_ids and i not in APPLIED_CORRECTIONS
+    ]
+
+
 def make_document(
     text: str,
     *,
@@ -107,7 +153,8 @@ def make_document(
 ) -> Document:
     if doc_type not in DOC_TYPES:
         raise ValueError(f"Unknown doc_type: {doc_type}")
-    text = text.strip()
+    text, applied = apply_corrections(doc_id, text.strip())
+    APPLIED_CORRECTIONS.update(applied)
     metadata = {
         "doc_id": doc_id,
         "doc_type": doc_type,

@@ -15,7 +15,13 @@ import sys
 import time
 
 from app import db, vector_store
-from app.ingestion import DOC_TYPES, load_documents, split_document
+from app.ingestion import (
+    APPLIED_CORRECTIONS,
+    DOC_TYPES,
+    load_documents,
+    split_document,
+    unmatched_corrections,
+)
 from app.retrieval import ensure_fulltext_index
 
 
@@ -40,6 +46,15 @@ def main() -> None:
     store = vector_store.get_vector_store()
 
     documents = load_documents(doc_types)
+    if APPLIED_CORRECTIONS:
+        print(
+            f"source corrections applied: {len(APPLIED_CORRECTIONS)} (data/source_corrections.yaml)"
+        )
+    for correction in unmatched_corrections({doc.doc_id for doc in documents}):
+        print(
+            f"warning: correction for {correction['doc_id']} no longer matches "
+            f"(was the original fixed? {correction['original']}): {correction['find'][:60]}"
+        )
     known = vector_store.tracked_hashes(doc_types)
     added = updated = skipped = chunks = 0
 

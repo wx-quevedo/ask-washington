@@ -51,14 +51,14 @@ questions:
     expected_doc_ids: [cv-ai-engineer, cv-xr-ai-engineer, linkedin-profile]
     expected_keywords: ["0.96", "mAP50"]
     should_refuse: false
-    notes: "Buscapez species detector: mAP50 0.96 (box IoU 0.90 in cv-ai and linkedin)."
+    notes: "Buscapez species detector: public figure mAP50 0.96 (detection, validation)."
   - id: q08
     category: ai_ml_production
     question: "How did he fix the accuracy problem of the on-device model in the mobile app?"
     expected_doc_ids: [cv-ai-engineer, cv-xr-ai-engineer, linkedin-profile]
-    expected_keywords: ["letterboxing", "66%", "93%"]
+    expected_keywords: ["letterboxing", "distort"]
     should_refuse: false
-    notes: "Mobile runtime distorted inputs; letterboxing raised class accuracy from 66% to 93%."
+    notes: "Mobile runtime distorted inputs, fixed with letterboxing (internal percentages are not published, see data/source_corrections.yaml)."
   - id: q09
     category: ai_ml_production
     question: "Does he have experience serving LLMs locally on his own hardware?"

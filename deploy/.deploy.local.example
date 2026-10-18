@@ -8,8 +8,9 @@ DEPLOY_HOST=deployer@203.0.113.10
 APP_PORT=8710
 
 # Origins allowed to embed the widget (iframe) and to change its language with postMessage,
-# comma-separated. Empty: no other site can embed it. The portfolio and its dev server:
-EMBED_ALLOWED_ORIGINS=https://washingtonquevedo.com,https://www.washingtonquevedo.com,http://localhost:4321
+# comma-separated. Empty: no other site can embed it. Production allows only the portfolio;
+# add http://localhost:4321 (Astro dev server) in the local .env, not here.
+EMBED_ALLOWED_ORIGINS=https://washingtonquevedo.com,https://www.washingtonquevedo.com
 
 # Optional: name of the local database container that holds the ingested data.
 LOCAL_DB_CONTAINER=ask-washington-db

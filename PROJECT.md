@@ -70,6 +70,9 @@ Este proyecto es P18 dentro del plan de `C:\xampp\htdocs\enhanced-me`. El seguim
 | Widget de alto fijo; solo el hilo tiene scroll | Así se comportan los chats de soporte en paneles flotantes; el composer siempre a la vista. El mensaje `ask-washington:height` queda solo por compatibilidad. |
 | Respuesta larga visible desde su inicio | Bajar siempre al final escondía el comienzo de las respuestas largas; ahora se baja al final solo si la respuesta cabe en el hilo. |
 | Separador entre citas pegadas, insertado por el JS | Con superíndices, [4][5][6] se leía como "456"; un selector CSS no distingue si hay texto en medio. |
+| Correcciones de fuentes en `data/source_corrections.yaml`, aplicadas en la ingesta | Los CV y el LinkedIn viven fuera del repo y no se editan desde aquí; el archivo versionado reemplaza los pasajes incorrectos antes del hash (solo se reingiere lo afectado) y avisa cuando una corrección deja de coincidir porque ya se corrigió el original. |
+| Solo la cifra pública del detector (mAP50 0.96, detección, validación) | Los porcentajes internos de prueba (66 % a 93 %) y el IoU de caja 0.90 no se publican; la clasificación de especies sigue mejorando con más fotos validadas. |
+| Producción sin `http://localhost:4321` | Solo el portafolio (`https://washingtonquevedo.com` y `www`) puede incrustar el widget en producción; el origen de desarrollo vive en el `.env` local. |
 | El sitio nginx se instala solo la primera vez (o con `-ForceNginx`) | Después de certbot el archivo queda gestionado por certbot; sobrescribirlo en cada deploy quitaría el bloque HTTPS. |
 
 ## Plan de los 5 prompts
@@ -204,6 +207,43 @@ Estado: terminado y verificado en local (sin deploy). Referencias y patrones en 
 - Pruebas: 77 en la suite normal y 14 en Playwright (`tests/e2e`, con `/ask` simulado): estado inicial, chip que envía, burbujas a cada lado, indicador, citas y fuentes, Enter y Shift+Enter, segunda pregunta con anclas propias, caja que crece y contador, errores en español, 360 px sin scroll horizontal, respuesta larga desde su inicio, widget en `http://localhost:4321` llenando un panel de 400 x 600 con solo el hilo desplazable, y sin errores de consola.
 - Capturas en `reports/screenshots/p20b/` (estado inicial EN y ES, conversación con 2 preguntas y fuentes, indicador de escritura, celular a 390 px, widget en un panel de demo). Costo de las respuestas reales usadas en las capturas: unos USD 0.0018.
 
+### 2026-10-18 - P20c corrección de fuentes (Buscapez) y orígenes de producción
+
+Una respuesta real afirmó que la app de Buscapez está publicada en App Store y Google Play y citó porcentajes internos de prueba. A octubre de 2026 la app móvil está en desarrollo (no publicada) y la cifra pública es "mAP50 0.96 (detection, validation)".
+
+**Dónde estaba** (todo en fuentes fuera del repo; también en `data_chunks` local):
+
+| Documento | Original | Fragmento |
+|---|---|---|
+| cv-ai-engineer (Summary) | `C:\xampp\htdocs\enhanced-me\cv\CV_Washington_X_Quevedo_AI_Engineer_EN.pdf` | "shipped on the web and on the App Store and Google Play." |
+| cv-ai-engineer (Experience, Stanford) | mismo PDF | "mAP50 0.96, box IoU 0.90 on validation" |
+| cv-ai-engineer (Experience, Stanford) | mismo PDF | "adding letterboxing raised class accuracy from 66% to 93%." |
+| cv-ai-engineer (Experience, Stanford) | mismo PDF | "and published the mobile app on the App Store and Google Play." |
+| cv-xr-ai-engineer (Experience, Stanford) | `C:\xampp\htdocs\enhanced-me\cv\CV_Washington_X_Quevedo_XR_AI_Engineer_EN.pdf` | "letterboxing raised class accuracy from 66% to 93%." |
+| cv-xr-ai-engineer (Experience, Stanford) | mismo PDF | "Delivered the web platform and published the mobile app on the App Store and Google Play." |
+| linkedin-profile (About) | `C:\xampp\htdocs\enhanced-me\linkedin\LINKEDIN_EN.md`, sección 2 | "The app is live on the App Store and Google Play." |
+| linkedin-profile (Experience, Stanford) | mismo archivo, sección 4 | "mAP50 0.96, box IoU 0.90 on validation" |
+| linkedin-profile (Experience, Stanford) | mismo archivo, sección 4 | "letterboxing raised class accuracy from 66% to 93%" |
+| linkedin-profile (Experience, Stanford) | mismo archivo, sección 4 | "app published on the App Store and Google Play" |
+
+Ninguna fuente dentro del repo (papers, README de repos, código) contenía estas afirmaciones.
+
+**Corrección:** mecanismo nuevo y mínimo `data/source_corrections.yaml` (10 entradas, cada una con documento, texto, reemplazo, motivo y ruta del original), aplicado en `app/ingestion.py` antes del hash. Reingesta solo de `cv` y `linkedin` (3 documentos actualizados, 43 chunks; el índice sigue en 132). En `data_chunks` quedan 0 fragmentos con esas afirmaciones. La pregunta q08 del set de evaluación ya no espera "66%" y "93%" (ahora "letterboxing" y "distort"); la evaluación de recuperación híbrida sigue igual (hit@3 1.000, MRR 0.981).
+
+**Antes y después** (3 preguntas reales, Claude Haiku 5.5, costo total USD 0.0021):
+
+| Pregunta | Antes | Después |
+|---|---|---|
+| Is Buscapez available on the App Store? | "Yes ... publishing the mobile app on the App Store and Google Play ... live on the App Store and Google Play." | "The sources state that the Buscapez mobile app is still in development and not yet published on the App Store or Google Play." |
+| ¿Qué tan preciso es el detector de Buscapez? | "mAP50 de 0.96 y un IoU de caja de 0.90 ... elevó la precisión por clase del 66% al 93%." | "mAP50 0,96 en la fase de detección y validación ... no la clasificación de especies, que sigue mejorando a medida que se añaden fotos validadas." |
+| What is Buscapez? | "... and published the mobile app on the App Store and Google Play." | "... achieved mAP50 0.96 on detection validation. The web platform has been delivered, while the mobile app is still in development." |
+
+**Pendiente fuera de este repo:** corregir los originales (las 3 rutas de la tabla) y volver a copiarlos a `data/sources/`; la ingesta avisará qué correcciones dejaron de coincidir para borrarlas del YAML.
+
+**Orígenes:** `deploy/.deploy.local` queda con `EMBED_ALLOWED_ORIGINS=https://washingtonquevedo.com,https://www.washingtonquevedo.com`; el `.env` local incluye además `http://localhost:4321`. `.deploy.local.example` y el README lo reflejan. Las pruebas de navegador aceptan `ASKW_E2E_DEV_PORT` para correr aunque el servidor de Astro ocupe el 4321.
+
+**Pruebas:** 79 en la suite normal (2 nuevas del mecanismo de correcciones) y 14 en Playwright (con `ASKW_E2E_DEV_PORT=4399`).
+
 ## Referencias de chats (P20b)
 
 Revisadas el 2026-10-18 en un Chromium sin sesión (Playwright), solo páginas públicas; las capturas se guardaron fuera del repositorio. ChatGPT (verificación de Cloudflare), el Messenger de Intercom y Tidio no cargan en un navegador automatizado: de Intercom se usó su documentación y no se intentó saltar ninguna protección.
@@ -240,7 +280,8 @@ Revisadas el 2026-10-18 en un Chromium sin sesión (Playwright), solo páginas p
 
 ## Próximos pasos
 
-- Washington: redeploy con `deploy.ps1` (sin `-ForceNginx`; `EMBED_ALLOWED_ORIGINS` ya está en `deploy/.deploy.local`) y verificar el panel del portafolio en https://washingtonquevedo.com.
+- Washington: redeploy con `deploy.ps1` (sube el índice corregido y los orígenes de producción) y verificar el panel del portafolio en https://washingtonquevedo.com.
+- Corregir los originales de los CV y del LinkedIn (rutas en P20c) y borrar las entradas de `data/source_corrections.yaml` que la ingesta marque como ya no necesarias.
 - Medir en el servidor el tamaño de la imagen, la RAM real del contenedor y la latencia de `/ask`.
 - Publicar el repo en GitHub cuando el despliegue esté verificado.
 - Volver a correr `scripts/eval.py` tras cada cambio y sumar preguntas reales de `qa_log`.

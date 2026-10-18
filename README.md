@@ -156,6 +156,8 @@ Only public sources are indexed. They live in `data/` and are not fetched at run
 
 Before indexing, email addresses and phone numbers are removed, and from the LinkedIn working file only the published sections (headline, about, experience, skills, education and awards) are kept.
 
+**Source corrections.** Some sources live outside this repository (the CVs and the LinkedIn working file). When one of them says something that must not reach the index, `data/source_corrections.yaml` replaces that passage at ingestion time: each entry names the document, the text to find (whitespace-tolerant, for PDF line breaks), the replacement, the reason and the path of the original to fix later. `scripts.ingest` reports how many corrections were applied and warns when one no longer matches (the original was fixed and the entry can go). Example: as of October 2026 the Buscapez mobile app is in development, not published, and only the public detector figure (mAP50 0.96, detection, validation) is cited.
+
 ### Commands
 
 ```bash
@@ -340,13 +342,13 @@ Full analysis, including the questions that still fail: `reports/P18-4_evaluacio
 
 Ask Washington has no language switch of its own: it follows the page that contains it. `?embed=1` gives the widget: the same chat with only the title in its header (the panel provides the close button). It fills 100% of the iframe height: only the thread scrolls and the composer stays at the bottom. **Give the iframe a fixed height** (the portfolio's floating panel does, about 400 x 600 px); the widget does not grow with its content.
 
-The portfolio at https://washingtonquevedo.com embeds it in a floating panel. Production allows these origins:
+The portfolio at https://washingtonquevedo.com embeds it in a floating panel. Production allows only the portfolio:
 
 ```
-EMBED_ALLOWED_ORIGINS=https://washingtonquevedo.com,https://www.washingtonquevedo.com,http://localhost:4321
+EMBED_ALLOWED_ORIGINS=https://washingtonquevedo.com,https://www.washingtonquevedo.com
 ```
 
-(`http://localhost:4321` is the portfolio's Astro dev and preview server.)
+For local development, add `http://localhost:4321` (the portfolio's Astro dev and preview server) to `EMBED_ALLOWED_ORIGINS` in the local `.env`.
 
 1. Add the embedding site to `EMBED_ALLOWED_ORIGINS` (for the deploy script, in `deploy/.deploy.local`). The app then sends `Content-Security-Policy: frame-ancestors 'self'` followed by those origins, and accepts `postMessage` events only from them. Every other origin, including the same host on another port or plain `http`, cannot frame the widget.
 2. Embed it, and send the language whenever the page switches:

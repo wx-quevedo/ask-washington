@@ -27,12 +27,14 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 APP_HOST, APP_PORT = "127.0.0.1", 8101
 APP_URL = f"http://{APP_HOST}:{APP_PORT}"
 
+# The portfolio's dev origin is http://localhost:4321. If the portfolio's own dev server is
+# running there, set ASKW_E2E_DEV_PORT to another port to run these tests anyway.
+DEV_PORT = int(os.environ.get("ASKW_E2E_DEV_PORT", "4321"))
 PORTFOLIO_ORIGINS = (
     "https://washingtonquevedo.com",
     "https://www.washingtonquevedo.com",
-    "http://localhost:4321",
+    f"http://localhost:{DEV_PORT}",
 )
-DEV_PORT = 4321  # allowed: http://localhost:4321
 SAME_HOST_OTHER_PORT = 8102  # not allowed: http://localhost:8102
 OTHER_HOST_PORT = 8103  # not allowed: http://127.0.0.1:8103
 
@@ -130,7 +132,7 @@ def parent_servers(tmp_path_factory):
     ports = (DEV_PORT, SAME_HOST_OTHER_PORT, OTHER_HOST_PORT)
     busy = [p for p in ports if not _port_free(p)]
     if busy:
-        pytest.skip(f"127.0.0.1 ports already in use: {busy}")
+        pytest.skip(f"127.0.0.1 ports already in use: {busy} (see ASKW_E2E_DEV_PORT)")
     root = tmp_path_factory.mktemp("parents")
     for lang in ("en", "es"):
         src = f"{APP_URL}/?embed=1&lang={lang}"

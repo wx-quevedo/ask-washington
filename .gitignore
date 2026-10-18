@@ -17,6 +17,7 @@ data/*
 !data/papers_seed.yaml
 !data/papers.yaml
 !data/eval/
+!data/source_corrections.yaml
 
 # Editors and OS
 .vscode/

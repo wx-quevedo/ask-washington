@@ -122,3 +122,40 @@ def test_content_hash_changes_with_metadata():
     a = make_document("same text", doc_id="x", doc_type="cv", title="t", public_url="u1")
     b = make_document("same text", doc_id="x", doc_type="cv", title="t", public_url="u2")
     assert a.metadata["content_hash"] != b.metadata["content_hash"]
+
+
+# ------------------------------------------------------- source corrections
+
+
+def test_corrections_tolerate_pdf_line_breaks_and_report_matches():
+    from app.ingestion import apply_corrections
+
+    corrections = (
+        {"doc_id": "cv-x", "find": "published the mobile app on the App Store", "replace": "R1"},
+        {"doc_id": "cv-x", "find": "not in the text", "replace": "R2"},
+        {"doc_id": "other", "find": "Delivered", "replace": "R3"},
+    )
+    text = "Delivered the platform and published the mobile\napp on the  App Store."
+    corrected, applied = apply_corrections("cv-x", text, corrections)
+    assert corrected == "Delivered the platform and R1."
+    assert applied == [0]
+
+
+def test_real_corrections_are_complete_and_remove_the_claims():
+    import re
+
+    from app.ingestion import CORRECTIONS_FILE, apply_corrections, load_corrections
+
+    corrections = load_corrections(CORRECTIONS_FILE)
+    assert corrections, "data/source_corrections.yaml should list the Buscapez corrections"
+    for correction in corrections:
+        assert {"doc_id", "find", "replace", "reason", "original"} <= correction.keys()
+        # Every replacement is clean on its own.
+        assert not re.search(
+            r"\b66 ?%|\b93 ?%|box IoU|is live on|published the mobile app on", correction["replace"]
+        )
+        # And it really replaces its own passage.
+        corrected, applied = apply_corrections(
+            correction["doc_id"], "before " + correction["find"] + " after", corrections
+        )
+        assert applied and correction["find"] not in corrected
