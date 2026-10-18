@@ -175,7 +175,7 @@
       "category": "ai_ml_production",
       "question": "Production ML experience",
       "route": "rag",
-      "answer": "Washington has taken ML models into production, most notably on the Buscapez platform. He built a 4-class YOLO detector in PyTorch (mAP50 0.96) and exported it to ONNX for the server and to ExecuTorch for offline inference on iOS and Android [4]. He deployed a FastAPI + ONNX Runtime inference service that runs at 49 ms per image and 70 MB of RAM on a 2-core VPS shared with other systems [4]. Along with this, he found that the mobile runtime distorted input images, and adding letterboxing raised class accuracy from 66% to 93% [4]. He also shipped a human-in-the-loop data pipeline with assisted annotation, hash-based deduplication and YOLO export for incremental retraining [4]. The mobile app is published on the App Store and Google Play [4].",
+      "answer": "Washington has taken ML models into production, most notably on the Buscapez platform. He built a 4-class YOLO detector in PyTorch (mAP50 0.96) and exported it to ONNX for the server and to ExecuTorch for offline inference on iOS and Android [4]. He deployed a FastAPI + ONNX Runtime inference service that runs at 49 ms per image and 70 MB of RAM on a 2-core VPS shared with other systems [4]. [redacted 2026-10-18: outdated claim, see PROJECT.md P20c] He also shipped a human-in-the-loop data pipeline with assisted annotation, hash-based deduplication and YOLO export for incremental retraining [4]. [redacted 2026-10-18: outdated claim, see PROJECT.md P20c]",
       "source_doc_ids": [
         "linkedin-profile",
         "cv-ai-engineer",
@@ -206,7 +206,7 @@
       "category": "ai_ml_production",
       "question": "What mAP did his YOLO detector reach?",
       "route": "rag",
-      "answer": "Washington's YOLO detector for the Buscapez species-identification module reached a mAP50 of 0.96 on validation [1][2][3]. It was a 4-class detector trained in PyTorch, with a box IoU of 0.90 on validation [1][2].",
+      "answer": "Washington's YOLO detector for the Buscapez species-identification module reached a mAP50 of 0.96 on validation [1][2][3]. [redacted 2026-10-18: outdated claim, see PROJECT.md P20c]",
       "source_doc_ids": [
         "linkedin-profile",
         "cv-ai-engineer",
@@ -236,7 +236,7 @@
       "category": "ai_ml_production",
       "question": "How did he fix the accuracy problem of the on-device model in the mobile app?",
       "route": "rag",
-      "answer": "Washington found that the mobile runtime was distorting the input images, and adding letterboxing raised class accuracy from 66% to 93% [1][2]. In the CV version, this is described as diagnosing the input distortion in the mobile runtime, with the same accuracy gain [3].",
+      "answer": "[redacted 2026-10-18: outdated claim, see PROJECT.md P20c] In the CV version, this is described as diagnosing the input distortion in the mobile runtime, with the same accuracy gain [3].",
       "source_doc_ids": [
         "cv-ai-engineer",
         "linkedin-profile",
@@ -251,8 +251,8 @@
       "latency_ms": 1261,
       "keywords_found": [
         "letterboxing",
-        "66%",
-        "93%"
+        "[redacted 2026-10-18: outdated claim, see PROJECT.md P20c]",
+        "[redacted 2026-10-18: outdated claim, see PROJECT.md P20c]"
       ],
       "keyword_rate": 1.0,
       "citations": 3,

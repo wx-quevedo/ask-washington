@@ -175,7 +175,7 @@
       "category": "ai_ml_production",
       "question": "Production ML experience",
       "route": "rag",
-      "answer": "Washington has taken several machine learning models into production:\n\n- **Buscapez (Stanford University marine research platform):** He built the species-identification module, a YOLO detector trained in PyTorch with mAP50 of 0.96 [4]. It is served by a FastAPI + ONNX Runtime service at 49 ms per image and 70 MB of RAM on a 2-core VPS [4][1], and runs offline on iOS and Android via ExecuTorch [4]. He found that the mobile runtime distorted input images, and adding letterboxing raised class accuracy from 66% to 93% [4]. The mobile app is published on the App Store and Google Play [4][6].\n- **Human-in-the-loop data pipeline:** He shipped assisted annotation with mandatory human review, hash-based deduplication, and YOLO export for incremental retraining [4].\n- **Laboratorios Bagó:** He built an AI campaign builder that helps product managers generate campaign concepts grounded in expert product information, used at the company's MKT Attack event [2][3].\n\nFor further detail, see his LinkedIn profile: https://www.linkedin.com/in/wxquevedo",
+      "answer": "Washington has taken several machine learning models into production:\n\n- **Buscapez (Stanford University marine research platform):** He built the species-identification module, a YOLO detector trained in PyTorch with mAP50 of 0.96 [4]. It is served by a FastAPI + ONNX Runtime service at 49 ms per image and 70 MB of RAM on a 2-core VPS [4][1], and runs offline on iOS and Android via ExecuTorch [4]. [redacted 2026-10-18: outdated claim, see PROJECT.md P20c]\n- **Human-in-the-loop data pipeline:** He shipped assisted annotation with mandatory human review, hash-based deduplication, and YOLO export for incremental retraining [4].\n- **Laboratorios Bagó:** He built an AI campaign builder that helps product managers generate campaign concepts grounded in expert product information, used at the company's MKT Attack event [2][3].\n\nFor further detail, see his LinkedIn profile: https://www.linkedin.com/in/wxquevedo",
       "source_doc_ids": [
         "linkedin-profile",
         "cv-ai-engineer",
@@ -206,7 +206,7 @@
       "category": "ai_ml_production",
       "question": "What mAP did his YOLO detector reach?",
       "route": "rag",
-      "answer": "Washington's YOLO detector for the Buscapez species-identification module reached a mAP50 of 0.96 on validation [1][2]. The same sources report a box IoU of 0.90 on validation [1][2].\n\nFor more details, see his LinkedIn profile: https://www.linkedin.com/in/wxquevedo",
+      "answer": "Washington's YOLO detector for the Buscapez species-identification module reached a mAP50 of 0.96 on validation [1][2]. [redacted 2026-10-18: outdated claim, see PROJECT.md P20c]\n\nFor more details, see his LinkedIn profile: https://www.linkedin.com/in/wxquevedo",
       "source_doc_ids": [
         "linkedin-profile",
         "cv-ai-engineer",
@@ -236,7 +236,7 @@
       "category": "ai_ml_production",
       "question": "How did he fix the accuracy problem of the on-device model in the mobile app?",
       "route": "rag",
-      "answer": "Washington found that the mobile runtime was distorting the input images, and adding letterboxing raised class accuracy from 66% to 93% [1][2]. The CV version describes this as diagnosing the input distortion in the mobile runtime, with the same accuracy gain [3].\n\nFor the on-device model specifically, the sources state that the species-identification module runs offline on iOS and Android through ExecuTorch [1][6]. They do not give further detail on the on-device fix beyond the letterboxing change.\n\nFor more details, you can check his LinkedIn profile: https://www.linkedin.com/in/wxquevedo",
+      "answer": "[redacted 2026-10-18: outdated claim, see PROJECT.md P20c] The CV version describes this as diagnosing the input distortion in the mobile runtime, with the same accuracy gain [3].\n\nFor the on-device model specifically, the sources state that the species-identification module runs offline on iOS and Android through ExecuTorch [1][6]. They do not give further detail on the on-device fix beyond the letterboxing change.\n\nFor more details, you can check his LinkedIn profile: https://www.linkedin.com/in/wxquevedo",
       "source_doc_ids": [
         "cv-ai-engineer",
         "linkedin-profile",
@@ -251,8 +251,8 @@
       "latency_ms": 1552,
       "keywords_found": [
         "letterboxing",
-        "66%",
-        "93%"
+        "[redacted 2026-10-18: outdated claim, see PROJECT.md P20c]",
+        "[redacted 2026-10-18: outdated claim, see PROJECT.md P20c]"
       ],
       "keyword_rate": 1.0,
       "citations": 5,
@@ -657,7 +657,7 @@
       "category": "career_companies",
       "question": "What is his role with Stanford University?",
       "route": "rag",
-      "answer": "Washington works with Stanford University as a Software & AI Consultant on the Buscapez project, a tuna-tagging research platform. He is contracted through Inmersoft, which is an official Stanford supplier, and the engagement is remote, running from July 2026 to the present [1][2][3].\n\nIn this role, he built the species-identification module, a 4-class YOLO detector trained in PyTorch with an mAP50 of 0.96 [2][3]. He also delivered the full platform and published the mobile app on the App Store and Google Play [2][3].\n\nFor more details, you can see his LinkedIn profile: https://www.linkedin.com/in/wxquevedo",
+      "answer": "Washington works with Stanford University as a Software & AI Consultant on the Buscapez project, a tuna-tagging research platform. He is contracted through Inmersoft, which is an official Stanford supplier, and the engagement is remote, running from July 2026 to the present [1][2][3].\n\nIn this role, he built the species-identification module, a 4-class YOLO detector trained in PyTorch with an mAP50 of 0.96 [2][3]. [redacted 2026-10-18: outdated claim, see PROJECT.md P20c]\n\nFor more details, you can see his LinkedIn profile: https://www.linkedin.com/in/wxquevedo",
       "source_doc_ids": [
         "cv-xr-ai-engineer",
         "cv-ai-engineer",

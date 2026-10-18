@@ -58,7 +58,7 @@ Fuentes:
 
 > Washington's sources describe several production ML projects:
 >
-> - **Buscapez (Stanford University marine research platform):** He is building the species-identification module, a YOLO detector trained in PyTorch (mAP50 0.96), served by a FastAPI + ONNX Runtime service at 49 ms per image on a 2-core VPS, and running offline on iOS and Android via ExecuTorch. The app is live on the App Store and Google Play [5].
+> - **Buscapez (Stanford University marine research platform):** He is building the species-identification module, a YOLO detector trained in PyTorch (mAP50 0.96), served by a FastAPI + ONNX Runtime service at 49 ms per image on a 2-core VPS, and running offline on iOS and Android via ExecuTorch. [redacted 2026-10-18: outdated claim, see PROJECT.md P20c]
 > - **Laboratorios Bagó del Ecuador:** He built an AI campaign builder for product managers that generates campaign concepts grounded in expert product information, used at the company's MKT Attack event [4].
 >
 > His profile also lists LLM application work with Claude, OpenAI and Gemini APIs, and local LLM serving with llama.cpp [5].

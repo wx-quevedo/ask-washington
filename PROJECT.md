@@ -244,6 +244,20 @@ Ninguna fuente dentro del repo (papers, README de repos, código) contenía esta
 
 **Pruebas:** 79 en la suite normal (2 nuevas del mecanismo de correcciones) y 14 en Playwright (con `ASKW_E2E_DEV_PORT=4399`).
 
+### 2026-10-18 - P20c·2 redacción de reportes históricos
+
+El repo ya es público, así que no se reescribe el historial: en un commit normal se reemplazó cada oración de los reportes que repetía las afirmaciones viejas sobre Buscapez (publicación en App Store o Google Play, "66%", "93%", "IoU 0.90") por "[redacted 2026-10-18: outdated claim, see PROJECT.md P20c]". Los JSON siguen siendo válidos y conservan su formato.
+
+| Archivo | Ubicación | Fragmentos redactados |
+|---|---|---:|
+| `reports/eval/answers_after.json` | respuestas de q06, q07, q08 y keywords encontradas de q08 | 6 |
+| `reports/eval/answers_before.json` | respuestas de q06, q07, q08, q22 y keywords encontradas de q08 | 7 |
+| `reports/P18-3_real_answers.json` | respuesta de "Production ML experience" | 1 |
+| `reports/P18-3_respuestas.md` | la misma respuesta citada en el reporte | 1 |
+| `reports/P20_real_answers.json` | respuesta de "Buscapez" (interfaz ES) | 2 |
+
+Quedan esas frases, a propósito, en `data/source_corrections.yaml` (el mecanismo necesita el texto literal para encontrarlo), en esta bitácora (P20c documenta qué estaba mal) y en `tests/test_ingestion.py` (frases de prueba del mecanismo). Las métricas guardadas en los JSON de evaluación no se recalcularon: son el registro de esas corridas.
+
 ## Referencias de chats (P20b)
 
 Revisadas el 2026-10-18 en un Chromium sin sesión (Playwright), solo páginas públicas; las capturas se guardaron fuera del repositorio. ChatGPT (verificación de Cloudflare), el Messenger de Intercom y Tidio no cargan en un navegador automatizado: de Intercom se usó su documentación y no se intentó saltar ninguna protección.
