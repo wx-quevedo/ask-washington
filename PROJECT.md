@@ -57,6 +57,12 @@ Este proyecto es P18 dentro del plan de `C:\xampp\htdocs\enhanced-me`. El seguim
 | Datos al servidor por `pg_dump -Fc` de `data_chunks` e `ingested_documents` | El servidor nunca recibe los CV ni las demás fuentes; el dump restaura también los índices HNSW y de texto completo. |
 | Host y usuario del VPS solo en `deploy/.deploy.local` (ignorado) | El repo será público. Los secretos de producción (contraseña de la db, sal del hash de IP) se generan una vez y se guardan en ese mismo archivo para que los redeploys no cambien la contraseña del volumen. |
 | Cachés de modelos fijas en `/app/models` y verificación offline en el build | LlamaIndex usa una carpeta de caché por usuario distinta de `HF_HOME`; fijarlas todas y cargar el modelo como el usuario final durante el build evita que el error aparezca recién en producción. |
+| Ask Washington no tiene selector de idioma propio | Lo incrusta el portafolio, que ya tiene el switch EN/ES; el widget obedece a `?lang=` y a `postMessage` de orígenes permitidos. |
+| Textos solo en `app/static/i18n/{en,es}.json`; el servidor los inserta en la página | Sin parpadeo ni dependencia de JS para el primer render (y mejor para buscadores); el JS usa los mismos archivos para cambiar de idioma en caliente. Una prueba verifica que la plantilla no tenga texto visible fijo. |
+| Idioma de la respuesta decidido en el backend con un detector simple | Reglas deterministas y comprobables: idioma de la interfaz salvo que la pregunta esté claramente en el otro; lo ambiguo (un nombre, una sigla) sigue a la interfaz. El prompt recibe una instrucción explícita ("Write the whole answer in Spanish."). |
+| CSP con `frame-ancestors` en la app, no en nginx | Depende de `EMBED_ALLOWED_ORIGINS`, que vive en el `.env`. Dos cabeceras CSP se aplican a la vez, así que nginx ya no debe enviar la suya ni `X-Frame-Options: DENY`. |
+| `X-Frame-Options: SAMEORIGIN` solo cuando no hay orígenes permitidos | `X-Frame-Options` no admite listas; con orígenes permitidos manda `frame-ancestors`. |
+| Migración puntual del sitio nginx en `remote-deploy.sh` | Quita solo las dos líneas de cabecera del sitio gestionado por certbot (con respaldo y `nginx -t`), así que el redeploy no necesita `-ForceNginx` ni arriesga las líneas de certbot. |
 | El sitio nginx se instala solo la primera vez (o con `-ForceNginx`) | Después de certbot el archivo queda gestionado por certbot; sobrescribirlo en cada deploy quitaría el bloque HTTPS. |
 
 ## Plan de los 5 prompts
@@ -160,9 +166,20 @@ Estado: código listo y validado en local; el despliegue al VPS lo ejecuta Washi
 - Corrección: `HF_HOME`, `LLAMA_INDEX_CACHE_DIR` y `TIKTOKEN_CACHE_DIR` fijos en `/app/models` en ambos stages; `download_models.py` usa los cargadores de la app; verificación offline como usuario `app` al final del build; prueba de humo `POST /ask` al final de `remote-deploy.sh`; `$PSScriptRoot` fuera de `param()` en los scripts de PowerShell 5.1.
 - Verificado en local con el compose de producción: `POST /ask` 200 con citas, imagen de 1.93 GB, app en 578 MB de RAM.
 
+### 2026-10-18 - P20 idioma
+
+Estado: terminado y verificado en local. Detalle completo en `reports/P20_idioma.md`.
+
+- Interfaz en inglés o español con `?lang=en|es` (inglés por defecto); todos los textos en `app/static/i18n/en.json` y `es.json`; `lang` del `<html>` y título según el idioma.
+- Modo widget `?embed=1`: sin encabezado ni pie, compacto, informa su alto al padre con `postMessage` solo hacia `EMBED_ALLOWED_ORIGINS`; acepta `{type: "ask-washington:lang"}` solo de esos orígenes.
+- `POST /ask` acepta `lang`; el idioma de la respuesta sigue a la interfaz salvo que la pregunta esté claramente en el otro idioma; también en la ruta de ranking y en los mensajes de error (422, 429, 502).
+- La app envía la CSP con `frame-ancestors 'self'` más los orígenes permitidos; nginx deja de enviar CSP y `X-Frame-Options`, y `remote-deploy.sh` migra el sitio existente sin tocar certbot.
+- Pruebas: 74 en la suite normal, más una prueba de JS con Playwright (`tests/e2e`, se omite si Playwright no está instalado).
+- Prueba real (4 preguntas): las 4 en el idioma esperado y con citas válidas, USD 0.0018.
+
 ## Próximos pasos
 
-- Washington: redeploy con `deploy.ps1` (la prueba de humo confirma `/ask` en el servidor).
+- Washington: redeploy con `deploy.ps1` (sin `-ForceNginx`); cuando exista el dominio del portafolio, agregarlo a `EMBED_ALLOWED_ORIGINS` en `deploy/.deploy.local` y volver a desplegar.
 - Medir en el servidor el tamaño de la imagen, la RAM real del contenedor y la latencia de `/ask`.
 - Publicar el repo en GitHub cuando el despliegue esté verificado.
 - Volver a correr `scripts/eval.py` tras cada cambio y sumar preguntas reales de `qa_log`.

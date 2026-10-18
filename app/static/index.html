@@ -1,52 +1,53 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{html_lang}}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ask Washington</title>
-  <meta name="description" content="Ask about the experience of Washington X. Quevedo, AI Engineer and XR + AI Engineer. Answers cite his public CV, LinkedIn, repositories and papers.">
+  <title data-i18n="page_title">{{page_title}}</title>
+  <meta name="description" content="{{meta_description}}" data-i18n-attr="content:meta_description">
+  <meta name="ask-washington-embed-origins" content="{{embed_origins}}">
   <link rel="stylesheet" href="/static/styles.css">
   <script src="/static/app.js" defer></script>
 </head>
-<body>
-  <a class="skip-link" href="#question">Skip to the question</a>
+<body class="{{embed_class}}">
+  <a class="skip-link" href="#question" data-i18n="skip_link">{{skip_link}}</a>
 
   <header class="site-header">
     <div class="container">
-      <h1>Ask Washington</h1>
-      <p class="subtitle">Ask about the experience of Washington X. Quevedo, AI Engineer and XR + AI Engineer. Every answer cites his public sources.</p>
+      <h1 data-i18n="title">{{title}}</h1>
+      <p class="subtitle" data-i18n="subtitle">{{subtitle}}</p>
     </div>
   </header>
 
   <main class="container">
     <section aria-labelledby="suggested-title" class="suggested">
-      <h2 id="suggested-title" class="section-label">Try a question</h2>
+      <h2 id="suggested-title" class="section-label" data-i18n="suggested_label">{{suggested_label}}</h2>
       <ul class="suggestions">
-        <li><button type="button" class="suggestion">What XR experience does Washington have?</button></li>
-        <li><button type="button" class="suggestion">What has he shipped with machine learning in production?</button></li>
-        <li><button type="button" class="suggestion">What is his most cited paper?</button></li>
-        <li><button type="button" class="suggestion">What is plan-vivo-kit?</button></li>
+        <li><button type="button" class="suggestion" data-i18n="suggestion_1">{{suggestion_1}}</button></li>
+        <li><button type="button" class="suggestion" data-i18n="suggestion_2">{{suggestion_2}}</button></li>
+        <li><button type="button" class="suggestion" data-i18n="suggestion_3">{{suggestion_3}}</button></li>
+        <li><button type="button" class="suggestion" data-i18n="suggestion_4">{{suggestion_4}}</button></li>
       </ul>
     </section>
 
     <form id="ask-form" class="ask-form" novalidate>
-      <label for="question" class="section-label">Your question</label>
+      <label for="question" class="section-label" data-i18n="question_label">{{question_label}}</label>
       <textarea id="question" name="question" rows="3" minlength="3" maxlength="500" required
         aria-describedby="question-help question-count"
-        placeholder="For example: What did he build at Stanford University?"></textarea>
+        placeholder="{{placeholder}}" data-i18n-attr="placeholder:placeholder"></textarea>
       <div class="form-row">
-        <p id="question-help" class="help">English or Spanish, 3 to 500 characters. Press Enter to send, Shift+Enter for a new line.</p>
-        <p id="question-count" class="help count" aria-live="polite">0 / 500</p>
+        <p id="question-help" class="help" data-i18n="help">{{help}}</p>
+        <p id="question-count" class="help count" aria-live="polite"></p>
       </div>
-      <button type="submit" id="ask-button" class="primary">Ask</button>
+      <button type="submit" id="ask-button" class="primary" data-i18n="ask_button">{{ask_button}}</button>
     </form>
 
     <section id="result" class="result" aria-live="polite" aria-busy="false" tabindex="-1">
       <div id="status" class="status" hidden></div>
       <div id="answer-block" hidden>
-        <h2 class="section-label">Answer</h2>
+        <h2 class="section-label" data-i18n="answer_label">{{answer_label}}</h2>
         <div id="answer" class="answer"></div>
-        <h2 class="section-label">Sources</h2>
+        <h2 class="section-label" data-i18n="sources_label">{{sources_label}}</h2>
         <ol id="sources" class="sources"></ol>
         <p id="meta" class="meta"></p>
       </div>
@@ -55,14 +56,14 @@
 
   <footer class="site-footer">
     <div class="container">
-      <nav aria-label="Profiles">
+      <nav aria-label="{{footer_nav_label}}" data-i18n-attr="aria-label:footer_nav_label">
         <ul class="footer-links">
-          <li><a href="https://www.linkedin.com/in/wxquevedo" rel="noopener" target="_blank">LinkedIn</a></li>
-          <li><a href="https://github.com/wx-quevedo" rel="noopener" target="_blank">GitHub</a></li>
-          <li><a href="https://scholar.google.com/citations?user=zPNPhwkAAAAJ" rel="noopener" target="_blank">Google Scholar</a></li>
+          <li><a href="https://www.linkedin.com/in/wxquevedo" rel="noopener" target="_blank" data-i18n="footer_linkedin">{{footer_linkedin}}</a></li>
+          <li><a href="https://github.com/wx-quevedo" rel="noopener" target="_blank" data-i18n="footer_github">{{footer_github}}</a></li>
+          <li><a href="https://scholar.google.com/citations?user=zPNPhwkAAAAJ" rel="noopener" target="_blank" data-i18n="footer_scholar">{{footer_scholar}}</a></li>
         </ul>
       </nav>
-      <p class="disclaimer">Answers are generated from public sources and may contain errors.</p>
+      <p class="disclaimer" data-i18n="disclaimer">{{disclaimer}}</p>
     </div>
   </footer>
 </body>

@@ -244,3 +244,19 @@ textarea:focus { border-color: var(--accent); }
   .form-row { flex-direction: column; gap: 2px; }
   .primary { width: 100%; }
 }
+
+/* ---- widget mode (?embed=1): no big header or footer, compact, fits the iframe ---- */
+body.embed { min-height: 0; background: var(--surface); }
+body.embed .site-header,
+body.embed .site-footer { display: none; }
+body.embed main.container { max-width: none; padding: 12px 12px 16px; }
+body.embed .section-label { margin-bottom: 6px; }
+body.embed .suggestions { margin-bottom: 12px; gap: 6px; }
+body.embed .suggestion { font-size: 0.88rem; padding: 8px 10px; }
+body.embed .ask-form { padding: 12px; border-radius: 8px; }
+body.embed textarea { min-height: 64px; }
+body.embed .result { margin-top: 12px; }
+body.embed #answer-block { padding: 12px 14px; }
+@media (max-width: 560px) {
+  body.embed .suggestions { grid-template-columns: 1fr; }
+}

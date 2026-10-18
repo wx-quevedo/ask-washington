@@ -159,7 +159,8 @@ try {
         "DAILY_BUDGET_USD=1.00",
         "RATE_LIMIT_PER_MINUTE=10/minute",
         "RATE_LIMIT_PER_DAY=100/day",
-        "IP_HASH_SALT=$($config['IP_HASH_SALT'])"
+        "IP_HASH_SALT=$($config['IP_HASH_SALT'])",
+        "EMBED_ALLOWED_ORIGINS=$(if ($config.Contains('EMBED_ALLOWED_ORIGINS')) { $config['EMBED_ALLOWED_ORIGINS'] } else { '' })"
     )
     [System.IO.File]::WriteAllText((Join-Path $tmp "env.production"), (($envLines -join "`n") + "`n"), $Utf8NoBom)
     $envLines = $null

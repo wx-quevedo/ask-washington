@@ -23,7 +23,7 @@ def test_index_serves_the_page():
     assert page.status_code == 200
     assert page.headers["content-type"].startswith("text/html")
     html = page.text
-    assert "<title>Ask Washington</title>" in html
+    assert '<title data-i18n="page_title">Ask Washington</title>' in html
     assert 'for="question"' in html and 'id="question"' in html
     assert html.count('class="suggestion"') == 4
     assert "Answers are generated from public sources and may contain errors." in html
@@ -34,7 +34,7 @@ def test_index_serves_the_page():
     ):
         assert link in html
     assert "<script>" not in html  # no inline script, so a strict CSP can be used
-    assert script.status_code == 200 and 'fetch("/ask"' in script.text
+    assert script.status_code == 200 and 'fetch("/ask?lang="' in script.text
     assert styles.status_code == 200
 
 

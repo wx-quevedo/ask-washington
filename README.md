@@ -208,11 +208,12 @@ Metadata stored with every chunk in `metadata_`:
 ```bash
 curl -s http://127.0.0.1:8000/ask \
   -H "Content-Type: application/json" \
-  -d '{"question": "What is his most cited paper?"}'
+  -d '{"question": "What is his most cited paper?", "lang": "en"}'
 ```
 
 ```json
 {
+  "lang": "en",
   "answer": "Washington's most cited paper is \"Unity3D-MatLab simulator in real time for robotics applications\" (2016) ... 88 citations on Google Scholar, as of a 2026-10-17 snapshot [1]. ...",
   "sources": [
     {"n": 1, "title": "Unity3D-MatLab simulator in real time for robotics applications", "doc_type": "paper",
@@ -226,6 +227,7 @@ curl -s http://127.0.0.1:8000/ask \
 ```
 
 - `question`: 3 to 500 characters, otherwise `422`.
+- `lang` (optional, `en` or `es`, default `en`): the language of the page. The answer uses it, unless the question is clearly written in the other language; ambiguous questions (a name, an acronym) follow the page. The response includes the language used (`"lang": "es"`). Error messages (`422`, `429`, `502`) come in the same language; for `422` and the rate-limit `429` the API reads `lang` from the body or from `?lang=`.
 - `sources[n]` matches the `[n]` markers in `answer`. `score` is the cosine similarity of the chunk, or `null` for computed facts.
 - `429`: per-IP rate limit exceeded, or the daily spend budget is used up.
 - `502`: the LLM provider failed; details stay in the server log.
@@ -260,6 +262,7 @@ curl -s http://127.0.0.1:8000/ask \
 | `RATE_LIMIT_PER_MINUTE` / `RATE_LIMIT_PER_DAY` | `10/minute` / `100/day` | |
 | `IP_HASH_SALT` | `ask-washington` | Set your own value. |
 | `FORWARDED_ALLOW_IPS` | `127.0.0.1` | Peers allowed to set `X-Forwarded-For` (IPs or CIDRs). Only the local reverse proxy; see Deployment. |
+| `EMBED_ALLOWED_ORIGINS` | (empty) | Comma-separated origins that may embed the page in an iframe and send it `postMessage` events, for example `https://portfolio.example`. Empty: same origin only. See Embedding the widget. |
 
 ### Providers
 
@@ -316,11 +319,51 @@ Full analysis, including the questions that still fail: `reports/P18-4_evaluacio
 
 ## Web interface
 
-`GET /` serves a single page (`app/static/`: HTML, CSS and JavaScript, no framework): four suggested questions, a question box, the answer with `[n]` markers linked to the source list, loading and error states (including a clear message on `429`), and links to LinkedIn, GitHub and Google Scholar. It works with keyboard and screen readers (labels, focus handling, `aria-live`) and on phones. There is no inline script, so it runs under a strict Content Security Policy.
+`GET /` serves a single page (`app/static/`: HTML, CSS and JavaScript, no framework) in English or Spanish: `?lang=en|es` (English by default). Every visible text lives in `app/static/i18n/en.json` and `es.json`; the server fills the page with them and the script uses them to switch languages without reloading. The page has four suggested questions, a question box, the answer with `[n]` markers linked to the source list, loading and error states (including a clear message on `429`), and links to LinkedIn, GitHub and Google Scholar. It works with keyboard and screen readers (labels, focus handling, `aria-live`) and on phones. There is no inline script, so it runs under a strict Content Security Policy.
 
 | Desktop | Mobile |
 |---|---|
-| ![Desktop](reports/screenshots/desktop-initial.png) | ![Mobile](reports/screenshots/mobile-initial.png) |
+| ![Desktop, English](reports/screenshots/page-en-desktop.png) | ![Mobile, Spanish](reports/screenshots/page-es-mobile.png) |
+
+Widget embedded in a demo page (English and Spanish):
+
+| English | Spanish |
+|---|---|
+| ![Widget, English](reports/screenshots/widget-en-desktop.png) | ![Widget, Spanish](reports/screenshots/widget-es-desktop.png) |
+
+## Embedding the widget
+
+Ask Washington has no language switch of its own: it follows the page that contains it. `?embed=1` gives a compact widget without the big header and footer, sized to its content.
+
+1. Add the embedding site to `EMBED_ALLOWED_ORIGINS` (for the deploy script: `EMBED_ALLOWED_ORIGINS=https://portfolio.example` in `deploy/.deploy.local`). The app then sends `Content-Security-Policy: frame-ancestors 'self' https://portfolio.example` and accepts `postMessage` events only from that origin.
+2. Embed it, and send the language whenever the page switches:
+
+```html
+<iframe id="ask-washington"
+        src="https://ask.inmersoft.com/?embed=1&lang=en"
+        title="Ask Washington"
+        style="width: 100%; max-width: 480px; height: 640px; border: 0;"></iframe>
+
+<script>
+  const ASK_ORIGIN = "https://ask.inmersoft.com";
+  const frame = document.getElementById("ask-washington");
+
+  // Call this from the portfolio's EN/ES switch.
+  function setAskWashingtonLanguage(lang) {   // "en" or "es"
+    frame.contentWindow.postMessage({ type: "ask-washington:lang", lang: lang }, ASK_ORIGIN);
+  }
+
+  // The widget reports its height so the iframe fits its content.
+  window.addEventListener("message", (event) => {
+    if (event.origin !== ASK_ORIGIN) return;
+    if (event.data && event.data.type === "ask-washington:height") {
+      frame.style.height = event.data.height + "px";
+    }
+  });
+</script>
+```
+
+Start with `lang=` in the `src` matching the current page language (the first render does not wait for a message). Messages from origins that are not in `EMBED_ALLOWED_ORIGINS` are ignored, and the widget posts its height only to allowed origins. The widget does not show the footer, so the embedding page should keep a short note such as "Answers are generated from public sources and may contain errors."
 
 ## Deployment
 
@@ -329,7 +372,7 @@ Production runs as one Docker Compose project behind the host's nginx:
 - `Dockerfile`: multi-stage build on `python:3.12-slim` with uv, CPU-only PyTorch, the embedding model downloaded at build time (offline at runtime), a non-root user and a health check on `/health`.
 - `docker-compose.prod.yml`: project `ask-washington` with its own network and volume; the app is published on `127.0.0.1:<APP_PORT>` only and the database has no published ports; `restart: unless-stopped`; memory limits of 1.5 GB (app) and 512 MB (database).
 - Uvicorn runs with `--proxy-headers`, and the app trusts `X-Forwarded-For` only from `FORWARDED_ALLOW_IPS` (the local proxy). nginx overwrites that header with the real client address, so clients cannot spoof it and the rate limit counts real clients.
-- `deploy/nginx/ask.inmersoft.com.conf`: reverse proxy with `X-Forwarded-*` headers, request size limits and basic security headers (CSP, `X-Frame-Options`, `nosniff`, referrer and permissions policies). certbot adds HTTPS.
+- `deploy/nginx/ask.inmersoft.com.conf`: reverse proxy with `X-Forwarded-*` headers, request size limits and basic security headers (`nosniff`, referrer and permissions policies). The app sends `Content-Security-Policy` (including `frame-ancestors` from `EMBED_ALLOWED_ORIGINS`) and, when no other origin may embed it, `X-Frame-Options: SAMEORIGIN`; nginx must not add its own versions of those two headers. certbot adds HTTPS.
 - Data: the server never receives the source documents. The deploy dumps the `data_chunks` and `ingested_documents` tables with `pg_dump -Fc` and restores them on the server.
 
 One command deploys from a Windows machine with SSH access to the server:

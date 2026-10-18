@@ -103,6 +103,19 @@ if [[ ! -L "${SITE_ENABLED}" ]]; then
   linked_site=1
 fi
 
+# Since P20 the app sends Content-Security-Policy (frame-ancestors) and X-Frame-Options.
+# Sites installed before that still have nginx versions that block embedding; remove only
+# those two add_header lines and keep everything else, including certbot's lines.
+if sudo grep -qE "add_header (X-Frame-Options|Content-Security-Policy) " "${SITE_AVAILABLE}"; then
+  if [[ -z "${backup}" ]]; then
+    backup="${SITE_AVAILABLE}.bak.$(date +%Y%m%d%H%M%S)"
+    sudo cp -p "${SITE_AVAILABLE}" "${backup}"
+  fi
+  sudo sed -i -E '/add_header (X-Frame-Options|Content-Security-Policy) /d' "${SITE_AVAILABLE}"
+  created_site=1  # on a failed nginx -t, the backup is restored below
+  echo "removed the nginx X-Frame-Options and Content-Security-Policy lines (now sent by the app)"
+fi
+
 if sudo nginx -t; then
   sudo systemctl reload nginx
 else

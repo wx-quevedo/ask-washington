@@ -1,0 +1,73 @@
+{
+  "total_cost_usd": 0.001818,
+  "results": [
+    {
+      "interface": "en",
+      "question": "What XR experience does Washington have?",
+      "expected_lang": "en",
+      "response_lang": "en",
+      "detected_answer_lang": "en",
+      "citations": [
+        2,
+        3,
+        5
+      ],
+      "citations_valid": true,
+      "sources": 6,
+      "cost_usd": 0.00035,
+      "latency_ms": 17129,
+      "answer": "Washington is an XR engineer with 10 years of experience building VR/AR training, simulation and interactive experiences in Unity [3]. He founded Inmersoft in 2018, where he has delivered 200+ VR/AR applications for engineering, medicine and entertainment, including industrial training, rehabilitation and immersive process environments [5]. His XR work includes a synchronized 360° VR experience for 31 Meta Quest headsets [2], and shipped XR and game work for Sansar (via BairesDev), Merge and a pharmaceutical sales force [3]. He is also building SkyNest, a multiplayer VR combat sandbox, and RayNeo Power, a HUD for AR glasses, both in development [2]."
+    },
+    {
+      "interface": "en",
+      "question": "¿Qué hizo en rehabilitación con realidad virtual?",
+      "expected_lang": "es",
+      "response_lang": "es",
+      "detected_answer_lang": "es",
+      "citations": [
+        1,
+        3,
+        5
+      ],
+      "citations_valid": true,
+      "sources": 6,
+      "cost_usd": 0.000487,
+      "latency_ms": 2047,
+      "answer": "Washington trabajó en varios sistemas de rehabilitación con realidad virtual para motricidad fina:\n\n- Desarrolló un guante háptico de estimulación para rehabilitación de motricidad fina en entornos de realidad virtual. Sensores de flexibilidad determinan la posición de los dedos, actuadores vibratorios dan retroalimentación al contactar superficies virtuales, y el sistema usa Unity 3D, Oculus Rift y Leap Motion [1].\n- Presentó un sistema de rehabilitación de extremidades superiores con dispositivos hápticos y retroalimentación de fuerza, usando Unity3D, el dispositivo Novint Falcon, Oculus Rift y Leap Motion [3].\n- Creó un sistema de rehabilitación virtual de motricidad fina con una ortesis activa de mano, usando Unity 3D y el brazalete Myo para identificar los movimientos [5]."
+    },
+    {
+      "interface": "es",
+      "question": "¿Qué es plan-vivo-kit?",
+      "expected_lang": "es",
+      "response_lang": "es",
+      "detected_answer_lang": "es",
+      "citations": [
+        1,
+        3,
+        4
+      ],
+      "citations_valid": true,
+      "sources": 6,
+      "cost_usd": 0.000496,
+      "latency_ms": 2066,
+      "answer": "Plan Vivo es un kit para mantener el plan de un proyecto en un único archivo JSON, que los agentes de programación con IA actualizan, junto con un visor local en vivo que muestra fases, tiempo real por actor y una proyección calibrada de la fecha de finalización [1][4]. Sus funciones principales incluyen:\n\n- Un archivo `plan.json` dividido en fases, con elementos de tipo prompt, gate (aprobación humana) y unplanned [1].\n- Un visor local en React que se recarga automáticamente al guardar el plan [1].\n- El comando `tiempos`, que reconstruye los tiempos a partir de los registros de sesión de Claude Code y de `git log` [1].\n- Validación y migración de versiones del formato del plan [1].\n\nSe instala una vez por máquina y funciona con varios proyectos a la vez [1]. Su arquitectura está descrita en el repositorio de GitHub de Washington [3]."
+    },
+    {
+      "interface": "es",
+      "question": "Buscapez",
+      "expected_lang": "es",
+      "response_lang": "es",
+      "detected_answer_lang": "es",
+      "citations": [
+        1,
+        2,
+        3
+      ],
+      "citations_valid": true,
+      "sources": 6,
+      "cost_usd": 0.000485,
+      "latency_ms": 1974,
+      "answer": "Buscapez es una plataforma de investigación para el marcado de atún de Stanford University. Washington participó como Software & AI Consultant, a través de Inmersoft, desde julio de 2026 hasta la actualidad, de forma remota [1][2].\n\nSu trabajo en el proyecto incluyó:\n- Construir el módulo de identificación de especies con un detector YOLO entrenado en PyTorch (mAP50 0.96) [1][2].\n- Descubrir que el runtime móvil distorsionaba las imágenes de entrada; el letterboxing elevó la precisión por clase de 66% a 93% [1][2].\n- Desplegar un servicio de inferencia FastAPI + ONNX Runtime con 49 ms por imagen [2][3].\n- Implementar inferencia offline en iOS y Android con ExecuTorch [2][3].\n- Entregar la plataforma completa y publicar la app en App Store y Google Play [1][2]."
+    }
+  ]
+}

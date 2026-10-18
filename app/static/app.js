@@ -1,6 +1,7 @@
 "use strict";
 
 (function () {
+  const LANGS = ["en", "es"];
   const form = document.getElementById("ask-form");
   const input = document.getElementById("question");
   const button = document.getElementById("ask-button");
@@ -12,22 +13,63 @@
   const sourcesEl = document.getElementById("sources");
   const metaEl = document.getElementById("meta");
 
-  const TYPE_LABELS = {
-    cv: "CV",
-    linkedin: "LinkedIn",
-    repo_readme: "README",
-    paper: "Paper",
-    profile: "Scholar profile",
-  };
+  const params = new URLSearchParams(window.location.search);
+  const isEmbed = document.body.classList.contains("embed");
+  // Origins allowed to embed this page and to talk to it (set by the server).
+  const originsMeta = document.querySelector('meta[name="ask-washington-embed-origins"]');
+  const allowedOrigins = (originsMeta ? originsMeta.content : "").split(/\s+/).filter(Boolean);
+
+  let lang = LANGS.includes(document.documentElement.lang) ? document.documentElement.lang : "en";
+  let t = {};
+  let lastAnswer = null;
+
+  function format(template, values) {
+    return String(template).replace(/\{(\w+)\}/g, (_, key) => (key in values ? values[key] : ""));
+  }
+
+  async function loadTexts(code) {
+    const response = await fetch("/static/i18n/" + code + ".json", { cache: "force-cache" });
+    if (!response.ok) throw new Error("texts not found");
+    return response.json();
+  }
+
+  function applyTexts() {
+    document.documentElement.lang = t.html_lang || lang;
+    document.querySelectorAll("[data-i18n]").forEach((node) => {
+      const key = node.getAttribute("data-i18n");
+      if (key in t) node.textContent = t[key];
+    });
+    document.querySelectorAll("[data-i18n-attr]").forEach((node) => {
+      node.getAttribute("data-i18n-attr").split(";").forEach((pair) => {
+        const [attr, key] = pair.split(":");
+        if (attr && key in t) node.setAttribute(attr, t[key]);
+      });
+    });
+    updateCount();
+    if (lastAnswer) renderResult(lastAnswer);
+  }
+
+  async function setLanguage(code) {
+    if (!LANGS.includes(code)) return;
+    try {
+      t = await loadTexts(code);
+      lang = code;
+      applyTexts();
+    } catch (e) {
+      // Keep the current texts if the other language cannot be loaded.
+    }
+  }
 
   function updateCount() {
-    count.textContent = input.value.length + " / 500";
+    count.textContent = format(t.counter || "{n} / 500", { n: input.value.length });
+    reportHeight();
   }
 
   function showStatus(message, kind) {
     status.textContent = message;
     status.className = "status" + (kind ? " " + kind : "");
     status.hidden = false;
+    reportHeight();
   }
 
   function el(tag, attrs, text) {
@@ -51,7 +93,7 @@
       } else {
         const n = Number(match[3]);
         if (n >= 1 && n <= sourceCount) {
-          parent.appendChild(el("a", { class: "cite", href: "#source-" + n, "aria-label": "Source " + n }, "[" + n + "]"));
+          parent.appendChild(el("a", { class: "cite", href: "#source-" + n, "aria-label": format(t.source_aria, { n: n }) }, "[" + n + "]"));
         } else {
           parent.appendChild(document.createTextNode(match[0]));
         }
@@ -98,32 +140,39 @@
       } else {
         item.appendChild(document.createTextNode(source.title));
       }
-      item.appendChild(el("span", { class: "source-type" }, TYPE_LABELS[source.doc_type] || source.doc_type));
+      item.appendChild(el("span", { class: "source-type" }, t["type_" + source.doc_type] || source.doc_type));
       if (source.section) item.appendChild(el("span", { class: "source-section" }, source.section));
       sourcesEl.appendChild(item);
     });
   }
 
+  function renderResult(body) {
+    renderAnswer(body.answer, body.sources.length);
+    renderSources(body.sources);
+    metaEl.textContent = format(t.answered_in, { seconds: (body.latency_ms / 1000).toFixed(1), model: body.model });
+    reportHeight();
+  }
+
   function errorMessage(statusCode, body) {
-    if (statusCode === 429) {
-      if (body && typeof body.detail === "string") return body.detail;
-      return "Too many questions in a short time. Please wait a minute and try again.";
-    }
-    if (statusCode === 422) return "Please write a question between 3 and 500 characters.";
-    if (statusCode >= 500) return "The answer service is not available right now. Please try again later.";
-    return "Something went wrong. Please try again.";
+    // The API localizes its messages with the language sent in the request.
+    if (body && typeof body.detail === "string" && (statusCode === 429 || statusCode === 502)) return body.detail;
+    if (statusCode === 429) return t.error_rate;
+    if (statusCode === 422) return t.error_length;
+    if (statusCode >= 500) return t.error_server;
+    return t.error_generic;
   }
 
   async function ask(question) {
     button.disabled = true;
     result.setAttribute("aria-busy", "true");
     answerBlock.hidden = true;
-    showStatus("Looking through the sources...", "loading");
+    lastAnswer = null;
+    showStatus(t.loading, "loading");
     try {
-      const response = await fetch("/ask", {
+      const response = await fetch("/ask?lang=" + lang, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: question }),
+        body: JSON.stringify({ question: question, lang: lang }),
       });
       let body = null;
       try {
@@ -136,24 +185,52 @@
         return;
       }
       status.hidden = true;
-      renderAnswer(body.answer, body.sources.length);
-      renderSources(body.sources);
-      metaEl.textContent = "Answered in " + (body.latency_ms / 1000).toFixed(1) + " s by " + body.model + ".";
+      lastAnswer = body;
       answerBlock.hidden = false;
+      renderResult(body);
     } catch (e) {
-      showStatus("Could not reach the server. Check your connection and try again.", "error");
+      showStatus(t.error_network, "error");
     } finally {
       button.disabled = false;
       result.setAttribute("aria-busy", "false");
-      result.focus();
+      if (!isEmbed) result.focus();
+      reportHeight();
     }
   }
+
+  // ---- embedding: height to the parent, language from the parent ----
+
+  let lastHeight = 0;
+  function reportHeight() {
+    if (!isEmbed || window.parent === window || allowedOrigins.length === 0) return;
+    const height = Math.ceil(document.documentElement.scrollHeight);
+    if (height === lastHeight) return;
+    lastHeight = height;
+    // Posting to a specific origin is dropped unless the parent really has that origin.
+    allowedOrigins.forEach((origin) => {
+      window.parent.postMessage({ type: "ask-washington:height", height: height }, origin);
+    });
+  }
+
+  window.addEventListener("message", (event) => {
+    if (!allowedOrigins.includes(event.origin)) return; // ignore anyone else
+    const data = event.data;
+    if (data && data.type === "ask-washington:lang" && LANGS.includes(data.lang)) {
+      setLanguage(data.lang);
+    }
+  });
+
+  if (isEmbed && "ResizeObserver" in window) {
+    new ResizeObserver(reportHeight).observe(document.body);
+  }
+
+  // ---- events ----
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     const question = input.value.trim();
     if (question.length < 3 || question.length > 500) {
-      showStatus("Please write a question between 3 and 500 characters.", "error");
+      showStatus(t.error_length, "error");
       input.focus();
       return;
     }
@@ -176,5 +253,7 @@
     });
   });
 
-  updateCount();
+  // The server already rendered the texts; load them for dynamic messages.
+  const requested = params.get("lang");
+  setLanguage(LANGS.includes(requested) ? requested : lang).then(reportHeight);
 })();

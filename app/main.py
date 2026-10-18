@@ -6,18 +6,20 @@ from pathlib import Path
 
 import psycopg
 from fastapi import Depends, FastAPI, HTTPException, Request
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from langchain_core.language_models import BaseChatModel
 from langchain_core.retrievers import BaseRetriever
 from pydantic import BaseModel, Field, field_validator
-from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi import Limiter
 from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
 from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 
 from app import db, usage
 from app.config import Settings, get_settings
+from app.i18n import answer_language, api_message, normalize_lang, parse_origins, render_page
 from app.llm import get_chat_model
 from app.rag import answer_question
 from app.retrieval import ChunkRetriever, ensure_fulltext_index
@@ -44,7 +46,6 @@ STATIC_DIR = Path(__file__).resolve().parent / "static"
 
 app = FastAPI(title="Ask Washington", version="0.5.0", lifespan=lifespan)
 app.state.limiter = limiter
-app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 # Behind nginx, take the client IP from X-Forwarded-For, but only when the request comes
 # from a trusted peer (the local proxy). The rightmost untrusted address wins, so a client
 # cannot spoof its IP by sending its own X-Forwarded-For header.
@@ -55,9 +56,57 @@ app.add_middleware(
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 
+DOCS_PATHS = ("/docs", "/redoc", "/openapi.json")
+
+
+def content_security_policy(origins: list[str]) -> str:
+    ancestors = " ".join(["'self'", *origins])
+    return (
+        "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; "
+        f"connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors {ancestors}"
+    )
+
+
+@app.middleware("http")
+async def security_headers(request: Request, call_next):
+    """CSP with frame-ancestors from EMBED_ALLOWED_ORIGINS (the app owns these headers)."""
+    response = await call_next(request)
+    if request.url.path.startswith(DOCS_PATHS):
+        return response  # the interactive docs load assets from a CDN
+    origins = parse_origins(get_settings().embed_allowed_origins)
+    response.headers["Content-Security-Policy"] = content_security_policy(origins)
+    if not origins:
+        # Legacy browsers ignore frame-ancestors; X-Frame-Options cannot list origins, so it
+        # is only sent when no other site may embed the page.
+        response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    return response
+
+
+def request_lang(request: Request, body: object = None) -> str:
+    """Language for API messages: the JSON body's "lang", else ?lang=, else English."""
+    if isinstance(body, dict) and body.get("lang"):
+        return normalize_lang(str(body["lang"]))
+    return normalize_lang(request.query_params.get("lang"))
+
+
+@app.exception_handler(RequestValidationError)
+async def localized_validation_error(request: Request, exc: RequestValidationError):
+    lang = request_lang(request, exc.body)
+    return JSONResponse({"detail": api_message("validation", lang)}, status_code=422)
+
+
+@app.exception_handler(RateLimitExceeded)
+async def localized_rate_limit(request: Request, exc: RateLimitExceeded):
+    return JSONResponse(
+        {"detail": api_message("rate_limit", request_lang(request))}, status_code=429
+    )
+
+
 @app.get("/", include_in_schema=False)
-def index() -> FileResponse:
-    return FileResponse(STATIC_DIR / "index.html", media_type="text/html")
+def index(lang: str = "en", embed: str = "0") -> HTMLResponse:
+    origins = parse_origins(get_settings().embed_allowed_origins)
+    page = render_page(normalize_lang(lang), embed in ("1", "true", "yes"), origins)
+    return HTMLResponse(page)
 
 
 @app.get("/health")
@@ -73,6 +122,8 @@ def health() -> JSONResponse:
 
 class AskRequest(BaseModel):
     question: str = Field(min_length=3, max_length=500)
+    # Interface language. The answer uses it unless the question is clearly in the other one.
+    lang: str = "en"
 
     @field_validator("question")
     @classmethod
@@ -81,6 +132,11 @@ class AskRequest(BaseModel):
         if len(value) < 3:
             raise ValueError("question must have at least 3 non-blank characters")
         return value
+
+    @field_validator("lang")
+    @classmethod
+    def known_lang(cls, value: str) -> str:
+        return normalize_lang(value)
 
 
 class Source(BaseModel):
@@ -99,6 +155,7 @@ class Usage(BaseModel):
 
 class AskResponse(BaseModel):
     answer: str
+    lang: str
     sources: list[Source]
     provider: str
     model: str
@@ -144,6 +201,8 @@ def ask(
 ) -> AskResponse:
     started = time.perf_counter()
     ip_hash = usage.hash_ip(settings, get_remote_address(request))
+    # Language of the answer and of any error from here on.
+    reply_lang = answer_language(body.question, body.lang)
     log = {
         "question": body.question,
         "provider": settings.llm_provider,
@@ -162,16 +221,10 @@ def ask(
             route="none",
             status="budget_exceeded",
         )
-        raise HTTPException(
-            status_code=429,
-            detail=(
-                "Ask Washington has reached its daily usage budget. Please try again tomorrow, "
-                "or see https://www.linkedin.com/in/wxquevedo in the meantime."
-            ),
-        )
+        raise HTTPException(status_code=429, detail=api_message("budget", reply_lang))
 
     try:
-        result = answer_question(body.question, llm, retriever)
+        result = answer_question(body.question, llm, retriever, lang=body.lang)
     except Exception as exc:  # provider or database failure: do not leak details
         logger.exception("answer failed")
         usage.log_question(
@@ -184,7 +237,7 @@ def ask(
             route="error",
             status=f"error:{exc.__class__.__name__}",
         )
-        raise HTTPException(status_code=502, detail="The answer service is unavailable.") from exc
+        raise HTTPException(status_code=502, detail=api_message("unavailable", reply_lang)) from exc
 
     cost = usage.cost_usd(settings, result.input_tokens, result.output_tokens)
     usage.record_usage(today, result.input_tokens, result.output_tokens, cost)
@@ -201,6 +254,7 @@ def ask(
     )
     return AskResponse(
         answer=result.answer,
+        lang=result.lang,
         sources=[Source(**s) for s in result.sources],
         provider=settings.llm_provider,
         model=settings.llm_model,

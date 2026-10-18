@@ -38,6 +38,9 @@ class Settings(BaseSettings):
     # Peers allowed to set X-Forwarded-For (comma-separated IPs or CIDRs). Only the local
     # reverse proxy belongs here; in Docker that is the bridge gateway of the app network.
     forwarded_allow_ips: str = "127.0.0.1"
+    # Origins allowed to embed the page in an iframe and to send it postMessage events
+    # (comma-separated, e.g. "https://portfolio.example"). Empty: same origin only.
+    embed_allowed_origins: str = ""
 
     @field_validator("llm_temperature", mode="before")
     @classmethod

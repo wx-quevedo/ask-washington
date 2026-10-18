@@ -109,7 +109,8 @@ def test_answer_format_and_citations(client, llm):
 
     assert response.status_code == 200
     body = response.json()
-    assert set(body) == {"answer", "sources", "provider", "model", "latency_ms", "usage"}
+    assert set(body) == {"answer", "lang", "sources", "provider", "model", "latency_ms", "usage"}
+    assert body["lang"] == "en"
     assert body["answer"] == "Washington builds VR training simulators [1]."
     assert body["usage"] == {"input_tokens": 1000, "output_tokens": 100}
     assert body["provider"] == "anthropic"
