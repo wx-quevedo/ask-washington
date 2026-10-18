@@ -1,5 +1,6 @@
 import logging
 import time
+from collections.abc import Callable
 from contextlib import asynccontextmanager
 from datetime import date
 from pathlib import Path
@@ -20,11 +21,24 @@ from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 from app import db, usage
 from app.config import Settings, get_settings
 from app.i18n import answer_language, api_message, normalize_lang, parse_origins, render_page
-from app.llm import get_chat_model
+from app.llm import get_chat_model, get_translation_model
 from app.rag import answer_question
 from app.retrieval import ChunkRetriever, ensure_fulltext_index
+from app.translation import QueryTranslation, QueryTranslator
 
 logger = logging.getLogger("ask_washington")
+
+
+def configure_logging() -> None:
+    """Show the app's INFO logs (uvicorn configures only its own loggers)."""
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        handler.setFormatter(logging.Formatter("%(levelname)s:     %(name)s - %(message)s"))
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+
+
+configure_logging()
 
 
 @asynccontextmanager
@@ -177,6 +191,17 @@ def get_retriever(settings: Settings = Depends(get_settings)) -> BaseRetriever:
     )
 
 
+def get_translator(settings: Settings = Depends(get_settings)):
+    """Query translator for non-English questions, or None when QUERY_TRANSLATION=off."""
+    if not settings.query_translation:
+        return None
+    try:
+        return QueryTranslator(get_translation_model(settings), settings.translation_timeout_s)
+    except Exception:  # never break /ask: search with the original question only
+        logger.warning("query translation unavailable; searching with the original question")
+        return None
+
+
 def get_today() -> date:
     return date.today()
 
@@ -199,6 +224,7 @@ def ask(
     today: date = Depends(get_today),
     llm: BaseChatModel = Depends(get_llm),
     retriever: BaseRetriever = Depends(get_retriever),
+    translator: Callable[[str], QueryTranslation] | None = Depends(get_translator),
 ) -> AskResponse:
     started = time.perf_counter()
     ip_hash = usage.hash_ip(settings, get_remote_address(request))
@@ -225,7 +251,9 @@ def ask(
         raise HTTPException(status_code=429, detail=api_message("budget", reply_lang))
 
     try:
-        result = answer_question(body.question, llm, retriever, lang=body.lang)
+        result = answer_question(
+            body.question, llm, retriever, lang=body.lang, translator=translator
+        )
     except Exception as exc:  # provider or database failure: do not leak details
         logger.exception("answer failed")
         usage.log_question(

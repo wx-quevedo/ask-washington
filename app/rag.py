@@ -1,5 +1,6 @@
 """Answer chain: retrieve chunks (or ranking facts), number them, and let the LLM write."""
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
 
 from langchain_core.language_models import BaseChatModel
@@ -9,6 +10,7 @@ from langchain_core.retrievers import BaseRetriever
 
 from app.i18n import LANGUAGE_NAMES, answer_language, normalize_lang
 from app.ranking import answer_ranking
+from app.translation import QueryTranslation
 
 LINKEDIN_URL = "https://www.linkedin.com/in/wxquevedo"
 
@@ -65,6 +67,8 @@ class Answer:
     # For evaluation: the doc_id and text behind each numbered source.
     source_doc_ids: list[str] = field(default_factory=list)
     source_texts: list[str] = field(default_factory=list)
+    # Query translation used for retrieval (None when not attempted).
+    translation: QueryTranslation | None = None
 
 
 def format_sources(sources: list[dict], texts: list[str]) -> str:
@@ -88,11 +92,16 @@ def _text(message: AIMessage) -> str:
 
 
 def answer_question(
-    question: str, llm: BaseChatModel, retriever: BaseRetriever, lang: str = "en"
+    question: str,
+    llm: BaseChatModel,
+    retriever: BaseRetriever,
+    lang: str = "en",
+    translator: Callable[[str], QueryTranslation] | None = None,
 ) -> Answer:
     interface_lang = normalize_lang(lang)
     reply_lang = answer_language(question, interface_lang)
     ranking = answer_ranking(question)
+    translation = None
     if ranking is not None:
         route = "ranking"
         sources = [{**s, "score": None} for s in ranking.sources]
@@ -111,7 +120,17 @@ def answer_question(
         source_texts = ["\n".join(ranking.facts)] * len(sources)
     else:
         route = "rag"
-        docs = retriever.invoke(question)
+        # Non-English questions are also searched in English (sources and embeddings are
+        # English); the answer prompt below still gets the original question.
+        queries = [question]
+        if translator is not None:
+            translation = translator(question)
+            queries = translation.queries
+        retrieve_many = getattr(retriever, "retrieve_many", None)
+        if len(queries) > 1 and retrieve_many is not None:
+            docs = retrieve_many(queries)
+        else:
+            docs = retriever.invoke(question)
         sources = [
             {
                 "title": d.metadata.get("title", ""),
@@ -141,6 +160,9 @@ def answer_question(
         }
     )
     input_tokens, output_tokens = _usage(message)
+    if translation is not None:  # the translation call is part of the cost of this answer
+        input_tokens += translation.input_tokens
+        output_tokens += translation.output_tokens
     numbered = [
         {"n": n, **{k: v for k, v in s.items() if k != "doc_id"}}
         for n, s in enumerate(sources, start=1)
@@ -155,4 +177,5 @@ def answer_question(
         source_ids=source_ids,
         source_doc_ids=source_doc_ids,
         source_texts=source_texts,
+        translation=translation,
     )

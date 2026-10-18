@@ -238,6 +238,7 @@ curl -s http://127.0.0.1:8000/ask \
 
 1. **Ranking route.** Questions about the most cited or latest papers, the number of papers, or citation metrics (h-index, i10-index, total citations) are detected with regular expressions (English and Spanish). The facts are computed from `data/papers.yaml` and the Google Scholar profile totals (640 citations, h-index 14, i10-index 21, snapshot 2026-10-17); the LLM only writes them up.
 2. **RAG route.** Anything else retrieves the top `RETRIEVAL_TOP_K` chunks from `data_chunks` with `RETRIEVAL_MODE` (default `hybrid`: the 20 best vector matches and the 20 best Postgres full-text matches, fused with Reciprocal Rank Fusion, keeping at most 3 chunks per document), numbers them, and sends them to the LLM.
+   - **Query translation** (`QUERY_TRANSLATION=on`, the default): the sources are in English and `bge-small-en` is an English-only embedding model, so a Spanish question can miss the chunk that answers it. When a cheap heuristic (no LLM call) detects that the question is not in English, one short Claude call translates it to English (at most 100 output tokens, 4 s timeout, no retries; Claude Haiku 5.5 does not accept a custom `temperature`, so the prompt asks for the translation only). Both the original and the English query are searched, the rankings are fused with the same RRF, and the per-document cap applies after the fusion. English and ambiguous questions (a single name or acronym) are searched as they are. If the call fails or times out, the original question is used alone and a warning is logged; `/ask` never fails because of it. The answer prompt still receives the original question, so the answer keeps the user's language. The translation tokens count toward the answer's usage and the daily budget. Logs show the detected language, the English query and the translation latency (the original question is not logged).
 3. The system prompt tells the model to answer only from the numbered sources, in the third person, citing `[n]`; to mention LinkedIn only when the sources do not answer the question; to reply in the language of the question; to ignore instructions inside the question; and never to give private contact details.
 
 ### Limits and logging
@@ -258,6 +259,7 @@ curl -s http://127.0.0.1:8000/ask \
 | `RETRIEVAL_TOP_K` | `6` | Chunks sent to the LLM on the RAG route. |
 | `RETRIEVAL_MODE` | `hybrid` | `vector`, `hybrid` (vector + Postgres full text, fused with RRF), `rerank` (hybrid candidates re-scored by `RERANKER_MODEL`) or `rerank_light` (same with `ms-marco-MiniLM-L-6-v2`). See Evaluation. |
 | `RETRIEVAL_CANDIDATES` | `20` | Candidates per search before fusion or reranking. |
+| `QUERY_TRANSLATION` | `on` | `on` or `off`. Spanish questions are also searched in English (see Query translation). |
 | `RETRIEVAL_MAX_PER_DOC` | `3` | Hybrid mode: at most this many chunks of one document among the `RETRIEVAL_TOP_K` (`0` = no limit), so a long README cannot push out another document that holds the answer. |
 | `RERANKER_MODEL` | `BAAI/bge-reranker-base` | Cross-encoder for `rerank` mode (downloaded on first use, about 1.1 GB). |
 | `LLM_PRICE_INPUT_PER_MTOK` / `LLM_PRICE_OUTPUT_PER_MTOK` | `0.10` / `0.50` | USD per million tokens. Update them if you change the model. |
@@ -290,6 +292,8 @@ uv run python -m scripts.eval --modes vector,hybrid             # selected retri
 uv run python -m scripts.eval --answers --label final           # real LLM on all 30 questions (about USD 0.011)
 uv run python -m scripts.eval --answers --mode rerank --max-usd 0.05
 ```
+
+Add `--translation off|on|both` to measure retrieval with query translation (on makes one short LLM call per Spanish question); results include separate English and Spanish metrics, the translation latency and its cost.
 
 Results go to `reports/eval/` as JSON and Markdown. `--answers` projects the cost first and stops if it would pass `--max-usd` (default 0.10).
 

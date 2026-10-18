@@ -182,6 +182,58 @@ def retrieve(
     raise ValueError(f"Unknown RETRIEVAL_MODE '{mode}'. Supported: {', '.join(RETRIEVAL_MODES)}.")
 
 
+def retrieve_many(
+    queries: list[str],
+    *,
+    mode: str = "vector",
+    top_k: int = 6,
+    candidates: int = 20,
+    reranker_model: str = "BAAI/bge-reranker-base",
+    max_per_doc: int | None = MAX_CHUNKS_PER_DOC,
+) -> list[Hit]:
+    """Search with several phrasings of the same question (for example the original
+    Spanish question and its English translation) and fuse the rankings with RRF.
+
+    The per-document cap and the reranker apply after the fusion; the reranker uses the
+    last query (the English translation when there is one).
+    """
+    queries = [q for i, q in enumerate(queries) if q and q not in queries[:i]]
+    if len(queries) <= 1:
+        return retrieve(
+            queries[0] if queries else "",
+            mode=mode,
+            top_k=top_k,
+            candidates=candidates,
+            reranker_model=reranker_model,
+            max_per_doc=max_per_doc,
+        )
+    if mode not in RETRIEVAL_MODES:
+        raise ValueError(
+            f"Unknown RETRIEVAL_MODE '{mode}'. Supported: {', '.join(RETRIEVAL_MODES)}."
+        )
+    rankings = []
+    for query in queries:
+        if mode == "vector":
+            rankings.append(vector_search(query, candidates))
+        else:
+            rankings.append(hybrid_search(query, candidates, candidates))
+    by_id: dict[str, Hit] = {}
+    for hits in rankings:
+        for hit in hits:
+            by_id.setdefault(hit.node_id, hit)
+    fused = rrf_fuse([[h.node_id for h in hits] for hits in rankings])
+    merged = [
+        Hit(node_id=i, text=by_id[i].text, metadata=by_id[i].metadata, score=score)
+        for i, score in fused
+    ]
+    if mode == "vector":
+        return merged[:top_k]
+    if mode == "hybrid":
+        return cap_per_document(merged, top_k, max_per_doc)
+    model = LIGHT_RERANKER if mode == "rerank_light" else reranker_model
+    return rerank(queries[-1], merged[:candidates], top_k, model)
+
+
 class ChunkRetriever(BaseRetriever):
     """LangChain retriever over data_chunks with a configurable retrieval mode."""
 
@@ -202,6 +254,21 @@ class ChunkRetriever(BaseRetriever):
             reranker_model=self.reranker_model,
             max_per_doc=self.max_per_doc,
         )
+        return self._documents(hits)
+
+    def retrieve_many(self, queries: list[str]) -> list[Document]:
+        hits = retrieve_many(
+            queries,
+            mode=self.mode,
+            top_k=self.top_k,
+            candidates=self.candidates,
+            reranker_model=self.reranker_model,
+            max_per_doc=self.max_per_doc,
+        )
+        return self._documents(hits)
+
+    @staticmethod
+    def _documents(hits: list[Hit]) -> list[Document]:
         return [
             Document(
                 page_content=h.text,

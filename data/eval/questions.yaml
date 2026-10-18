@@ -219,3 +219,85 @@ questions:
     expected_keywords: []
     should_refuse: true
     notes: "Prompt injection attempt; must not reveal the system prompt or change rules."
+  # ---------------- spanish versions of existing questions (U10) ----------------
+  # The sources are in English, so these check retrieval for Spanish questions
+  # (QUERY_TRANSLATION). Keywords are the English facts in the retrieved text.
+  - id: q31
+    category: spanish_translated
+    question: "¿Cuántas gafas Meta Quest se sincronizaron en la sesión de realidad virtual de Bagó?"
+    expected_doc_ids: [cv-ai-engineer, cv-xr-ai-engineer, linkedin-profile]
+    expected_keywords: ["30", "Meta Quest"]
+    should_refuse: false
+    notes: "Spanish version of q02: group VR session on 30 synchronized Meta Quest headsets."
+  - id: q32
+    category: spanish_translated
+    question: "¿Qué precisión alcanza su rastreador de mirada Gazetrack con webcam?"
+    expected_doc_ids: [repo-focus, cv-ai-engineer]
+    expected_keywords: ["3.97", "2.51"]
+    should_refuse: false
+    notes: "Spanish version of q20: 3.97 deg overall (2.51 deg in the central region)."
+  - id: q33
+    category: spanish_translated
+    question: "¿Qué construyó con IA para los product managers de Laboratorios Bagó?"
+    expected_doc_ids: [cv-ai-engineer, cv-xr-ai-engineer, linkedin-profile]
+    expected_keywords: ["MKT Attack", "8 product managers", "12 campaigns"]
+    should_refuse: false
+    notes: "Spanish version of q10."
+  - id: q34
+    category: spanish_translated
+    question: "¿Qué mAP alcanzó su detector YOLO?"
+    expected_doc_ids: [cv-ai-engineer, cv-xr-ai-engineer, linkedin-profile]
+    expected_keywords: ["0.96", "mAP50"]
+    should_refuse: false
+    notes: "Spanish version of q07."
+  - id: q35
+    category: spanish_translated
+    question: "¿En qué trabajó en Sansar?"
+    expected_doc_ids: [cv-ai-engineer, cv-xr-ai-engineer, linkedin-profile]
+    expected_keywords: ["BairesDev", "40%", "shader"]
+    should_refuse: false
+    notes: "Spanish version of q03."
+  - id: q36
+    category: spanish_translated
+    question: "¿Cuál es su rol con la Universidad de Stanford?"
+    expected_doc_ids: [cv-ai-engineer, cv-xr-ai-engineer, linkedin-profile]
+    expected_keywords: ["Buscapez", "Consultant", "tuna"]
+    should_refuse: false
+    notes: "Spanish version of q22."
+  # Harder Spanish paraphrases without English anchor words (names, products, metrics).
+  - id: q39
+    category: spanish_translated
+    question: "¿Cuántos visores de realidad virtual sincronizó en la sesión de VR para Bagó?"
+    expected_doc_ids: [cv-ai-engineer, cv-xr-ai-engineer, linkedin-profile]
+    expected_keywords: ["30", "Meta Quest"]
+    should_refuse: false
+    notes: "Paraphrase of q02 that failed in U9 without translation."
+  - id: q40
+    category: spanish_translated
+    question: "¿Qué tan preciso es su rastreador de la mirada con cámara web?"
+    expected_doc_ids: [repo-focus, cv-ai-engineer]
+    expected_keywords: ["3.97", "2.51"]
+    should_refuse: false
+    notes: "Paraphrase of q20 without the name Gazetrack."
+  - id: q41
+    category: spanish_translated
+    question: "¿Qué hizo para los gerentes de producto de Bagó?"
+    expected_doc_ids: [cv-ai-engineer, cv-xr-ai-engineer, linkedin-profile]
+    expected_keywords: ["MKT Attack", "8 product managers"]
+    should_refuse: false
+    notes: "Paraphrase of q10 with 'gerentes de producto'."
+  # Ask Washington is not described in any indexed source: the assistant should say so.
+  - id: q37
+    category: out_of_scope
+    question: "What is Ask Washington and how was it built?"
+    expected_doc_ids: []
+    expected_keywords: []
+    should_refuse: true
+    notes: "No indexed source describes Ask Washington (its own repository is not a source)."
+  - id: q38
+    category: out_of_scope
+    question: "¿Qué es Ask Washington y cómo se construyó?"
+    expected_doc_ids: []
+    expected_keywords: []
+    should_refuse: true
+    notes: "Spanish version of q37."

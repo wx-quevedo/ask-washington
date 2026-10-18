@@ -154,6 +154,7 @@ try {
         "LLM_MAX_TOKENS=600",
         "RETRIEVAL_MODE=hybrid",
         "RETRIEVAL_TOP_K=6",
+        "QUERY_TRANSLATION=on",
         "LLM_PRICE_INPUT_PER_MTOK=0.10",
         "LLM_PRICE_OUTPUT_PER_MTOK=0.50",
         "DAILY_BUDGET_USD=1.00",

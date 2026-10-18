@@ -1,0 +1,1804 @@
+[
+  {
+    "spec": "hybrid",
+    "questions": 36,
+    "hit@3": 1.0,
+    "hit@6": 1.0,
+    "mrr": 0.949074074074074,
+    "kw@6": 0.949074074074074,
+    "by_lang": {
+      "en": {
+        "questions": 24,
+        "hit@3": 1.0,
+        "hit@6": 1.0,
+        "mrr": 0.9791666666666666,
+        "kw@6": 1.0
+      },
+      "es": {
+        "questions": 12,
+        "hit@3": 1.0,
+        "hit@6": 1.0,
+        "mrr": 0.8888888888888888,
+        "kw@6": 0.8472222222222222
+      }
+    },
+    "kw_misses": [
+      "q27",
+      "q39",
+      "q40"
+    ],
+    "latency_ms_mean": 69.6596638873517,
+    "latency_ms_p95": 89.16790000512265,
+    "translations": 0,
+    "translation_errors": 0,
+    "translation_ms_mean": 0.0,
+    "translation_usd_mean": 0.0,
+    "misses": [],
+    "rows": [
+      {
+        "id": "q01",
+        "lang": "en",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile",
+          "cv-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q02",
+        "lang": "en",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q03",
+        "lang": "en",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile",
+          "repo-forex-trading-system"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q04",
+        "lang": "en",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "repo-riemann-hypothesis",
+          "repo-forex-trading-system",
+          "paper-p24",
+          "repo-plan-vivo-kit",
+          "repo-forex-trading-system"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q05",
+        "lang": "en",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "repo-agent-office-visualizer",
+          "linkedin-profile",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q06",
+        "lang": "en",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "cv-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q07",
+        "lang": "en",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "repo-focus",
+          "repo-focus"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q08",
+        "lang": "en",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "paper-p16",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "repo-focus",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q09",
+        "lang": "en",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "repo-riemann-hypothesis",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q10",
+        "lang": "en",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "cv-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q11",
+        "lang": "en",
+        "doc_ids": [
+          "paper-p09",
+          "paper-p08",
+          "paper-p11",
+          "linkedin-profile",
+          "paper-p19",
+          "cv-xr-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q12",
+        "lang": "en",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "cv-xr-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q13",
+        "lang": "en",
+        "doc_ids": [
+          "paper-p23",
+          "paper-p16",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "paper-p03"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q14",
+        "lang": "en",
+        "doc_ids": [
+          "linkedin-profile",
+          "paper-p02",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "cv-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 0.5,
+        "first_rank": 2
+      },
+      {
+        "id": "q15",
+        "lang": "en",
+        "doc_ids": [
+          "paper-p25",
+          "repo-focus",
+          "repo-focus",
+          "repo-focus",
+          "linkedin-profile",
+          "cv-xr-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q16",
+        "lang": "en",
+        "doc_ids": [
+          "repo-plan-vivo-kit",
+          "repo-plan-vivo-kit",
+          "repo-plan-vivo-kit",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "repo-riemann-hypothesis"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q17",
+        "lang": "en",
+        "doc_ids": [
+          "repo-localia-genai-platform",
+          "repo-localia-genai-platform",
+          "repo-localia-genai-platform",
+          "cv-ai-engineer",
+          "repo-agent-office-visualizer",
+          "repo-forex-trading-system"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q18",
+        "lang": "en",
+        "doc_ids": [
+          "repo-forex-trading-system",
+          "repo-forex-trading-system",
+          "repo-forex-trading-system",
+          "repo-plan-vivo-kit",
+          "paper-p04",
+          "paper-p19"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q19",
+        "lang": "en",
+        "doc_ids": [
+          "repo-agent-office-visualizer",
+          "repo-agent-office-visualizer",
+          "repo-agent-office-visualizer",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "paper-p24"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q20",
+        "lang": "en",
+        "doc_ids": [
+          "repo-focus",
+          "repo-focus",
+          "repo-focus",
+          "paper-p25",
+          "cv-ai-engineer",
+          "paper-p07"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q21",
+        "lang": "en",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "cv-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q22",
+        "lang": "en",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q23",
+        "lang": "en",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "repo-riemann-hypothesis",
+          "linkedin-profile",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q24",
+        "lang": "en",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "repo-localia-genai-platform",
+          "repo-agent-office-visualizer",
+          "cv-ai-engineer",
+          "repo-agent-office-visualizer"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q25",
+        "lang": "es",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "repo-agent-office-visualizer",
+          "repo-forex-trading-system",
+          "repo-plan-vivo-kit"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q26",
+        "lang": "es",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "cv-xr-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q27",
+        "lang": "es",
+        "doc_ids": [
+          "repo-riemann-hypothesis",
+          "repo-riemann-hypothesis",
+          "repo-riemann-hypothesis",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "linkedin-profile"
+        ],
+        "kw@6": 0.6666666666666666,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q31",
+        "lang": "es",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "paper-p18",
+          "paper-p21"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q32",
+        "lang": "es",
+        "doc_ids": [
+          "repo-focus",
+          "repo-focus",
+          "cv-ai-engineer",
+          "repo-focus",
+          "linkedin-profile",
+          "cv-xr-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q33",
+        "lang": "es",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q34",
+        "lang": "es",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "repo-plan-vivo-kit",
+          "repo-focus"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q35",
+        "lang": "es",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q36",
+        "lang": "es",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile",
+          "cv-xr-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q39",
+        "lang": "es",
+        "doc_ids": [
+          "paper-p18",
+          "paper-p03",
+          "cv-xr-ai-engineer",
+          "paper-p09",
+          "paper-p20",
+          "paper-p21"
+        ],
+        "kw@6": 0.5,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 0.3333333333333333,
+        "first_rank": 3
+      },
+      {
+        "id": "q40",
+        "lang": "es",
+        "doc_ids": [
+          "repo-forex-trading-system",
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer"
+        ],
+        "kw@6": 0.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 0.3333333333333333,
+        "first_rank": 3
+      },
+      {
+        "id": "q41",
+        "lang": "es",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "repo-forex-trading-system"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      }
+    ]
+  },
+  {
+    "spec": "hybrid +translation",
+    "questions": 36,
+    "hit@3": 1.0,
+    "hit@6": 1.0,
+    "mrr": 0.9861111111111112,
+    "kw@6": 0.9907407407407407,
+    "by_lang": {
+      "en": {
+        "questions": 24,
+        "hit@3": 1.0,
+        "hit@6": 1.0,
+        "mrr": 0.9791666666666666,
+        "kw@6": 1.0
+      },
+      "es": {
+        "questions": 12,
+        "hit@3": 1.0,
+        "hit@6": 1.0,
+        "mrr": 1.0,
+        "kw@6": 0.9722222222222222
+      }
+    },
+    "kw_misses": [
+      "q27"
+    ],
+    "latency_ms_mean": 395.7560416682908,
+    "latency_ms_p95": 1286.9906999985687,
+    "translations": 12,
+    "translation_errors": 0,
+    "translation_ms_mean": 943,
+    "translation_usd_mean": 2.5233333333333335e-05,
+    "misses": [],
+    "rows": [
+      {
+        "id": "q01",
+        "lang": "en",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile",
+          "cv-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q02",
+        "lang": "en",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q03",
+        "lang": "en",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile",
+          "repo-forex-trading-system"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q04",
+        "lang": "en",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "repo-riemann-hypothesis",
+          "repo-forex-trading-system",
+          "paper-p24",
+          "repo-plan-vivo-kit",
+          "repo-forex-trading-system"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q05",
+        "lang": "en",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "repo-agent-office-visualizer",
+          "linkedin-profile",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q06",
+        "lang": "en",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "cv-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q07",
+        "lang": "en",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "repo-focus",
+          "repo-focus"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q08",
+        "lang": "en",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "paper-p16",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "repo-focus",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q09",
+        "lang": "en",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "repo-riemann-hypothesis",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q10",
+        "lang": "en",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "cv-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q11",
+        "lang": "en",
+        "doc_ids": [
+          "paper-p09",
+          "paper-p08",
+          "paper-p11",
+          "linkedin-profile",
+          "paper-p19",
+          "cv-xr-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q12",
+        "lang": "en",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "cv-xr-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q13",
+        "lang": "en",
+        "doc_ids": [
+          "paper-p23",
+          "paper-p16",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "paper-p03"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q14",
+        "lang": "en",
+        "doc_ids": [
+          "linkedin-profile",
+          "paper-p02",
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "cv-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 0.5,
+        "first_rank": 2
+      },
+      {
+        "id": "q15",
+        "lang": "en",
+        "doc_ids": [
+          "paper-p25",
+          "repo-focus",
+          "repo-focus",
+          "repo-focus",
+          "linkedin-profile",
+          "cv-xr-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q16",
+        "lang": "en",
+        "doc_ids": [
+          "repo-plan-vivo-kit",
+          "repo-plan-vivo-kit",
+          "repo-plan-vivo-kit",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "repo-riemann-hypothesis"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q17",
+        "lang": "en",
+        "doc_ids": [
+          "repo-localia-genai-platform",
+          "repo-localia-genai-platform",
+          "repo-localia-genai-platform",
+          "cv-ai-engineer",
+          "repo-agent-office-visualizer",
+          "repo-forex-trading-system"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q18",
+        "lang": "en",
+        "doc_ids": [
+          "repo-forex-trading-system",
+          "repo-forex-trading-system",
+          "repo-forex-trading-system",
+          "repo-plan-vivo-kit",
+          "paper-p04",
+          "paper-p19"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q19",
+        "lang": "en",
+        "doc_ids": [
+          "repo-agent-office-visualizer",
+          "repo-agent-office-visualizer",
+          "repo-agent-office-visualizer",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "paper-p24"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q20",
+        "lang": "en",
+        "doc_ids": [
+          "repo-focus",
+          "repo-focus",
+          "repo-focus",
+          "paper-p25",
+          "cv-ai-engineer",
+          "paper-p07"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q21",
+        "lang": "en",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "cv-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q22",
+        "lang": "en",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q23",
+        "lang": "en",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "repo-riemann-hypothesis",
+          "linkedin-profile",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q24",
+        "lang": "en",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "repo-localia-genai-platform",
+          "repo-agent-office-visualizer",
+          "cv-ai-engineer",
+          "repo-agent-office-visualizer"
+        ],
+        "kw@6": 1.0,
+        "translated": null,
+        "translation_ms": 0,
+        "translation_tokens": [
+          0,
+          0
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q25",
+        "lang": "es",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "repo-agent-office-visualizer",
+          "repo-plan-vivo-kit",
+          "repo-localia-genai-platform"
+        ],
+        "kw@6": 1.0,
+        "translated": "What is vSpace and how many users does it have?",
+        "translation_ms": 973,
+        "translation_tokens": [
+          150,
+          16
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q26",
+        "lang": "es",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "translated": "What awards or recognitions has he received?",
+        "translation_ms": 685,
+        "translation_tokens": [
+          147,
+          14
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q27",
+        "lang": "es",
+        "doc_ids": [
+          "repo-riemann-hypothesis",
+          "repo-riemann-hypothesis",
+          "repo-riemann-hypothesis",
+          "paper-p17",
+          "paper-p01",
+          "paper-p16"
+        ],
+        "kw@6": 0.6666666666666666,
+        "translated": "What technologies does his application on the Riemann hypothesis use?",
+        "translation_ms": 827,
+        "translation_tokens": [
+          159,
+          22
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q31",
+        "lang": "es",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "linkedin-profile",
+          "paper-p03",
+          "paper-p18"
+        ],
+        "kw@6": 1.0,
+        "translated": "How many Meta Quest headsets were synchronized in Bagó's virtual reality session?",
+        "translation_ms": 829,
+        "translation_tokens": [
+          168,
+          31
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q32",
+        "lang": "es",
+        "doc_ids": [
+          "repo-focus",
+          "repo-focus",
+          "repo-focus",
+          "cv-ai-engineer",
+          "paper-p25",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "translated": "What accuracy does his Gazetrack webcam eye tracker achieve?",
+        "translation_ms": 1306,
+        "translation_tokens": [
+          159,
+          27
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q33",
+        "lang": "es",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "cv-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "translated": "What did he build with AI for the product managers at Laboratorios Bagó?",
+        "translation_ms": 1362,
+        "translation_tokens": [
+          155,
+          26
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q34",
+        "lang": "es",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "paper-p03",
+          "repo-focus"
+        ],
+        "kw@6": 1.0,
+        "translated": "What mAP did his YOLO detector achieve?",
+        "translation_ms": 813,
+        "translation_tokens": [
+          148,
+          18
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q35",
+        "lang": "es",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "repo-localia-genai-platform"
+        ],
+        "kw@6": 1.0,
+        "translated": "What did he work on at Sansar?",
+        "translation_ms": 941,
+        "translation_tokens": [
+          142,
+          13
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q36",
+        "lang": "es",
+        "doc_ids": [
+          "linkedin-profile",
+          "cv-xr-ai-engineer",
+          "cv-ai-engineer",
+          "cv-ai-engineer",
+          "linkedin-profile",
+          "cv-ai-engineer"
+        ],
+        "kw@6": 1.0,
+        "translated": "What is his role with Stanford University?",
+        "translation_ms": 610,
+        "translation_tokens": [
+          149,
+          13
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q39",
+        "lang": "es",
+        "doc_ids": [
+          "cv-xr-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "cv-ai-engineer",
+          "paper-p03",
+          "linkedin-profile"
+        ],
+        "kw@6": 1.0,
+        "translated": "How many VR headsets did he sync in the VR session for Bagó?",
+        "translation_ms": 952,
+        "translation_tokens": [
+          162,
+          24
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q40",
+        "lang": "es",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "repo-forex-trading-system",
+          "repo-focus"
+        ],
+        "kw@6": 1.0,
+        "translated": "How accurate is his webcam eye tracker?",
+        "translation_ms": 849,
+        "translation_tokens": [
+          154,
+          17
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      },
+      {
+        "id": "q41",
+        "lang": "es",
+        "doc_ids": [
+          "cv-ai-engineer",
+          "cv-xr-ai-engineer",
+          "linkedin-profile",
+          "repo-forex-trading-system",
+          "paper-p21",
+          "repo-agent-office-visualizer"
+        ],
+        "kw@6": 1.0,
+        "translated": "What did he do for Bagó's product managers?",
+        "translation_ms": 1169,
+        "translation_tokens": [
+          150,
+          16
+        ],
+        "translation_error": null,
+        "hit@3": true,
+        "hit@6": true,
+        "rr": 1.0,
+        "first_rank": 1
+      }
+    ]
+  }
+]

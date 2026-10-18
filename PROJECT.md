@@ -74,6 +74,7 @@ Este proyecto es P18 dentro del plan de `C:\xampp\htdocs\enhanced-me`. El seguim
 | Solo la cifra pública del detector (mAP50 0.96, detección, validación) | Los porcentajes internos de prueba (66 % a 93 %) y el IoU de caja 0.90 no se publican; la clasificación de especies sigue mejorando con más fotos validadas. |
 | Producción sin `http://localhost:4321` | Solo el portafolio (`https://washingtonquevedo.com` y `www`) puede incrustar el widget en producción; el origen de desarrollo vive en el `.env` local. |
 | Máximo 3 chunks por documento en la recuperación híbrida (`RETRIEVAL_MAX_PER_DOC`) | Un README largo ocupaba los 6 lugares y dejaba fuera el único chunk del CV con la cifra de Gazetrack. Medido en el set de evaluación: hit@3 1.000 y MRR 0.981 iguales, kw@6 de 0.963 a 0.988. Se descartó garantizar los 2 primeros de cada búsqueda porque bajaba el MRR a 0.929. |
+| Traducir al inglés las preguntas en español solo para recuperar (`QUERY_TRANSLATION`) | Las fuentes están en inglés y bge-small-en es solo de inglés. Traducir la consulta (una llamada corta a Haiku, unos 0.9 s y USD 0.000025) es más barato y simple que cambiar el modelo de embeddings y reingerir; buscar con las dos versiones y fusionarlas con RRF no pierde lo que la original ya encontraba. La respuesta sigue en el idioma del usuario. |
 | El sitio nginx se instala solo la primera vez (o con `-ForceNginx`) | Después de certbot el archivo queda gestionado por certbot; sobrescribirlo en cada deploy quitaría el bloque HTTPS. |
 
 ## Plan de los 5 prompts
@@ -259,6 +260,27 @@ El repo ya es público, así que no se reescribe el historial: en un commit norm
 
 Quedan esas frases, a propósito, en `data/source_corrections.yaml` (el mecanismo necesita el texto literal para encontrarlo), en esta bitácora (P20c documenta qué estaba mal) y en `tests/test_ingestion.py` (frases de prueba del mecanismo). Las métricas guardadas en los JSON de evaluación no se recalcularon: son el registro de esas corridas.
 
+### 2026-10-18 - U10 búsqueda para preguntas en español (traducción de la consulta)
+
+- `app/translation.py`: detección del idioma con la heurística existente (`app.i18n.detect_language`, sin LLM); si la pregunta está claramente en español, una llamada a Haiku la traduce al inglés (máximo 100 tokens, timeout de 4 s, sin reintentos). Ante error o timeout se usa la pregunta original y se registra el aviso; `/ask` nunca falla por esto. `temperature 0` no se envía: Claude Haiku 5.5 rechaza valores de muestreo distintos del predeterminado (igual que en P18·3); el prompt pide solo la traducción y que "su" se traduzca como "his".
+- `app/retrieval.py`: `retrieve_many` busca con la pregunta original y con la traducida, fusiona las listas con el mismo RRF y aplica `RETRIEVAL_MAX_PER_DOC=3` después de la fusión.
+- `app/rag.py` y `app/main.py`: la traducción solo se usa para recuperar; el prompt de respuesta recibe la pregunta original (la regla de idioma de P20 ya garantiza que la respuesta salga en el idioma del usuario). Los tokens de la traducción se suman al uso y al presupuesto. Logs con idioma detectado, consulta traducida y latencia, sin la pregunta original; la app ahora muestra sus logs INFO.
+- `QUERY_TRANSLATION=on|off` en `.env`, `.env.example` y el `.env` de producción de `deploy.ps1`; documentado en el README.
+- Set de evaluación: 9 versiones o paráfrasis en español de preguntas existentes (q31 a q36 y q39 a q41: 30 Meta Quest de Bagó, Gazetrack 3.97° y 2.51°, 8 product managers y 12 campaigns, mAP50 0.96, Sansar, Stanford) y un par fuera de alcance sobre Ask Washington (q37 y q38), porque ninguna fuente indexada lo describe.
+- `scripts/eval.py --translation off|on|both`: métricas por idioma, latencia y costo de la traducción.
+
+Evaluación de recuperación (modo híbrido, 36 preguntas con respuesta; `reports/eval/retrieval_u10.*`). "Apagada" es el mismo camino de antes de U10:
+
+| Traducción | EN hit@3 / MRR / kw@6 (n=24) | ES hit@3 / MRR / kw@6 (n=12) | Latencia media de recuperación | Sin keywords en el top 6 |
+|---|---|---|---:|---|
+| apagada (antes) | 1.000 / 0.979 / 1.000 | 1.000 / 0.889 / 0.847 | 70 ms | q27, q39, q40 |
+| **encendida** | **1.000 / 0.979 / 1.000** | **1.000 / 1.000 / 0.972** | 396 ms | q27 |
+
+- Las preguntas en inglés no cambian (ninguna empeora). Mejoran las dos paráfrasis sin anclas en inglés: q39 (visores para Bagó) y q40 (rastreador de mirada sin nombrar Gazetrack), de MRR 0.33 a 1.00. Las demás preguntas en español ya acertaban porque llevan nombres en inglés (Meta Quest, Gazetrack, mAP, Sansar).
+- Costo y latencia agregados: solo en preguntas en español, una llamada de unos 943 ms de media y USD 0.000025 por pregunta (12 de 12 sin errores); en inglés, nada. Prueba real de `/ask` con la pregunta de U9: "Washington sincronizó 30 visores Meta Quest en una sesión de VR grupal para Laboratorios Bagó del Ecuador [5]", en español.
+- Pruebas: 98 en la suite normal (nuevas en `tests/test_translation.py`: detección, traducción, fallback por error y por timeout, limpieza de la salida, fusión de las dos consultas con el límite por documento, `/ask` con traducción y respuesta en español, `/ask` que responde aunque la traducción falle, flag on/off). La suite desactiva la traducción real con un fixture en `tests/conftest.py`.
+- Riesgos: suma unos 0.9 s a cada pregunta en español; la heurística solo reconoce español (otros idiomas se buscan sin traducir); si la traducción cambia un término técnico, la búsqueda con la pregunta original sigue en la fusión.
+
 ### 2026-10-18 - U9 fuentes corregidas en origen
 
 Los originales de `enhanced-me` se corrigieron (commit 62cc910): MKT Attack, la sesión de VR de Bagó y la cifra de Gazetrack.
@@ -328,7 +350,7 @@ Revisadas el 2026-10-18 en un Chromium sin sesión (Playwright), solo páginas p
 ## Próximos pasos
 
 - Washington: redeploy con `deploy.ps1` (sube el índice corregido y los orígenes de producción) y verificar el panel del portafolio en https://washingtonquevedo.com.
-- Recuperación en español sobre fuentes en inglés: probar un modelo de embeddings multilingüe (por ejemplo, bge-m3) o traducir la consulta, y medirlo con el set de evaluación.
+- Si se suman otros idiomas, ampliar la detección (hoy solo español) o probar un modelo de embeddings multilingüe (por ejemplo, bge-m3) y compararlo con la traducción de la consulta.
 - Medir en el servidor el tamaño de la imagen, la RAM real del contenedor y la latencia de `/ask`.
 - Publicar el repo en GitHub cuando el despliegue esté verificado.
 - Volver a correr `scripts/eval.py` tras cada cambio y sumar preguntas reales de `qa_log`.

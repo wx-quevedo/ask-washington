@@ -26,6 +26,11 @@ class Settings(BaseSettings):
     reranker_model: str = "BAAI/bge-reranker-base"
     # Hybrid mode: at most this many chunks per document in the top_k (0 = no limit).
     retrieval_max_per_doc: int = 3
+    # Translate non-English questions to English before retrieval (the answer keeps the
+    # user's language). on|off; a short, cheap LLM call with a hard timeout.
+    query_translation: bool = True
+    translation_max_tokens: int = 100
+    translation_timeout_s: float = 4.0
 
     # Prices in USD per million tokens, used for the daily budget.
     llm_price_input_per_mtok: float = 0.10

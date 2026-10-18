@@ -64,9 +64,28 @@ def retrieval_metrics(ranked_doc_ids: list[str], expected: list[str]) -> dict:
     }
 
 
-def evaluate_retrieval(questions: list[dict], spec: str, top_k: int = 6) -> dict:
+def _summary(rows: list[dict]) -> dict:
+    n = len(rows)
+    if not n:
+        return {"questions": 0}
+    return {
+        "questions": n,
+        "hit@3": sum(r["hit@3"] for r in rows) / n,
+        "hit@6": sum(r["hit@6"] for r in rows) / n,
+        "mrr": sum(r["rr"] for r in rows) / n,
+        "kw@6": sum(r["kw@6"] for r in rows) / n,
+    }
+
+
+def evaluate_retrieval(
+    questions: list[dict], spec: str, top_k: int = 6, translation: bool = False
+) -> dict:
+    """Retrieval metrics. With translation=True, Spanish questions are also searched in
+    English (QUERY_TRANSLATION), which makes one short LLM call per Spanish question."""
     from app.config import get_settings
-    from app.retrieval import retrieve
+    from app.i18n import detect_language
+    from app.retrieval import retrieve_many
+    from app.translation import QueryTranslation
 
     mode, model = parse_mode(spec)
     settings = get_settings()
@@ -77,13 +96,23 @@ def evaluate_retrieval(questions: list[dict], spec: str, top_k: int = 6) -> dict
         "reranker_model": model or settings.reranker_model,
         "max_per_doc": settings.retrieval_max_per_doc or None,
     }
+    translator = None
+    if translation:
+        from app.llm import get_translation_model
+        from app.translation import QueryTranslator
+
+        translator = QueryTranslator(
+            get_translation_model(settings), settings.translation_timeout_s
+        )
+
     answerable = [q for q in questions if not q["should_refuse"]]
-    retrieve(answerable[0]["question"], **kwargs)  # warm up models and caches
+    retrieve_many([answerable[0]["question"]], **kwargs)  # warm up models and caches
 
     rows, latencies = [], []
     for q in answerable:
         started = time.perf_counter()
-        hits = retrieve(q["question"], **kwargs)
+        info = translator(q["question"]) if translator else QueryTranslation(q["question"])
+        hits = retrieve_many(info.queries, **kwargs)
         latencies.append((time.perf_counter() - started) * 1000)
         doc_ids = [h.doc_id for h in hits]
         # Stricter than hit@k: are the expected facts in the retrieved text itself?
@@ -93,23 +122,40 @@ def evaluate_retrieval(questions: list[dict], spec: str, top_k: int = 6) -> dict
         rows.append(
             {
                 "id": q["id"],
+                "lang": "es" if detect_language(q["question"]) == "es" else "en",
                 "doc_ids": doc_ids,
                 "kw@6": kw_rate,
+                "translated": info.translated,
+                "translation_ms": info.latency_ms,
+                "translation_tokens": [info.input_tokens, info.output_tokens],
+                "translation_error": info.error,
                 **retrieval_metrics(doc_ids, q["expected_doc_ids"]),
             }
         )
 
     n = len(rows)
+    translated = [r for r in rows if r["translated"] or r["translation_error"]]
+    price_in, price_out = settings.llm_price_input_per_mtok, settings.llm_price_output_per_mtok
+    translation_costs = [
+        (r["translation_tokens"][0] * price_in + r["translation_tokens"][1] * price_out) / 1e6
+        for r in translated
+    ]
     return {
-        "spec": spec,
+        "spec": spec + (" +translation" if translation else ""),
         "questions": n,
-        "hit@3": sum(r["hit@3"] for r in rows) / n,
-        "hit@6": sum(r["hit@6"] for r in rows) / n,
-        "mrr": sum(r["rr"] for r in rows) / n,
-        "kw@6": sum(r["kw@6"] for r in rows) / n,
+        **{k: v for k, v in _summary(rows).items() if k != "questions"},
+        "by_lang": {
+            lang: _summary([r for r in rows if r["lang"] == lang]) for lang in ("en", "es")
+        },
         "kw_misses": [r["id"] for r in rows if r["kw@6"] < 1],
         "latency_ms_mean": statistics.mean(latencies),
         "latency_ms_p95": sorted(latencies)[max(0, int(round(0.95 * n)) - 1)],
+        "translations": len(translated),
+        "translation_errors": sum(1 for r in rows if r["translation_error"]),
+        "translation_ms_mean": statistics.mean(r["translation_ms"] for r in translated)
+        if translated
+        else 0.0,
+        "translation_usd_mean": statistics.mean(translation_costs) if translation_costs else 0.0,
         "misses": [r["id"] for r in rows if not r["hit@6"]],
         "rows": rows,
     }
@@ -117,15 +163,23 @@ def evaluate_retrieval(questions: list[dict], spec: str, top_k: int = 6) -> dict
 
 def retrieval_table(results: list[dict]) -> str:
     lines = [
-        "| Config | hit@3 | hit@6 | MRR | kw@6 | Latency mean (ms) | Latency p95 (ms) "
-        "| Missing keywords in top 6 |",
-        "|---|---:|---:|---:|---:|---:|---:|---|",
+        "| Config | hit@3 | hit@6 | MRR | kw@6 | EN hit@3 / MRR / kw@6 | ES hit@3 / MRR / kw@6 "
+        "| Latency mean (ms) | Translation mean (ms) | Missing keywords in top 6 |",
+        "|---|---:|---:|---:|---:|---|---|---:|---:|---|",
     ]
     for r in results:
+        by = r.get("by_lang", {})
+
+        def cell(lang, by=by):
+            m = by.get(lang) or {}
+            if not m.get("questions"):
+                return "-"
+            return f"{m['hit@3']:.3f} / {m['mrr']:.3f} / {m['kw@6']:.3f} (n={m['questions']})"
+
         lines.append(
             f"| {r['spec']} | {r['hit@3']:.3f} | {r['hit@6']:.3f} | {r['mrr']:.3f} | "
-            f"{r['kw@6']:.3f} | {r['latency_ms_mean']:.0f} | {r['latency_ms_p95']:.0f} | "
-            f"{', '.join(r['kw_misses']) or '-'} |"
+            f"{r['kw@6']:.3f} | {cell('en')} | {cell('es')} | {r['latency_ms_mean']:.0f} | "
+            f"{r.get('translation_ms_mean', 0):.0f} | {', '.join(r['kw_misses']) or '-'} |"
         )
     return "\n".join(lines)
 
@@ -278,6 +332,13 @@ def main() -> None:
     parser.add_argument("--mode", help="retrieval spec for --answers (default: RETRIEVAL_MODE)")
     parser.add_argument("--label", default="final", help="name of the --answers run")
     parser.add_argument("--max-usd", type=float, default=0.10, help="spend cap for --answers")
+    parser.add_argument(
+        "--translation",
+        choices=("off", "on", "both"),
+        default="off",
+        help="retrieval: translate Spanish questions to English (on calls the LLM)",
+    )
+    parser.add_argument("--out", default="retrieval", help="output name for retrieval runs")
     args = parser.parse_args()
 
     from app.vector_store import quiet_logs
@@ -290,9 +351,14 @@ def main() -> None:
         table = answers_table([result])
         write_outputs(f"answers_{args.label}", result, table)
     else:
-        results = [evaluate_retrieval(questions, spec) for spec in args.modes.split(",")]
+        flags = {"off": [False], "on": [True], "both": [False, True]}[args.translation]
+        results = [
+            evaluate_retrieval(questions, spec, translation=flag)
+            for spec in args.modes.split(",")
+            for flag in flags
+        ]
         table = retrieval_table(results)
-        write_outputs("retrieval", results, table)
+        write_outputs(args.out, results, table)
     print("\n" + table)
 
 
