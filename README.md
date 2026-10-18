@@ -6,7 +6,7 @@ It is also a learning project for RAG, vector databases, LangChain and LlamaInde
 
 **Demo: https://ask.inmersoft.com**
 
-![Ask Washington answering a question, with numbered citations linked to the source list](reports/screenshots/desktop-answer.png)
+![Ask Washington chat: two questions answered with numbered citations and a source list under each answer](reports/screenshots/p20b/conversation-en-desktop.png)
 
 ## Architecture
 
@@ -319,21 +319,26 @@ Full analysis, including the questions that still fail: `reports/P18-4_evaluacio
 
 ## Web interface
 
-`GET /` serves a single page (`app/static/`: HTML, CSS and JavaScript, no framework) in English or Spanish: `?lang=en|es` (English by default). Every visible text lives in `app/static/i18n/en.json` and `es.json`; the server fills the page with them and the script uses them to switch languages without reloading. The page has four suggested questions, a question box, the answer with `[n]` markers linked to the source list, loading and error states (including a clear message on `429`), and links to LinkedIn, GitHub and Google Scholar. It works with keyboard and screen readers (labels, focus handling, `aria-live`) and on phones. There is no inline script, so it runs under a strict Content Security Policy.
+`GET /` serves a chat (`app/static/`: one HTML template, CSS and JavaScript, no framework and no build step) in English or Spanish: `?lang=en|es`, English by default. Every visible text lives in `app/static/i18n/en.json` and `es.json`; the server fills the page with them and the script uses them to switch languages without reloading.
 
-| Desktop | Mobile |
+- **Start**: a short greeting from the assistant and four suggested questions as chips. A chip sends its question; the chips disappear after the first question.
+- **Thread**: the visitor's messages on the right (accent colour), answers on the left (light neutral background). `[n]` citations become linked superscripts (adjacent ones are separated), and each answer has a compact source list with links. The thread scrolls to the newest message; an answer taller than the thread is shown from its start.
+- **Waiting and errors**: a three-dot typing indicator with text for screen readers; rate-limit, budget, validation and network errors appear as assistant bubbles with the localized message.
+- **Composer**, always visible at the bottom: a text box that grows up to four lines, a send button with an icon and an `aria-label`, Enter to send and Shift+Enter for a new line, a 500-character counter that appears only near the limit, and the note "Answers are generated from public sources and may contain errors."
+- **No memory**: each question is sent on its own to `POST /ask`. The conversation exists only in the page; nothing is stored in the browser.
+- **Accessibility**: the thread is an `aria-live` log, every control is reachable by keyboard with a visible focus ring, and text colours meet WCAG AA (the tightest is the placeholder at 4.6:1). It works at 360 px, in the 400 px widget and on desktop. There is no inline script, so it runs under a strict Content Security Policy.
+
+| Desktop, English | Phone, Spanish (390 px) |
 |---|---|
-| ![Desktop, English](reports/screenshots/page-en-desktop.png) | ![Mobile, Spanish](reports/screenshots/page-es-mobile.png) |
+| ![Initial state, English](reports/screenshots/p20b/initial-en-desktop.png) | ![Conversation on a phone, Spanish](reports/screenshots/p20b/conversation-es-mobile-390.png) |
 
-Widget embedded in a demo page (English and Spanish):
-
-| English | Spanish |
+| Typing indicator | Widget in a 400 x 600 portfolio panel |
 |---|---|
-| ![Widget, English](reports/screenshots/widget-en-desktop.png) | ![Widget, Spanish](reports/screenshots/widget-es-desktop.png) |
+| ![Typing indicator](reports/screenshots/p20b/typing-en-desktop.png) | ![Widget conversation](reports/screenshots/p20b/widget-en-conversation.png) |
 
 ## Embedding the widget
 
-Ask Washington has no language switch of its own: it follows the page that contains it. `?embed=1` gives a compact widget without the big header and footer, sized to its content, with one discreet line at the bottom: "Answers are generated from public sources and may contain errors." (or its Spanish version).
+Ask Washington has no language switch of its own: it follows the page that contains it. `?embed=1` gives the widget: the same chat with only the title in its header (the panel provides the close button). It fills 100% of the iframe height: only the thread scrolls and the composer stays at the bottom. **Give the iframe a fixed height** (the portfolio's floating panel does, about 400 x 600 px); the widget does not grow with its content.
 
 The portfolio at https://washingtonquevedo.com embeds it in a floating panel. Production allows these origins:
 
@@ -350,7 +355,7 @@ EMBED_ALLOWED_ORIGINS=https://washingtonquevedo.com,https://www.washingtonqueved
 <iframe id="ask-washington"
         src="https://ask.inmersoft.com/?embed=1&lang=en"
         title="Ask Washington"
-        style="width: 100%; max-width: 480px; height: 640px; border: 0;"></iframe>
+        style="width: 400px; height: 600px; border: 0;"></iframe>
 
 <script>
   const ASK_ORIGIN = "https://ask.inmersoft.com";
@@ -360,20 +365,12 @@ EMBED_ALLOWED_ORIGINS=https://washingtonquevedo.com,https://www.washingtonqueved
   function setAskWashingtonLanguage(lang) {   // "en" or "es"
     frame.contentWindow.postMessage({ type: "ask-washington:lang", lang: lang }, ASK_ORIGIN);
   }
-
-  // The widget reports its height so the iframe fits its content.
-  window.addEventListener("message", (event) => {
-    if (event.origin !== ASK_ORIGIN) return;
-    if (event.data && event.data.type === "ask-washington:height") {
-      frame.style.height = event.data.height + "px";
-    }
-  });
 </script>
 ```
 
-Start with `lang=` in the `src` matching the current page language (the first render does not wait for a message). Messages from origins that are not in `EMBED_ALLOWED_ORIGINS` are ignored. The widget posts its height only to its actual parent origin (taken from the parent's messages, `location.ancestorOrigins` or the referrer), and only when that origin is allowed, so the browser does not log "target origin does not match" errors for the other allowed origins.
+Start with `lang=` in the `src` matching the current page language (the first render does not wait for a message). Messages from origins that are not in `EMBED_ALLOWED_ORIGINS` are ignored. The widget still posts `{type: "ask-washington:height", height}` for parents that listen, but since it fills the iframe the value is just the iframe's own height; do not size the iframe from it. It posts only to its actual parent origin (taken from the parent's messages, `location.ancestorOrigins` or the referrer), and only when that origin is allowed, so the browser does not log "target origin does not match" errors for the other allowed origins.
 
-`tests/e2e/test_embed_postmessage.py` checks this in Chromium with the portfolio's origins: a page on `http://localhost:4321` shows the widget, switches its language and receives its height without console errors, while `http://localhost:8102` and `http://127.0.0.1:8103` can neither frame it nor change its language (`uv run --with playwright pytest tests/e2e`).
+Browser tests (`uv run --with playwright pytest tests/e2e`, with `POST /ask` simulated): `test_embed_postmessage.py` checks that a page on `http://localhost:4321` shows the widget and switches its language without console errors, while `http://localhost:8102` and `http://127.0.0.1:8103` can neither frame it nor change its language; `test_chat_ui.py` checks the chat (chips, bubbles, typing indicator, citations and sources, Enter and Shift+Enter, the growing text box and counter, errors in Spanish, 360 px, and the widget filling a 400 x 600 panel with only the thread scrolling).
 
 ## Deployment
 

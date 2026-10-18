@@ -66,6 +66,10 @@ Este proyecto es P18 dentro del plan de `C:\xampp\htdocs\enhanced-me`. El seguim
 | Orígenes del portafolio en `EMBED_ALLOWED_ORIGINS` (incluido `http://localhost:4321`) | El portafolio incrusta el widget en producción (con y sin `www`) y en su servidor de desarrollo de Astro; cualquier otro origen sigue bloqueado. |
 | El widget publica su alto solo hacia el origen real del padre | Con varios orígenes permitidos, publicar hacia todos genera errores de consola en el portafolio por cada origen que no coincide. |
 | Línea de aviso propia en el widget | El widget no muestra el pie; el aviso de posibles errores debe estar visible donde se lee la respuesta. |
+| Interfaz de chat sin memoria | Se ve y se usa como un chat, pero cada pregunta va sola a `/ask` (sin historial ni localStorage): el costo por pregunta no crece con la conversación y no se guarda nada del visitante. |
+| Widget de alto fijo; solo el hilo tiene scroll | Así se comportan los chats de soporte en paneles flotantes; el composer siempre a la vista. El mensaje `ask-washington:height` queda solo por compatibilidad. |
+| Respuesta larga visible desde su inicio | Bajar siempre al final escondía el comienzo de las respuestas largas; ahora se baja al final solo si la respuesta cabe en el hilo. |
+| Separador entre citas pegadas, insertado por el JS | Con superíndices, [4][5][6] se leía como "456"; un selector CSS no distingue si hay texto en medio. |
 | El sitio nginx se instala solo la primera vez (o con `-ForceNginx`) | Después de certbot el archivo queda gestionado por certbot; sobrescribirlo en cada deploy quitaría el bloque HTTPS. |
 
 ## Plan de los 5 prompts
@@ -188,6 +192,52 @@ Estado: terminado y verificado en local. Detalle completo en `reports/P20_idioma
 - Pruebas: 77 en la suite normal (nuevas: orígenes del portafolio aceptados y otros rechazados, aviso del widget en los dos idiomas) y 6 en Playwright: una página en `http://localhost:4321` muestra el widget, cambia el idioma y recibe el alto sin errores de consola; `http://localhost:8102` y `http://127.0.0.1:8103` no pueden incrustarlo ni cambiar su idioma.
 - Capturas del widget actualizadas.
 
+### 2026-10-18 - P20b interfaz de chat
+
+Estado: terminado y verificado en local (sin deploy). Referencias y patrones en la sección "Referencias de chats (P20b)".
+
+- Página completa y widget pasan de formulario a chat: cabecera ("Ask Washington"; en el widget, nada más), saludo del asistente en burbuja, 4 preguntas sugeridas como chips que se envían al hacer clic y desaparecen tras la primera pregunta, hilo con burbujas (visitante a la derecha en color de acento, respuestas a la izquierda en fondo neutro), citas como superíndices enlazados y lista compacta de fuentes bajo cada respuesta, indicador de tres puntos con texto para lectores de pantalla, errores como burbuja del asistente.
+- Composer fijo abajo: caja que crece hasta 4 líneas, botón de enviar con icono y `aria-label`, Enter envía y Shift+Enter salta de línea, contador solo desde 400 caracteres, aviso de posibles errores en letra pequeña.
+- Widget: ocupa el 100 % del alto del iframe, solo el hilo tiene scroll; el portafolio debe darle alto fijo (documentado en el README). Cambio de idioma por `postMessage` y orígenes permitidos sin cambios.
+- Textos nuevos en `en.json` y `es.json` (saludo, sugerencias propuestas, etiquetas del chat, indicador de escritura); se quitaron los del formulario.
+- Contraste AA verificado: texto del visitante 6.1:1, respuestas 13.8:1, chips 8.6:1, aviso y fuentes 6.9:1, placeholder 4.6:1; borde de la caja 3.0:1.
+- Pruebas: 77 en la suite normal y 14 en Playwright (`tests/e2e`, con `/ask` simulado): estado inicial, chip que envía, burbujas a cada lado, indicador, citas y fuentes, Enter y Shift+Enter, segunda pregunta con anclas propias, caja que crece y contador, errores en español, 360 px sin scroll horizontal, respuesta larga desde su inicio, widget en `http://localhost:4321` llenando un panel de 400 x 600 con solo el hilo desplazable, y sin errores de consola.
+- Capturas en `reports/screenshots/p20b/` (estado inicial EN y ES, conversación con 2 preguntas y fuentes, indicador de escritura, celular a 390 px, widget en un panel de demo). Costo de las respuestas reales usadas en las capturas: unos USD 0.0018.
+
+## Referencias de chats (P20b)
+
+Revisadas el 2026-10-18 en un Chromium sin sesión (Playwright), solo páginas públicas; las capturas se guardaron fuera del repositorio. ChatGPT (verificación de Cloudflare), el Messenger de Intercom y Tidio no cargan en un navegador automatizado: de Intercom se usó su documentación y no se intentó saltar ninguna protección.
+
+| Referencia | Qué se observó |
+|---|---|
+| Vercel AI Chatbot (template oficial, demo y código) | Hilo centrado y composer fijo abajo; 4 sugerencias solo con el hilo vacío, que se envían al hacer clic; mensaje del usuario a la derecha; Enter envía y Shift+Enter salta de línea (ignorado durante composición IME); caja que crece con el texto; botón de enviar con icono y `aria-label`; región `aria-live`; sin citas. |
+| Perplexity | La mejor referencia de citas: marca pequeña al final de la frase y lista de fuentes bajo la respuesta (en 400 px, detrás de un botón "N sources"); indicador de progreso mientras investiga; preguntas relacionadas tras cada respuesta. Banners de inicio de sesión y sin aviso de exactitud visible. |
+| Chatwoot (widget en vivo) | Panel flotante de 400 x 636 px abajo a la derecha, pantalla completa en celulares; saludo grande; formulario previo con email y nombre (a evitar); botones de icono sin etiqueta. |
+| Intercom Messenger (documentación) | Respuestas de Fin con fuentes, citas y acciones sugeridas; etiqueta "AI Agent" y mensaje de presentación que aclara que es un agente de IA. |
+| HuggingChat | Sugerencias sobre el composer; caja de una línea que crece; aviso "Generated content may be inaccurate or false." justo debajo del composer. |
+
+**Patrones adoptados y por qué**
+
+- Composer fijo abajo, caja que crece (aquí hasta 4 líneas), Enter / Shift+Enter, IME respetado y botón de icono con `aria-label` (Vercel, HuggingChat): es lo que la gente espera de un chat y funciona igual en 400 px.
+- 4 preguntas sugeridas solo en el estado inicial, que se envían al hacer clic (Vercel, HuggingChat): enseñan qué se puede preguntar y llevan a la primera respuesta en un toque. Como chips en varias líneas, entran en 400 px.
+- Citas en línea que llevan a una lista compacta de fuentes bajo la misma respuesta (Perplexity): ata cada afirmación a su evidencia, que es la razón de ser de Ask Washington; no hay espacio para una columna lateral.
+- Indicador de espera mientras se recupera y se genera (Vercel, Perplexity): la respuesta tarda unos segundos y conviene mostrar que está trabajando.
+- Aviso de posibles errores en letra pequeña bajo el composer (HuggingChat): siempre visible y sin ocupar espacio del hilo.
+- Región `aria-live` en el hilo y botones de icono con etiqueta (Vercel, Perplexity; Chatwoot como contraejemplo).
+- Panel de unos 400 x 600 px con alto fijo y solo el hilo desplazable (Chatwoot): coincide con el panel flotante del portafolio.
+- Errores dentro del hilo, como mensaje del asistente, en vez de un aviso flotante (el toast de Vercel pasa desapercibido en un panel chico).
+
+**Diferencias deliberadas**
+
+- La respuesta va en burbuja de fondo neutro (pedido explícito), aunque Vercel y Perplexity usan texto sin burbuja.
+- Las citas son superíndices `[n]` con número, no marcas con el dominio: las fuentes son pocas y propias (CV, LinkedIn, README, papers) y el número enlaza a la lista.
+
+**No adoptado (por ahora)**
+
+- Streaming y botón de detener: `/ask` responde de una vez; queda como mejora futura si se agrega streaming.
+- Preguntas de seguimiento tras cada respuesta, botón "ir al final" al leer hacia arriba, copiar y pulgar arriba o abajo, botón de reintentar en los errores, etiqueta "AI" en la cabecera: útiles pero fuera del alcance de P20b.
+- Formularios previos, inicio de sesión, historial guardado, barras laterales, selector de modelo, adjuntos y voz: no aportan a una consulta puntual de un reclutador y requieren cuentas o memoria.
+
 ## Próximos pasos
 
 - Washington: redeploy con `deploy.ps1` (sin `-ForceNginx`; `EMBED_ALLOWED_ORIGINS` ya está en `deploy/.deploy.local`) y verificar el panel del portafolio en https://washingtonquevedo.com.
@@ -200,4 +250,5 @@ Estado: terminado y verificado en local. Detalle completo en `reports/P20_idioma
 - **Proveedor local en la torre (Ollama):** constructor `ollama` en `app/llm.py` con `langchain-ollama`, para responder sin costo por token cuando la torre esté encendida.
 - **Servicio de inferencia vía la API de Localia:** constructor `openai_compatible` con `langchain-openai` apuntando a la API de Localia, para reutilizar la plataforma propia.
 - Rate limit en Postgres o Redis si la app corre con varios procesos.
+- Chat: respuestas en streaming con botón de detener, preguntas de seguimiento tras cada respuesta, botón "ir al final", copiar y valorar respuestas, reintentar tras un error.
 - Reranker (`RETRIEVAL_MODE=rerank`) si la inferencia corre con GPU en la torre: es el único que recupera q20.

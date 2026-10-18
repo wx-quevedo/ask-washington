@@ -25,7 +25,7 @@ def test_index_serves_the_page():
     html = page.text
     assert '<title data-i18n="page_title">Ask Washington</title>' in html
     assert 'for="question"' in html and 'id="question"' in html
-    assert html.count('class="suggestion"') == 4
+    assert html.count('class="chip"') == 4
     assert "Answers are generated from public sources and may contain errors." in html
     for link in (
         "https://www.linkedin.com/in/wxquevedo",

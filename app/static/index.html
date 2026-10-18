@@ -2,7 +2,7 @@
 <html lang="{{html_lang}}">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
   <title data-i18n="page_title">{{page_title}}</title>
   <meta name="description" content="{{meta_description}}" data-i18n-attr="content:meta_description">
   <meta name="ask-washington-embed-origins" content="{{embed_origins}}">
@@ -12,61 +12,56 @@
 <body class="{{embed_class}}">
   <a class="skip-link" href="#question" data-i18n="skip_link">{{skip_link}}</a>
 
-  <header class="site-header">
-    <div class="container">
-      <h1 data-i18n="title">{{title}}</h1>
-      <p class="subtitle" data-i18n="subtitle">{{subtitle}}</p>
-    </div>
-  </header>
-
-  <main class="container">
-    <section aria-labelledby="suggested-title" class="suggested">
-      <h2 id="suggested-title" class="section-label" data-i18n="suggested_label">{{suggested_label}}</h2>
-      <ul class="suggestions">
-        <li><button type="button" class="suggestion" data-i18n="suggestion_1">{{suggestion_1}}</button></li>
-        <li><button type="button" class="suggestion" data-i18n="suggestion_2">{{suggestion_2}}</button></li>
-        <li><button type="button" class="suggestion" data-i18n="suggestion_3">{{suggestion_3}}</button></li>
-        <li><button type="button" class="suggestion" data-i18n="suggestion_4">{{suggestion_4}}</button></li>
-      </ul>
-    </section>
-
-    <form id="ask-form" class="ask-form" novalidate>
-      <label for="question" class="section-label" data-i18n="question_label">{{question_label}}</label>
-      <textarea id="question" name="question" rows="3" minlength="3" maxlength="500" required
-        aria-describedby="question-help question-count"
-        placeholder="{{placeholder}}" data-i18n-attr="placeholder:placeholder"></textarea>
-      <div class="form-row">
-        <p id="question-help" class="help" data-i18n="help">{{help}}</p>
-        <p id="question-count" class="help count" aria-live="polite"></p>
+  <div class="chat">
+    <header class="chat-header">
+      <div class="chat-header-inner">
+        <div class="brand">
+          <h1 data-i18n="title">{{title}}</h1>
+          <p class="subtitle" data-i18n="subtitle">{{subtitle}}</p>
+        </div>
+        <nav class="profiles" aria-label="{{footer_nav_label}}" data-i18n-attr="aria-label:footer_nav_label">
+          <a href="https://www.linkedin.com/in/wxquevedo" rel="noopener" target="_blank" data-i18n="footer_linkedin">{{footer_linkedin}}</a>
+          <a href="https://github.com/wx-quevedo" rel="noopener" target="_blank" data-i18n="footer_github">{{footer_github}}</a>
+          <a href="https://scholar.google.com/citations?user=zPNPhwkAAAAJ" rel="noopener" target="_blank" data-i18n="footer_scholar">{{footer_scholar}}</a>
+        </nav>
       </div>
-      <button type="submit" id="ask-button" class="primary" data-i18n="ask_button">{{ask_button}}</button>
-    </form>
+    </header>
 
-    <section id="result" class="result" aria-live="polite" aria-busy="false" tabindex="-1">
-      <div id="status" class="status" hidden></div>
-      <div id="answer-block" hidden>
-        <h2 class="section-label" data-i18n="answer_label">{{answer_label}}</h2>
-        <div id="answer" class="answer"></div>
-        <h2 class="section-label" data-i18n="sources_label">{{sources_label}}</h2>
-        <ol id="sources" class="sources"></ol>
-        <p id="meta" class="meta"></p>
+    <main id="thread" class="thread" role="log" aria-live="polite" aria-relevant="additions"
+      aria-label="{{thread_label}}" data-i18n-attr="aria-label:thread_label" tabindex="0">
+      <div id="messages" class="thread-inner">
+        <div class="msg assistant">
+          <p class="sr-only" data-i18n="assistant_label">{{assistant_label}}</p>
+          <div class="bubble"><p data-i18n="greeting">{{greeting}}</p></div>
+        </div>
+        <div id="chips" class="chips" role="group" aria-label="{{suggested_label}}" data-i18n-attr="aria-label:suggested_label">
+          <button type="button" class="chip" data-i18n="suggestion_1">{{suggestion_1}}</button>
+          <button type="button" class="chip" data-i18n="suggestion_2">{{suggestion_2}}</button>
+          <button type="button" class="chip" data-i18n="suggestion_3">{{suggestion_3}}</button>
+          <button type="button" class="chip" data-i18n="suggestion_4">{{suggestion_4}}</button>
+        </div>
       </div>
-    </section>
+    </main>
 
-    <p class="embed-disclaimer" data-i18n="disclaimer">{{disclaimer}}</p>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container">
-      <nav aria-label="{{footer_nav_label}}" data-i18n-attr="aria-label:footer_nav_label">
-        <ul class="footer-links">
-          <li><a href="https://www.linkedin.com/in/wxquevedo" rel="noopener" target="_blank" data-i18n="footer_linkedin">{{footer_linkedin}}</a></li>
-          <li><a href="https://github.com/wx-quevedo" rel="noopener" target="_blank" data-i18n="footer_github">{{footer_github}}</a></li>
-          <li><a href="https://scholar.google.com/citations?user=zPNPhwkAAAAJ" rel="noopener" target="_blank" data-i18n="footer_scholar">{{footer_scholar}}</a></li>
-        </ul>
-      </nav>
-      <p class="disclaimer" data-i18n="disclaimer">{{disclaimer}}</p>
-    </div>
-  </footer>
+    <footer class="composer">
+      <div class="composer-inner">
+        <form id="ask-form" class="composer-form" novalidate>
+          <label for="question" class="sr-only" data-i18n="question_label">{{question_label}}</label>
+          <div class="composer-box">
+            <textarea id="question" name="question" rows="1" maxlength="500" required
+              aria-describedby="question-count"
+              placeholder="{{placeholder}}" data-i18n-attr="placeholder:placeholder"></textarea>
+            <button type="submit" id="send" class="send" aria-label="{{send_label}}" data-i18n-attr="aria-label:send_label">
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+                <path d="M3.4 20.4 21 12 3.4 3.6 3.4 10.1 15 12 3.4 13.9z" fill="currentColor"></path>
+              </svg>
+            </button>
+          </div>
+          <p id="question-count" class="count" aria-live="polite" hidden></p>
+        </form>
+        <p class="disclaimer" data-i18n="disclaimer">{{disclaimer}}</p>
+      </div>
+    </footer>
+  </div>
 </body>
 </html>

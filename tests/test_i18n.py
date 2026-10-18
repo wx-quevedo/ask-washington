@@ -5,6 +5,7 @@ The LLM is simulated (tests.test_ask), so nothing here calls the API.
 
 import json
 import re
+from html import escape
 
 import pytest
 from fastapi.testclient import TestClient
@@ -54,11 +55,11 @@ def test_page_language(url, lang, texts):
     with TestClient(app) as client:
         html = client.get(url).text
     assert f'<html lang="{lang}">' in html
-    assert texts["subtitle"] in html
-    assert texts["suggestion_1"] in html
-    assert f'placeholder="{texts["placeholder"]}"' in html
+    assert escape(texts["subtitle"]) in html
+    assert escape(texts["suggestion_1"]) in html
+    assert f'placeholder="{escape(texts["placeholder"])}"' in html
     other = ES if texts is EN else EN
-    assert other["subtitle"] not in html
+    assert escape(other["subtitle"]) not in html
 
 
 def test_widget_mode():
@@ -280,4 +281,4 @@ def test_portfolio_origins_are_allowed_and_others_are_not(origins):
 def test_widget_has_a_discreet_disclaimer(lang, texts):
     with TestClient(app) as client:
         widget = client.get(f"/?embed=1&lang={lang}").text
-    assert f'<p class="embed-disclaimer" data-i18n="disclaimer">{texts["disclaimer"]}</p>' in widget
+    assert f'<p class="disclaimer" data-i18n="disclaimer">{texts["disclaimer"]}</p>' in widget

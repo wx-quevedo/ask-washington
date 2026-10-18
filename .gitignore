@@ -30,3 +30,6 @@ deploy/*.local
 
 # Written by "podman machine ssh" when run from Git Bash (SSH known_hosts line)
 /NUL
+
+# Local reference material (third-party screenshots), never committed
+local-refs/
