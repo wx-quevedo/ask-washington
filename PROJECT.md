@@ -63,6 +63,9 @@ Este proyecto es P18 dentro del plan de `C:\xampp\htdocs\enhanced-me`. El seguim
 | CSP con `frame-ancestors` en la app, no en nginx | Depende de `EMBED_ALLOWED_ORIGINS`, que vive en el `.env`. Dos cabeceras CSP se aplican a la vez, así que nginx ya no debe enviar la suya ni `X-Frame-Options: DENY`. |
 | `X-Frame-Options: SAMEORIGIN` solo cuando no hay orígenes permitidos | `X-Frame-Options` no admite listas; con orígenes permitidos manda `frame-ancestors`. |
 | Migración puntual del sitio nginx en `remote-deploy.sh` | Quita solo las dos líneas de cabecera del sitio gestionado por certbot (con respaldo y `nginx -t`), así que el redeploy no necesita `-ForceNginx` ni arriesga las líneas de certbot. |
+| Orígenes del portafolio en `EMBED_ALLOWED_ORIGINS` (incluido `http://localhost:4321`) | El portafolio incrusta el widget en producción (con y sin `www`) y en su servidor de desarrollo de Astro; cualquier otro origen sigue bloqueado. |
+| El widget publica su alto solo hacia el origen real del padre | Con varios orígenes permitidos, publicar hacia todos genera errores de consola en el portafolio por cada origen que no coincide. |
+| Línea de aviso propia en el widget | El widget no muestra el pie; el aviso de posibles errores debe estar visible donde se lee la respuesta. |
 | El sitio nginx se instala solo la primera vez (o con `-ForceNginx`) | Después de certbot el archivo queda gestionado por certbot; sobrescribirlo en cada deploy quitaría el bloque HTTPS. |
 
 ## Plan de los 5 prompts
@@ -177,9 +180,17 @@ Estado: terminado y verificado en local. Detalle completo en `reports/P20_idioma
 - Pruebas: 74 en la suite normal, más una prueba de JS con Playwright (`tests/e2e`, se omite si Playwright no está instalado).
 - Prueba real (4 preguntas): las 4 en el idioma esperado y con citas válidas, USD 0.0018.
 
+### 2026-10-18 - P9 Ask Washington acepta el portafolio
+
+- Orígenes permitidos: `https://washingtonquevedo.com`, `https://www.washingtonquevedo.com` y `http://localhost:4321`, configurados en `deploy/.deploy.local` (ignorado) y pasados al `.env` de producción por `deploy.ps1`; valores de ejemplo en `deploy/.deploy.local.example`.
+- El widget (`?embed=1`) muestra una línea discreta con el aviso de posibles errores (desde los archivos i18n; contraste 6.9:1).
+- El alto se publica solo hacia el origen real del padre (sin errores de consola con varios orígenes permitidos).
+- Pruebas: 77 en la suite normal (nuevas: orígenes del portafolio aceptados y otros rechazados, aviso del widget en los dos idiomas) y 6 en Playwright: una página en `http://localhost:4321` muestra el widget, cambia el idioma y recibe el alto sin errores de consola; `http://localhost:8102` y `http://127.0.0.1:8103` no pueden incrustarlo ni cambiar su idioma.
+- Capturas del widget actualizadas.
+
 ## Próximos pasos
 
-- Washington: redeploy con `deploy.ps1` (sin `-ForceNginx`); cuando exista el dominio del portafolio, agregarlo a `EMBED_ALLOWED_ORIGINS` en `deploy/.deploy.local` y volver a desplegar.
+- Washington: redeploy con `deploy.ps1` (sin `-ForceNginx`; `EMBED_ALLOWED_ORIGINS` ya está en `deploy/.deploy.local`) y verificar el panel del portafolio en https://washingtonquevedo.com.
 - Medir en el servidor el tamaño de la imagen, la RAM real del contenedor y la latencia de `/ask`.
 - Publicar el repo en GitHub cuando el despliegue esté verificado.
 - Volver a correr `scripts/eval.py` tras cada cambio y sumar preguntas reales de `qa_log`.

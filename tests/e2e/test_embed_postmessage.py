@@ -1,15 +1,22 @@
-"""End-to-end check of the embed postMessage protocol in a real browser.
+"""End-to-end check of the embed protocol in a real browser.
+
+The app runs with the portfolio's origins in EMBED_ALLOWED_ORIGINS. A minimal parent page
+is served at http://localhost:4321 (the portfolio's dev origin) and must be able to show
+the widget and switch its language; other origins must not.
 
 Needs Playwright, which is not a project dependency. Run it ad hoc with:
 
     uv run --with playwright python -m playwright install chromium   # once
     uv run --with playwright pytest tests/e2e -q
 
-Without Playwright the whole module is skipped.
+Without Playwright the whole module is skipped. The parent page binds 127.0.0.1:4321 and
+Chromium maps "localhost" to 127.0.0.1, so a dev server already listening on [::1]:4321
+(for example `astro preview`) is not disturbed.
 """
 
 import json
 import os
+import socket
 import subprocess
 import sys
 import threading
@@ -26,9 +33,16 @@ sync_api = pytest.importorskip("playwright.sync_api")
 REPO_ROOT = Path(__file__).resolve().parents[2]
 APP_HOST, APP_PORT = "127.0.0.1", 8101
 APP_URL = f"http://{APP_HOST}:{APP_PORT}"
-ALLOWED_PORT, OTHER_PORT = 8102, 8103
-ALLOWED_ORIGIN = f"http://localhost:{ALLOWED_PORT}"
 IFRAME_SRC = f"{APP_URL}/?embed=1&lang=en"
+
+PORTFOLIO_ORIGINS = (
+    "https://washingtonquevedo.com",
+    "https://www.washingtonquevedo.com",
+    "http://localhost:4321",
+)
+DEV_PORT = 4321  # allowed: http://localhost:4321
+SAME_HOST_OTHER_PORT = 8102  # not allowed: http://localhost:8102
+OTHER_HOST_PORT = 8103  # not allowed: http://127.0.0.1:8103
 
 I18N = REPO_ROOT / "app" / "static" / "i18n"
 EN = json.loads((I18N / "en.json").read_text(encoding="utf-8"))
@@ -73,9 +87,18 @@ def _wait_for(url: str, timeout: float = 120.0) -> None:
     raise RuntimeError(f"{url} did not answer within {timeout}s: {last_error}")
 
 
+def _port_free(port: int) -> bool:
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+        return sock.connect_ex(("127.0.0.1", port)) != 0
+
+
 @pytest.fixture(scope="module")
 def app_server():
-    env = dict(os.environ, EMBED_ALLOWED_ORIGINS=ALLOWED_ORIGIN, PYTHONUNBUFFERED="1")
+    env = dict(
+        os.environ,
+        EMBED_ALLOWED_ORIGINS=",".join(PORTFOLIO_ORIGINS),
+        PYTHONUNBUFFERED="1",
+    )
     proc = subprocess.Popen(
         [
             sys.executable,
@@ -108,19 +131,24 @@ def app_server():
 
 @pytest.fixture(scope="module")
 def parent_servers(tmp_path_factory):
+    ports = (DEV_PORT, SAME_HOST_OTHER_PORT, OTHER_HOST_PORT)
+    busy = [p for p in ports if not _port_free(p)]
+    if busy:
+        pytest.skip(f"127.0.0.1 ports already in use: {busy}")
+    # The parent page lives in a temporary directory, outside the repository.
     root = tmp_path_factory.mktemp("parents")
     (root / "parent.html").write_text(PARENT_HTML.format(src=IFRAME_SRC), encoding="utf-8")
     handler = partial(_QuietHandler, directory=str(root))
     servers = []
     try:
-        for host, port in (("localhost", ALLOWED_PORT), ("127.0.0.1", OTHER_PORT)):
-            bind = "127.0.0.1" if host == "localhost" else host
-            server = ThreadingHTTPServer((bind, port), handler)
+        for port in ports:
+            server = ThreadingHTTPServer(("127.0.0.1", port), handler)
             threading.Thread(target=server.serve_forever, daemon=True).start()
             servers.append(server)
         yield {
-            "allowed": f"http://localhost:{ALLOWED_PORT}/parent.html",
-            "other": f"http://127.0.0.1:{OTHER_PORT}/parent.html",
+            "dev": f"http://localhost:{DEV_PORT}/parent.html",
+            "same_host_other_port": f"http://localhost:{SAME_HOST_OTHER_PORT}/parent.html",
+            "other_host": f"http://127.0.0.1:{OTHER_HOST_PORT}/parent.html",
         }
     finally:
         for server in servers:
@@ -131,16 +159,20 @@ def parent_servers(tmp_path_factory):
 @pytest.fixture(scope="module")
 def browser():
     with sync_api.sync_playwright() as pw:
-        browser = pw.chromium.launch()
+        # "localhost" -> 127.0.0.1, so http://localhost:4321 reaches the test page.
+        browser = pw.chromium.launch(args=["--host-resolver-rules=MAP localhost 127.0.0.1"])
         try:
             yield browser
         finally:
             browser.close()
 
 
-def _new_page(browser, **context_options):
-    context = browser.new_context(**context_options)
-    return context, context.new_page()
+def _new_page(browser):
+    context = browser.new_context()
+    page = context.new_page()
+    page.console_errors = []
+    page.on("console", lambda msg: msg.type == "error" and page.console_errors.append(msg.text))
+    return context, page
 
 
 @pytest.fixture
@@ -192,29 +224,43 @@ def _height_messages(page):
     )
 
 
-def test_allowed_parent_switches_language_and_gets_height(app_server, parent_servers, page):
-    frame = _open_parent(page, parent_servers["allowed"])
+def test_widget_lists_the_portfolio_origins(app_server):
+    with urllib.request.urlopen(IFRAME_SRC, timeout=5) as response:
+        csp = response.headers["Content-Security-Policy"]
+        html = response.read().decode("utf-8")
+    assert csp.endswith("frame-ancestors 'self' " + " ".join(PORTFOLIO_ORIGINS))
+    assert response.headers.get("X-Frame-Options") is None
+    assert f'content="{" ".join(PORTFOLIO_ORIGINS)}"' in html
+
+
+def test_dev_origin_shows_widget_and_switches_language(app_server, parent_servers, page):
+    frame = _open_parent(page, parent_servers["dev"])
     sync_api.expect(frame.locator("label[for=question]")).to_have_text(EN["question_label"])
+    sync_api.expect(frame.locator(".embed-disclaimer")).to_have_text(EN["disclaimer"])
 
     page.evaluate("window.sendLang('es')")
-
     sync_api.expect(frame.locator("html")).to_have_attribute("lang", "es", timeout=5000)
     sync_api.expect(frame.locator("label[for=question]")).to_have_text(ES["question_label"])
+    sync_api.expect(frame.locator(".embed-disclaimer")).to_have_text(ES["disclaimer"])
+
+    page.evaluate("window.sendLang('en')")
+    sync_api.expect(frame.locator("html")).to_have_attribute("lang", "en", timeout=5000)
 
     page.wait_for_function(
         """() => window.received.some(m => m.data && m.data.type === "ask-washington:height")""",
         timeout=5000,
     )
     heights = _height_messages(page)
-    assert heights, "no ask-washington:height message received"
     assert all(m["origin"] == APP_URL for m in heights)
-    assert any(
-        isinstance(m["data"]["height"], int | float) and m["data"]["height"] > 0 for m in heights
-    )
+    assert any(m["data"]["height"] > 0 for m in heights)
+    # The height goes only to the real parent origin: no "target origin does not match"
+    # errors for the other allowed origins.
+    assert page.console_errors == []
 
 
-def test_other_parent_cannot_frame_the_widget(app_server, parent_servers, page):
-    page.goto(parent_servers["other"])
+@pytest.mark.parametrize("parent", ["same_host_other_port", "other_host"])
+def test_other_origins_cannot_frame_the_widget(app_server, parent_servers, page, parent):
+    page.goto(parent_servers[parent])
     page.wait_for_timeout(1500)
     widget = page.frame_locator("#widget")
     # frame-ancestors blocks the document, so the widget's form never appears.
@@ -222,9 +268,10 @@ def test_other_parent_cannot_frame_the_widget(app_server, parent_servers, page):
     assert _height_messages(page) == []
 
 
-def test_other_parent_messages_are_ignored(app_server, parent_servers, page_without_csp):
+@pytest.mark.parametrize("parent", ["same_host_other_port", "other_host"])
+def test_other_origins_messages_are_ignored(app_server, parent_servers, page_without_csp, parent):
     page = page_without_csp
-    frame = _open_parent(page, parent_servers["other"])
+    frame = _open_parent(page, parent_servers[parent])
 
     page.evaluate("window.sendLang('es')")
     page.wait_for_timeout(1500)

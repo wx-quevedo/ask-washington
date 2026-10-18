@@ -260,3 +260,14 @@ body.embed #answer-block { padding: 12px 14px; }
 @media (max-width: 560px) {
   body.embed .suggestions { grid-template-columns: 1fr; }
 }
+
+/* Widget only: the page footer is hidden, so the disclaimer gets one discreet line.
+   #4f5b6b on #ffffff is about 6.9:1, above the WCAG AA 4.5:1 for small text. */
+.embed-disclaimer { display: none; }
+body.embed .embed-disclaimer {
+  display: block;
+  margin: 10px 2px 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--muted);
+}

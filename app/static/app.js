@@ -200,20 +200,40 @@
 
   // ---- embedding: height to the parent, language from the parent ----
 
+  // The parent's origin, when it can be known: from a message it sent, from
+  // location.ancestorOrigins (Chromium, Safari) or from the referrer. Posting only to that
+  // origin avoids "target origin does not match" console errors for the other allowed ones.
+  let parentOrigin = null;
+  function parentTargets() {
+    if (parentOrigin) return [parentOrigin];
+    let origin = null;
+    if (window.location.ancestorOrigins && window.location.ancestorOrigins.length) {
+      origin = window.location.ancestorOrigins[0];
+    } else if (document.referrer) {
+      try {
+        origin = new URL(document.referrer).origin;
+      } catch (e) {
+        origin = null;
+      }
+    }
+    if (origin) return allowedOrigins.includes(origin) ? [origin] : [];
+    return allowedOrigins; // unknown parent: postMessage drops every non-matching origin
+  }
+
   let lastHeight = 0;
   function reportHeight() {
     if (!isEmbed || window.parent === window || allowedOrigins.length === 0) return;
     const height = Math.ceil(document.documentElement.scrollHeight);
     if (height === lastHeight) return;
     lastHeight = height;
-    // Posting to a specific origin is dropped unless the parent really has that origin.
-    allowedOrigins.forEach((origin) => {
+    parentTargets().forEach((origin) => {
       window.parent.postMessage({ type: "ask-washington:height", height: height }, origin);
     });
   }
 
   window.addEventListener("message", (event) => {
     if (!allowedOrigins.includes(event.origin)) return; // ignore anyone else
+    if (event.source === window.parent) parentOrigin = event.origin;
     const data = event.data;
     if (data && data.type === "ask-washington:lang" && LANGS.includes(data.lang)) {
       setLanguage(data.lang);

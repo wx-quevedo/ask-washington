@@ -333,9 +333,17 @@ Widget embedded in a demo page (English and Spanish):
 
 ## Embedding the widget
 
-Ask Washington has no language switch of its own: it follows the page that contains it. `?embed=1` gives a compact widget without the big header and footer, sized to its content.
+Ask Washington has no language switch of its own: it follows the page that contains it. `?embed=1` gives a compact widget without the big header and footer, sized to its content, with one discreet line at the bottom: "Answers are generated from public sources and may contain errors." (or its Spanish version).
 
-1. Add the embedding site to `EMBED_ALLOWED_ORIGINS` (for the deploy script: `EMBED_ALLOWED_ORIGINS=https://portfolio.example` in `deploy/.deploy.local`). The app then sends `Content-Security-Policy: frame-ancestors 'self' https://portfolio.example` and accepts `postMessage` events only from that origin.
+The portfolio at https://washingtonquevedo.com embeds it in a floating panel. Production allows these origins:
+
+```
+EMBED_ALLOWED_ORIGINS=https://washingtonquevedo.com,https://www.washingtonquevedo.com,http://localhost:4321
+```
+
+(`http://localhost:4321` is the portfolio's Astro dev and preview server.)
+
+1. Add the embedding site to `EMBED_ALLOWED_ORIGINS` (for the deploy script, in `deploy/.deploy.local`). The app then sends `Content-Security-Policy: frame-ancestors 'self'` followed by those origins, and accepts `postMessage` events only from them. Every other origin, including the same host on another port or plain `http`, cannot frame the widget.
 2. Embed it, and send the language whenever the page switches:
 
 ```html
@@ -363,7 +371,9 @@ Ask Washington has no language switch of its own: it follows the page that conta
 </script>
 ```
 
-Start with `lang=` in the `src` matching the current page language (the first render does not wait for a message). Messages from origins that are not in `EMBED_ALLOWED_ORIGINS` are ignored, and the widget posts its height only to allowed origins. The widget does not show the footer, so the embedding page should keep a short note such as "Answers are generated from public sources and may contain errors."
+Start with `lang=` in the `src` matching the current page language (the first render does not wait for a message). Messages from origins that are not in `EMBED_ALLOWED_ORIGINS` are ignored. The widget posts its height only to its actual parent origin (taken from the parent's messages, `location.ancestorOrigins` or the referrer), and only when that origin is allowed, so the browser does not log "target origin does not match" errors for the other allowed origins.
+
+`tests/e2e/test_embed_postmessage.py` checks this in Chromium with the portfolio's origins: a page on `http://localhost:4321` shows the widget, switches its language and receives its height without console errors, while `http://localhost:8102` and `http://127.0.0.1:8103` can neither frame it nor change its language (`uv run --with playwright pytest tests/e2e`).
 
 ## Deployment
 

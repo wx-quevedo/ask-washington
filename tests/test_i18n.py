@@ -245,3 +245,39 @@ def test_unavailable_message_in_answer_language(client_and_llm):
     response = client.post("/ask", json={"question": "¿Qué es Buscapez?", "lang": "en"})
     assert response.status_code == 502
     assert response.json()["detail"] == i18n.api_message("unavailable", "es")
+
+
+# ------------------------------------------------------- portfolio embedding
+
+PORTFOLIO_ORIGINS = [
+    "https://washingtonquevedo.com",
+    "https://www.washingtonquevedo.com",
+    "http://localhost:4321",
+]
+
+
+def test_portfolio_origins_are_allowed_and_others_are_not(origins):
+    origins.embed_allowed_origins = ",".join(PORTFOLIO_ORIGINS)
+    with TestClient(app) as client:
+        response = client.get("/?embed=1&lang=es")
+    csp = response.headers["content-security-policy"]
+    ancestors = csp.split("frame-ancestors ", 1)[1].split()
+    assert ancestors == ["'self'", *PORTFOLIO_ORIGINS]
+    for other in (
+        "http://washingtonquevedo.com",  # http, not https
+        "https://washingtonquevedo.com.evil.example",
+        "https://evil.example",
+        "http://localhost:4322",
+        "http://127.0.0.1:4321",
+        "*",
+    ):
+        assert other not in ancestors
+    assert "x-frame-options" not in response.headers
+    assert f'content="{" ".join(PORTFOLIO_ORIGINS)}"' in response.text
+
+
+@pytest.mark.parametrize(("lang", "texts"), [("en", EN), ("es", ES)])
+def test_widget_has_a_discreet_disclaimer(lang, texts):
+    with TestClient(app) as client:
+        widget = client.get(f"/?embed=1&lang={lang}").text
+    assert f'<p class="embed-disclaimer" data-i18n="disclaimer">{texts["disclaimer"]}</p>' in widget
