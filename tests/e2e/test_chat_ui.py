@@ -83,6 +83,10 @@ def open_page(page, lang="en", viewport=None):
 
 def test_initial_state(app_server, page):
     open_page(page)
+    # The full page keeps its visible header.
+    sync_api.expect(page.locator("h1")).to_be_visible()
+    sync_api.expect(page.locator("h1")).to_have_text(EN["title"])
+    sync_api.expect(page.locator(".profiles")).to_be_visible()
     sync_api.expect(page.locator(".msg.assistant .bubble")).to_have_text(EN["greeting"])
     chips = page.locator(".chip")
     sync_api.expect(chips).to_have_count(4)
@@ -229,8 +233,15 @@ def test_widget_in_portfolio_panel_fills_height_and_scrolls_only_the_thread(
     frame = page.frame_locator("#widget")
     wait_ready(frame)
 
+    # The panel shows the title, so the widget's header is hidden (h1 kept for screen readers).
+    header = frame.locator(".chat-header").bounding_box()
+    assert header["width"] <= 1 and header["height"] <= 1
+    sync_api.expect(frame.locator("h1")).to_have_text(ES["title"])
     sync_api.expect(frame.locator(".subtitle")).to_be_hidden()
     sync_api.expect(frame.locator(".profiles")).to_be_hidden()
+    thread_top = frame.locator("#thread").bounding_box()["y"]
+    iframe_top = page.locator("#widget").bounding_box()["y"]
+    assert thread_top - iframe_top <= 1  # the thread starts at the top of the panel
     sync_api.expect(frame.locator(".chip").first).to_have_text(ES["suggestion_1"])
 
     box = frame.locator("#question")

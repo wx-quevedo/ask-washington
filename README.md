@@ -340,7 +340,7 @@ Full analysis, including the questions that still fail: `reports/P18-4_evaluacio
 
 ## Embedding the widget
 
-Ask Washington has no language switch of its own: it follows the page that contains it. `?embed=1` gives the widget: the same chat with only the title in its header (the panel provides the close button). It fills 100% of the iframe height: only the thread scrolls and the composer stays at the bottom. **Give the iframe a fixed height** (the portfolio's floating panel does, about 400 x 600 px); the widget does not grow with its content.
+Ask Washington has no language switch of its own: it follows the page that contains it. `?embed=1` gives the widget: the same chat without its header, since the portfolio panel already shows the title and the close button (the `h1` stays available to screen readers). It fills 100% of the iframe height: only the thread scrolls and the composer stays at the bottom. **Give the iframe a fixed height** (the portfolio's floating panel does, about 400 x 600 px); the widget does not grow with its content.
 
 The portfolio at https://washingtonquevedo.com embeds it in a floating panel. Production allows only the portfolio:
 

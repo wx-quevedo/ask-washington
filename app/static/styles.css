@@ -329,8 +329,18 @@ textarea::placeholder { color: #6b7686; }
 /* ---- widget mode (?embed=1): the portfolio panel gives the iframe a fixed height ---- */
 
 body.embed { background: var(--surface); }
-body.embed .chat-header-inner { padding: 10px 12px; flex-direction: row; }
-body.embed h1 { font-size: 1rem; }
+/* The portfolio panel already shows the "Ask Washington" title: hide the header visually
+   but keep the h1 for screen readers. */
+body.embed .chat-header {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 body.embed .subtitle,
 body.embed .profiles { display: none; }
 body.embed .thread-inner { padding: 12px 12px 6px; }

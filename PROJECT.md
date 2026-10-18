@@ -258,6 +258,10 @@ El repo ya es público, así que no se reescribe el historial: en un commit norm
 
 Quedan esas frases, a propósito, en `data/source_corrections.yaml` (el mecanismo necesita el texto literal para encontrarlo), en esta bitácora (P20c documenta qué estaba mal) y en `tests/test_ingestion.py` (frases de prueba del mecanismo). Las métricas guardadas en los JSON de evaluación no se recalcularon: son el registro de esas corridas.
 
+### 2026-10-18 - P20d widget sin cabecera
+
+En modo widget (`?embed=1`) la cabecera "Ask Washington" queda oculta a la vista, porque el panel del portafolio ya muestra ese título; el `h1` sigue disponible para lectores de pantalla y el subtítulo y los perfiles quedan fuera. La página completa mantiene su cabecera. Pruebas de Playwright ajustadas (cabecera oculta y hilo desde el borde superior del panel en el widget; cabecera visible en la página completa) y capturas del widget actualizadas en `reports/screenshots/p20b/`.
+
 ## Referencias de chats (P20b)
 
 Revisadas el 2026-10-18 en un Chromium sin sesión (Playwright), solo páginas públicas; las capturas se guardaron fuera del repositorio. ChatGPT (verificación de Cloudflare), el Messenger de Intercom y Tidio no cargan en un navegador automatizado: de Intercom se usó su documentación y no se intentó saltar ninguna protección.
