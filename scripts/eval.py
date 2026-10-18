@@ -75,6 +75,7 @@ def evaluate_retrieval(questions: list[dict], spec: str, top_k: int = 6) -> dict
         "top_k": top_k,
         "candidates": settings.retrieval_candidates,
         "reranker_model": model or settings.reranker_model,
+        "max_per_doc": settings.retrieval_max_per_doc or None,
     }
     answerable = [q for q in questions if not q["should_refuse"]]
     retrieve(answerable[0]["question"], **kwargs)  # warm up models and caches
@@ -182,6 +183,7 @@ def evaluate_answers(questions: list[dict], spec: str | None, max_usd: float, la
         top_k=settings.retrieval_top_k,
         candidates=settings.retrieval_candidates,
         reranker_model=model or settings.reranker_model,
+        max_per_doc=settings.retrieval_max_per_doc or None,
     )
     rows, spent = [], 0.0
     for q in questions:

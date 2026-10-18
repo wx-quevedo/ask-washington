@@ -20,7 +20,7 @@
       "category": "xr_vr",
       "question": "Which VR/AR headsets and XR hardware has he worked with?",
       "route": "rag",
-      "answer": "Washington has worked with several VR/AR headsets and XR hardware:\n\n- **Meta Quest 2, 3 and Pro**: used in a synchronized 360° VR experience for 31 headsets [2], and in his in-development SkyNest multiplayer VR project [2].\n- **RayNeo Air 4 Pro glasses**: he is building a heads-up display for these AR glasses [2].\n- **HTC Vive**: used in his VR Runner maze game [2] and in a DJI Matrice 600 Pro VR simulator [2].\n- **Leap Motion**: integrated in XR work at Inmersoft [3][6] and in the DJI simulator [2].\n- **Emotiv EEG**: hardware integration at Inmersoft [3][6].\n- **HoloLens**: mentioned for AR heads-up displays at Inmersoft [6].\n- **Other hardware**: haptics, Arduino, Alexa and IoT devices [3][6], plus muscle and heart-rate sensors in VR Runner [2].",
+      "answer": "Washington has worked with several VR/AR headsets and XR hardware:\n\n- [redacted 2026-10-18: outdated claim]\n- **RayNeo Air 4 Pro glasses**: he is building a heads-up display for these AR glasses [2].\n- **HTC Vive**: used in his VR Runner maze game [2] and in a DJI Matrice 600 Pro VR simulator [2].\n- **Leap Motion**: integrated in XR work at Inmersoft [3][6] and in the DJI simulator [2].\n- **Emotiv EEG**: hardware integration at Inmersoft [3][6].\n- **HoloLens**: mentioned for AR heads-up displays at Inmersoft [6].\n- **Other hardware**: haptics, Arduino, Alexa and IoT devices [3][6], plus muscle and heart-rate sensors in VR Runner [2].",
       "source_doc_ids": [
         "cv-xr-ai-engineer",
         "cv-xr-ai-engineer",
@@ -51,7 +51,7 @@
       "category": "xr_vr",
       "question": "Tell me about the synchronized multi-headset VR experience he built for a corporate wellness session.",
       "route": "rag",
-      "answer": "Washington built a synchronized 360° VR experience for 31 Meta Quest headsets, using Unity, Meta Quest 2/3/Pro, and a web control panel [2]. A Unity app plus a web panel showed the status of all 31 headsets and launched the session in sync [2].\n\nThe session was designed for first-time VR users at a corporate wellness event [2]. It opened with an 11-minute 8K 360° guided meditation with spatial audio built on the Meta XR Audio SDK, followed by a head-movement rhythm game [2]. This was delivered through his studio, Inmersoft, which lists it among its VR projects for engineering, medicine and entertainment [1].\n\nFor more details, see his LinkedIn profile: https://www.linkedin.com/in/wxquevedo",
+      "answer": "[redacted 2026-10-18: outdated claim]\n\nThe session was designed for first-time VR users at a corporate wellness event [2]. It opened with an 11-minute 8K 360° guided meditation with spatial audio built on the Meta XR Audio SDK, followed by a head-movement rhythm game [2]. This was delivered through his studio, Inmersoft, which lists it among its VR projects for engineering, medicine and entertainment [1].\n\nFor more details, see his LinkedIn profile: https://www.linkedin.com/in/wxquevedo",
       "source_doc_ids": [
         "linkedin-profile",
         "cv-xr-ai-engineer",
@@ -65,7 +65,7 @@
       "cost_usd": 0.000425,
       "latency_ms": 1656,
       "keywords_found": [
-        "31",
+        "[redacted 2026-10-18: outdated claim]",
         "Meta Quest",
         "8K"
       ],
@@ -175,7 +175,7 @@
       "category": "ai_ml_production",
       "question": "Production ML experience",
       "route": "rag",
-      "answer": "Washington has taken several machine learning models into production:\n\n- **Buscapez (Stanford University marine research platform):** He built the species-identification module, a YOLO detector trained in PyTorch with mAP50 of 0.96 [4]. It is served by a FastAPI + ONNX Runtime service at 49 ms per image and 70 MB of RAM on a 2-core VPS [4][1], and runs offline on iOS and Android via ExecuTorch [4]. [redacted 2026-10-18: outdated claim, see PROJECT.md P20c]\n- **Human-in-the-loop data pipeline:** He shipped assisted annotation with mandatory human review, hash-based deduplication, and YOLO export for incremental retraining [4].\n- **Laboratorios Bagó:** He built an AI campaign builder that helps product managers generate campaign concepts grounded in expert product information, used at the company's MKT Attack event [2][3].\n\nFor further detail, see his LinkedIn profile: https://www.linkedin.com/in/wxquevedo",
+      "answer": "Washington has taken several machine learning models into production:\n\n- **Buscapez (Stanford University marine research platform):** He built the species-identification module, a YOLO detector trained in PyTorch with mAP50 of 0.96 [4]. It is served by a FastAPI + ONNX Runtime service at 49 ms per image and 70 MB of RAM on a 2-core VPS [4][1], and runs offline on iOS and Android via ExecuTorch [4]. [redacted 2026-10-18: outdated claim, see PROJECT.md P20c]\n- **Human-in-the-loop data pipeline:** He shipped assisted annotation with mandatory human review, hash-based deduplication, and YOLO export for incremental retraining [4].\n- [redacted 2026-10-18: outdated claim]\n\nFor further detail, see his LinkedIn profile: https://www.linkedin.com/in/wxquevedo",
       "source_doc_ids": [
         "linkedin-profile",
         "cv-ai-engineer",
@@ -298,7 +298,7 @@
       "category": "ai_ml_production",
       "question": "What did he build with LLMs at Laboratorios Bagó?",
       "route": "rag",
-      "answer": "At Laboratorios Bagó del Ecuador, Washington built an AI campaign builder that helps product managers generate campaign concepts such as slogans, gimmicks and art ideas, grounded in expert product information [1][2]. It was used at the company's MKT Attack creative event [1][2]. His skills listed on LinkedIn include Large Language Models and the Claude API [2].",
+      "answer": "[redacted 2026-10-18: outdated claim] It was used at the company's MKT Attack creative event [1][2]. His skills listed on LinkedIn include Large Language Models and the Claude API [2].",
       "source_doc_ids": [
         "cv-ai-engineer",
         "linkedin-profile",
@@ -312,7 +312,7 @@
       "cost_usd": 0.000343,
       "latency_ms": 1065,
       "keywords_found": [
-        "campaign builder",
+        "[redacted 2026-10-18: outdated claim]",
         "MKT Attack"
       ],
       "keyword_rate": 1.0,

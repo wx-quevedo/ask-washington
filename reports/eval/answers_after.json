@@ -20,7 +20,7 @@
       "category": "xr_vr",
       "question": "Which VR/AR headsets and XR hardware has he worked with?",
       "route": "rag",
-      "answer": "Washington has worked with several VR/AR headsets and XR hardware:\n\n- **Meta Quest 2/3/Pro:** used for a synchronized 360° VR experience across 31 headsets, and for the SkyNest multiplayer VR project [2].\n- **RayNeo Air 4 Pro glasses:** he is developing a heads-up display for these AR glasses [2].\n- **HTC Vive:** used in the VR Runner maze game and the DJI Matrice 600 Pro VR simulator [2].\n- **Leap Motion:** used in the DJI simulator and in hardware integration at Inmersoft [2][3].\n- **HoloLens:** mentioned in AR heads-up display work for Inmersoft [6].\n- **Other hardware:** Emotiv EEG, haptics, Arduino and IoT devices in Inmersoft projects [3], plus muscle and heart-rate sensors in VR Runner [2].",
+      "answer": "Washington has worked with several VR/AR headsets and XR hardware:\n\n- [redacted 2026-10-18: outdated claim]\n- **RayNeo Air 4 Pro glasses:** he is developing a heads-up display for these AR glasses [2].\n- **HTC Vive:** used in the VR Runner maze game and the DJI Matrice 600 Pro VR simulator [2].\n- **Leap Motion:** used in the DJI simulator and in hardware integration at Inmersoft [2][3].\n- **HoloLens:** mentioned in AR heads-up display work for Inmersoft [6].\n- **Other hardware:** Emotiv EEG, haptics, Arduino and IoT devices in Inmersoft projects [3], plus muscle and heart-rate sensors in VR Runner [2].",
       "source_doc_ids": [
         "cv-xr-ai-engineer",
         "cv-xr-ai-engineer",
@@ -51,7 +51,7 @@
       "category": "xr_vr",
       "question": "Tell me about the synchronized multi-headset VR experience he built for a corporate wellness session.",
       "route": "rag",
-      "answer": "Washington built a synchronized 360° VR experience for 31 Meta Quest headsets, using Unity, Meta Quest 2/3/Pro, and a web control panel [2]. A Unity app and a web panel showed the status of all 31 headsets and launched the session in sync [2]. The session opened with an 11-minute 8K 360° guided meditation with spatial audio (Meta XR Audio SDK), followed by a head-movement rhythm game, and it was designed for first-time VR users at a corporate wellness session [2]. The project was delivered through his studio, Inmersoft, which he founded in 2018 [1].",
+      "answer": "[redacted 2026-10-18: outdated claim] The session opened with an 11-minute 8K 360° guided meditation with spatial audio (Meta XR Audio SDK), followed by a head-movement rhythm game, and it was designed for first-time VR users at a corporate wellness session [2]. The project was delivered through his studio, Inmersoft, which he founded in 2018 [1].",
       "source_doc_ids": [
         "linkedin-profile",
         "cv-xr-ai-engineer",
@@ -65,7 +65,7 @@
       "cost_usd": 0.000422,
       "latency_ms": 1480,
       "keywords_found": [
-        "31",
+        "[redacted 2026-10-18: outdated claim]",
         "Meta Quest",
         "8K"
       ],
@@ -298,7 +298,7 @@
       "category": "ai_ml_production",
       "question": "What did he build with LLMs at Laboratorios Bagó?",
       "route": "rag",
-      "answer": "At Laboratorios Bagó, Washington built an AI campaign builder that helps product managers generate campaign concepts such as slogans, gimmicks, and art ideas, grounded in expert product information [1][2]. The tool was used at the company's MKT Attack creative event [1][2]. His listed skills include Large Language Models (LLM) and the Claude API [2].",
+      "answer": "[redacted 2026-10-18: outdated claim] The tool was used at the company's MKT Attack creative event [1][2]. His listed skills include Large Language Models (LLM) and the Claude API [2].",
       "source_doc_ids": [
         "cv-ai-engineer",
         "linkedin-profile",
@@ -312,7 +312,7 @@
       "cost_usd": 0.000364,
       "latency_ms": 4765,
       "keywords_found": [
-        "campaign builder",
+        "[redacted 2026-10-18: outdated claim]",
         "MKT Attack"
       ],
       "keyword_rate": 1.0,

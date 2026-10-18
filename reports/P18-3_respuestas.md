@@ -22,7 +22,7 @@ La latencia de la primera pregunta (12 s) incluye la carga en frío del modelo d
 > Washington has about 10 years of experience building VR/AR training, simulation and interactive experiences in Unity [2]. He shipped XR and game work for a social VR platform (Sansar, via BairesDev), an AR company (Merge) and a pharmaceutical sales force [2]. He also founded Inmersoft in 2018, with 200+ delivered projects [2].
 >
 > Selected XR projects include:
-> - A synchronized 360° VR experience for 31 Meta Quest headsets, with a guided meditation and a head-movement rhythm game [4].
+> - [redacted 2026-10-18: outdated claim]
 > - SkyNest, a multiplayer VR combat sandbox in development with Unity 6 and Meta Quest [4].
 > - RayNeo Power, a HUD for RayNeo Air 4 Pro AR glasses, in development [4].
 > - Earlier work including a VR maze game (VR Runner), a DJI Matrice 600 Pro VR simulator, and a Unity3D–MATLAB robotics simulator [4].
@@ -59,7 +59,7 @@ Fuentes:
 > Washington's sources describe several production ML projects:
 >
 > - **Buscapez (Stanford University marine research platform):** He is building the species-identification module, a YOLO detector trained in PyTorch (mAP50 0.96), served by a FastAPI + ONNX Runtime service at 49 ms per image on a 2-core VPS, and running offline on iOS and Android via ExecuTorch. [redacted 2026-10-18: outdated claim, see PROJECT.md P20c]
-> - **Laboratorios Bagó del Ecuador:** He built an AI campaign builder for product managers that generates campaign concepts grounded in expert product information, used at the company's MKT Attack event [4].
+> - [redacted 2026-10-18: outdated claim]
 >
 > His profile also lists LLM application work with Claude, OpenAI and Gemini APIs, and local LLM serving with llama.cpp [5].
 >

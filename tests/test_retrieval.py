@@ -101,3 +101,19 @@ def test_eval_runs_in_retrieval_only_mode_without_api(monkeypatch):
         assert result["hit@3"] == 1.0
         assert result["rows"][0]["doc_ids"][0] == "repo-plan-vivo-kit"
         assert result["latency_ms_mean"] > 0
+
+
+def test_cap_per_document_keeps_order_and_limits_each_document():
+    from app.retrieval import Hit, cap_per_document
+
+    def hit(node_id):
+        return Hit(node_id=node_id, text="", metadata={}, score=0.0)
+
+    hits = [hit(i) for i in ("a#1", "a#2", "a#3", "a#4", "b#1", "a#5", "c#1", "b#2")]
+    capped = cap_per_document(hits, k=6, max_per_doc=3)
+    assert [h.node_id for h in capped] == ["a#1", "a#2", "a#3", "b#1", "c#1", "b#2"]
+    assert [h.node_id for h in cap_per_document(hits, k=3, max_per_doc=None)] == [
+        "a#1",
+        "a#2",
+        "a#3",
+    ]

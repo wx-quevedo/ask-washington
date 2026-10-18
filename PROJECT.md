@@ -73,6 +73,7 @@ Este proyecto es P18 dentro del plan de `C:\xampp\htdocs\enhanced-me`. El seguim
 | Correcciones de fuentes en `data/source_corrections.yaml`, aplicadas en la ingesta | Los CV y el LinkedIn viven fuera del repo y no se editan desde aquí; el archivo versionado reemplaza los pasajes incorrectos antes del hash (solo se reingiere lo afectado) y avisa cuando una corrección deja de coincidir porque ya se corrigió el original. |
 | Solo la cifra pública del detector (mAP50 0.96, detección, validación) | Los porcentajes internos de prueba (66 % a 93 %) y el IoU de caja 0.90 no se publican; la clasificación de especies sigue mejorando con más fotos validadas. |
 | Producción sin `http://localhost:4321` | Solo el portafolio (`https://washingtonquevedo.com` y `www`) puede incrustar el widget en producción; el origen de desarrollo vive en el `.env` local. |
+| Máximo 3 chunks por documento en la recuperación híbrida (`RETRIEVAL_MAX_PER_DOC`) | Un README largo ocupaba los 6 lugares y dejaba fuera el único chunk del CV con la cifra de Gazetrack. Medido en el set de evaluación: hit@3 1.000 y MRR 0.981 iguales, kw@6 de 0.963 a 0.988. Se descartó garantizar los 2 primeros de cada búsqueda porque bajaba el MRR a 0.929. |
 | El sitio nginx se instala solo la primera vez (o con `-ForceNginx`) | Después de certbot el archivo queda gestionado por certbot; sobrescribirlo en cada deploy quitaría el bloque HTTPS. |
 
 ## Plan de los 5 prompts
@@ -258,6 +259,34 @@ El repo ya es público, así que no se reescribe el historial: en un commit norm
 
 Quedan esas frases, a propósito, en `data/source_corrections.yaml` (el mecanismo necesita el texto literal para encontrarlo), en esta bitácora (P20c documenta qué estaba mal) y en `tests/test_ingestion.py` (frases de prueba del mecanismo). Las métricas guardadas en los JSON de evaluación no se recalcularon: son el registro de esas corridas.
 
+### 2026-10-18 - U9 fuentes corregidas en origen
+
+Los originales de `enhanced-me` se corrigieron (commit 62cc910): MKT Attack, la sesión de VR de Bagó y la cifra de Gazetrack.
+
+- Copiados a `data/sources/` los 2 CV y `LINKEDIN_EN.md` (PROFILE.md no se ingiere); el README de `focus` también había cambiado en GitHub y se volvió a descargar. Reingesta de esos 4 documentos; el índice queda en 133 chunks.
+- `data/source_corrections.yaml`: la ingesta marcó las 10 correcciones de P20c como sin coincidencia; se eliminaron todas (la lista queda vacía y el historial en la cabecera del archivo).
+- Índice verificado, 0 chunks con: "App Store", "Google Play", "66%", "93%", "IoU 0.90", "campaign builder", "31" junto a visores, "3.2°". Hechos nuevos presentes: 8 product managers, 12 campaigns, 30 Meta Quest, 3.97°, 2.51°.
+- Set de evaluación: q02 (sesión de VR de Bagó, 30 visores), q10 (plataforma para la sesión creativa, 8 product managers, 12 campaigns) y q20 (Gazetrack 3.97° y 2.51°) actualizadas.
+- Reportes históricos: 18 fragmentos más redactados como "[redacted 2026-10-18: outdated claim]" en los mismos 5 archivos de P20c·2 (31 visores, "campaign builder", y esas keywords en las corridas de evaluación); JSON válido.
+- Recuperación: máximo 3 chunks por documento en el modo híbrido (ver decisiones). Evaluación de recuperación (gratis), resultados en `reports/eval/retrieval_u9.*`:
+
+| Configuración | hit@3 | hit@6 | MRR | kw@6 | Sin keywords en el top 6 |
+|---|---:|---:|---:|---:|---|
+| hybrid, antes de U9 (P18·4) | 1.000 | 1.000 | 0.981 | 0.981 | q20 |
+| hybrid, fuentes nuevas, sin límite por documento | 1.000 | 1.000 | 0.981 | 0.963 | q20 |
+| **hybrid, fuentes nuevas, máximo 3 por documento** | **1.000** | **1.000** | **0.981** | **0.988** | q27 |
+
+- Preguntas reales (Claude Haiku 5.5; costo total USD 0.004):
+
+| Pregunta | Antes (índice viejo) | Después (fuentes nuevas + límite por documento) |
+|---|---|---|
+| What did Washington build for the product managers at Laboratorios Bagó? | "an AI campaign builder ... slogans, gimmicks and art ideas" | "an AI-assisted platform for the product managers' yearly creative event, called MKT Attack ... covering 8 product managers and 12 campaigns" |
+| ¿Cuántos visores de realidad virtual sincronizó en la sesión de VR para Bagó? | "Las fuentes no mencionan una sesión de VR para Bagó" | Igual: no encuentra el dato (ver limitación) |
+| How accurate is his Gazetrack webcam gaze tracker? | "do not report a final accuracy figure" | "3.97° overall and 2.51° in the central region on a 49-inch ultrawide with free head movement" |
+
+- Limitación conocida: la pregunta en español sobre los visores no recupera el chunk correcto (las fuentes están en inglés, el modelo de embeddings es solo de inglés y la búsqueda de texto completo no cruza idiomas). La misma pregunta en inglés responde "30 Meta Quest headsets". Opciones futuras: un modelo de embeddings multilingüe o traducir la consulta antes de buscar.
+- Pruebas: 80 en la suite normal (nueva: límite por documento).
+
 ### 2026-10-18 - P20d widget sin cabecera
 
 En modo widget (`?embed=1`) la cabecera "Ask Washington" queda oculta a la vista, porque el panel del portafolio ya muestra ese título; el `h1` sigue disponible para lectores de pantalla y el subtítulo y los perfiles quedan fuera. La página completa mantiene su cabecera. Pruebas de Playwright ajustadas (cabecera oculta y hilo desde el borde superior del panel en el widget; cabecera visible en la página completa) y capturas del widget actualizadas en `reports/screenshots/p20b/`.
@@ -299,7 +328,7 @@ Revisadas el 2026-10-18 en un Chromium sin sesión (Playwright), solo páginas p
 ## Próximos pasos
 
 - Washington: redeploy con `deploy.ps1` (sube el índice corregido y los orígenes de producción) y verificar el panel del portafolio en https://washingtonquevedo.com.
-- Corregir los originales de los CV y del LinkedIn (rutas en P20c) y borrar las entradas de `data/source_corrections.yaml` que la ingesta marque como ya no necesarias.
+- Recuperación en español sobre fuentes en inglés: probar un modelo de embeddings multilingüe (por ejemplo, bge-m3) o traducir la consulta, y medirlo con el set de evaluación.
 - Medir en el servidor el tamaño de la imagen, la RAM real del contenedor y la latencia de `/ask`.
 - Publicar el repo en GitHub cuando el despliegue esté verificado.
 - Volver a correr `scripts/eval.py` tras cada cambio y sumar preguntas reales de `qa_log`.

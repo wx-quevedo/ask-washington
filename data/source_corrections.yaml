@@ -11,64 +11,9 @@
 # A correction that no longer matches (because the original was fixed) is reported by
 # `scripts.ingest` and can then be deleted.
 #
-# 2026-10-18 (P20c): as of October 2026 the Buscapez mobile app is in development, not
-# published on the App Store or Google Play. Internal test percentages are not published;
-# the public detector figure is "mAP50 0.96 (detection, validation)" and species
-# classification keeps improving with more validated photos.
+# History:
+# - 2026-10-18 (P20c): 10 corrections about Buscapez (mobile app not published; only the
+#   public detector figure). Removed on 2026-10-18 (U9): the originals in enhanced-me were
+#   fixed (commit 62cc910) and the ingestion reported every entry as no longer matching.
 
-corrections:
-  # ---- CV, AI Engineer ----
-  - doc_id: cv-ai-engineer
-    find: "shipped on the web and on the App Store and Google Play."
-    replace: "available on the web; its mobile app is in development and not yet published."
-    reason: The mobile app is not published (October 2026).
-    original: C:\xampp\htdocs\enhanced-me\cv\CV_Washington_X_Quevedo_AI_Engineer_EN.pdf (Summary)
-  - doc_id: cv-ai-engineer
-    find: "mAP50 0.96, box IoU 0.90 on validation"
-    replace: "mAP50 0.96 (detection, validation)"
-    reason: Only the public detector figure is published.
-    original: C:\xampp\htdocs\enhanced-me\cv\CV_Washington_X_Quevedo_AI_Engineer_EN.pdf (Experience, Stanford University)
-  - doc_id: cv-ai-engineer
-    find: "distorted input images; adding letterboxing raised class accuracy from 66% to 93%."
-    replace: "distorted input images and fixed it with letterboxing; species classification keeps improving as more validated photos are added."
-    reason: Internal test percentages are not published.
-    original: C:\xampp\htdocs\enhanced-me\cv\CV_Washington_X_Quevedo_AI_Engineer_EN.pdf (Experience, Stanford University)
-  - doc_id: cv-ai-engineer
-    find: "Delivered the full platform (Laravel, React, React Native/Expo) and published the mobile app on the App Store and Google Play."
-    replace: "Delivered the web platform (Laravel, React); the mobile app (React Native/Expo) is in development and not yet published on the App Store or Google Play."
-    reason: The mobile app is not published (October 2026).
-    original: C:\xampp\htdocs\enhanced-me\cv\CV_Washington_X_Quevedo_AI_Engineer_EN.pdf (Experience, Stanford University)
-
-  # ---- CV, XR + AI Engineer ----
-  - doc_id: cv-xr-ai-engineer
-    find: "Diagnosed input distortion in the mobile runtime; letterboxing raised class accuracy from 66% to 93%."
-    replace: "Diagnosed input distortion in the mobile runtime and fixed it with letterboxing; species classification keeps improving as more validated photos are added."
-    reason: Internal test percentages are not published.
-    original: C:\xampp\htdocs\enhanced-me\cv\CV_Washington_X_Quevedo_XR_AI_Engineer_EN.pdf (Experience, Stanford University)
-  - doc_id: cv-xr-ai-engineer
-    find: "Delivered the web platform and published the mobile app on the App Store and Google Play."
-    replace: "Delivered the web platform; the mobile app is in development and not yet published on the App Store or Google Play."
-    reason: The mobile app is not published (October 2026).
-    original: C:\xampp\htdocs\enhanced-me\cv\CV_Washington_X_Quevedo_XR_AI_Engineer_EN.pdf (Experience, Stanford University)
-
-  # ---- LinkedIn ----
-  - doc_id: linkedin-profile
-    find: "The app is live on the App Store and Google Play."
-    replace: "The mobile app is in development and not yet published."
-    reason: The mobile app is not published (October 2026).
-    original: C:\xampp\htdocs\enhanced-me\linkedin\LINKEDIN_EN.md (section 2, About)
-  - doc_id: linkedin-profile
-    find: "mAP50 0.96, box IoU 0.90 on validation"
-    replace: "mAP50 0.96 (detection, validation)"
-    reason: Only the public detector figure is published.
-    original: C:\xampp\htdocs\enhanced-me\linkedin\LINKEDIN_EN.md (section 4, Experience, Stanford University)
-  - doc_id: linkedin-profile
-    find: "Found that the mobile runtime distorted input images; letterboxing raised class accuracy from 66% to 93%"
-    replace: "Found that the mobile runtime distorted input images and fixed it with letterboxing; species classification keeps improving as more validated photos are added"
-    reason: Internal test percentages are not published.
-    original: C:\xampp\htdocs\enhanced-me\linkedin\LINKEDIN_EN.md (section 4, Experience, Stanford University)
-  - doc_id: linkedin-profile
-    find: "Delivered the full platform (Laravel, React, React Native/Expo); app published on the App Store and Google Play"
-    replace: "Delivered the web platform (Laravel, React); the mobile app (React Native/Expo) is in development and not yet published"
-    reason: The mobile app is not published (October 2026).
-    original: C:\xampp\htdocs\enhanced-me\linkedin\LINKEDIN_EN.md (section 4, Experience, Stanford University)
+corrections: []

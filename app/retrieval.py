@@ -21,6 +21,9 @@ from app.db import connect
 RETRIEVAL_MODES = ("vector", "hybrid", "rerank", "rerank_light")
 LIGHT_RERANKER = "cross-encoder/ms-marco-MiniLM-L-6-v2"
 RRF_K = 60
+# At most this many chunks of one document in the hybrid top_k, so a long README cannot
+# push out the only chunk of another document that has the answer (U9).
+MAX_CHUNKS_PER_DOC = 3
 
 # Title and section are searchable too, so "plan-vivo-kit" matches the repo chunks.
 FTS_DOCUMENT = (
@@ -107,15 +110,31 @@ def fulltext_search(query: str, k: int) -> list[Hit]:
     return [Hit(node_id=r[0], text=r[1], metadata=r[2], score=float(r[3])) for r in rows]
 
 
-def hybrid_search(query: str, k: int, candidates: int) -> list[Hit]:
+def cap_per_document(hits: list[Hit], k: int, max_per_doc: int | None) -> list[Hit]:
+    """Keep the order, skip chunks of documents that already have max_per_doc, stop at k."""
+    if not max_per_doc:
+        return hits[:k]
+    kept, per_doc = [], {}
+    for hit in hits:
+        if per_doc.get(hit.doc_id, 0) >= max_per_doc:
+            continue
+        per_doc[hit.doc_id] = per_doc.get(hit.doc_id, 0) + 1
+        kept.append(hit)
+        if len(kept) == k:
+            break
+    return kept
+
+
+def hybrid_search(query: str, k: int, candidates: int, max_per_doc: int | None = None) -> list[Hit]:
     vector_hits = vector_search(query, candidates)
     text_hits = fulltext_search(query, candidates)
     by_id = {h.node_id: h for h in text_hits} | {h.node_id: h for h in vector_hits}
     fused = rrf_fuse([[h.node_id for h in vector_hits], [h.node_id for h in text_hits]])
-    return [
+    hits = [
         Hit(node_id=i, text=by_id[i].text, metadata=by_id[i].metadata, score=score)
-        for i, score in fused[:k]
+        for i, score in fused
     ]
+    return cap_per_document(hits, k, max_per_doc)
 
 
 @lru_cache
@@ -150,11 +169,12 @@ def retrieve(
     top_k: int = 6,
     candidates: int = 20,
     reranker_model: str = "BAAI/bge-reranker-base",
+    max_per_doc: int | None = MAX_CHUNKS_PER_DOC,
 ) -> list[Hit]:
     if mode == "vector":
         return vector_search(query, top_k)
     if mode == "hybrid":
-        return hybrid_search(query, top_k, candidates)
+        return hybrid_search(query, top_k, candidates, max_per_doc)
     if mode == "rerank":
         return rerank(query, hybrid_search(query, candidates, candidates), top_k, reranker_model)
     if mode == "rerank_light":
@@ -169,6 +189,7 @@ class ChunkRetriever(BaseRetriever):
     top_k: int = 6
     candidates: int = 20
     reranker_model: str = "BAAI/bge-reranker-base"
+    max_per_doc: int | None = MAX_CHUNKS_PER_DOC
 
     def _get_relevant_documents(
         self, query: str, *, run_manager: CallbackManagerForRetrieverRun
@@ -179,6 +200,7 @@ class ChunkRetriever(BaseRetriever):
             top_k=self.top_k,
             candidates=self.candidates,
             reranker_model=self.reranker_model,
+            max_per_doc=self.max_per_doc,
         )
         return [
             Document(

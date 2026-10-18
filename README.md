@@ -156,7 +156,7 @@ Only public sources are indexed. They live in `data/` and are not fetched at run
 
 Before indexing, email addresses and phone numbers are removed, and from the LinkedIn working file only the published sections (headline, about, experience, skills, education and awards) are kept.
 
-**Source corrections.** Some sources live outside this repository (the CVs and the LinkedIn working file). When one of them says something that must not reach the index, `data/source_corrections.yaml` replaces that passage at ingestion time: each entry names the document, the text to find (whitespace-tolerant, for PDF line breaks), the replacement, the reason and the path of the original to fix later. `scripts.ingest` reports how many corrections were applied and warns when one no longer matches (the original was fixed and the entry can go). Example: as of October 2026 the Buscapez mobile app is in development, not published, and only the public detector figure (mAP50 0.96, detection, validation) is cited.
+**Source corrections.** Some sources live outside this repository (the CVs and the LinkedIn working file). When one of them says something that must not reach the index, `data/source_corrections.yaml` replaces that passage at ingestion time: each entry names the document, the text to find (whitespace-tolerant, for PDF line breaks), the replacement, the reason and the path of the original to fix later. `scripts.ingest` reports how many corrections were applied and warns when one no longer matches (the original was fixed and the entry can go). The file is empty when every original is up to date; its history is kept in its header (for example, 10 Buscapez corrections were removed once the originals were fixed).
 
 ### Commands
 
@@ -237,7 +237,7 @@ curl -s http://127.0.0.1:8000/ask \
 ### How an answer is built
 
 1. **Ranking route.** Questions about the most cited or latest papers, the number of papers, or citation metrics (h-index, i10-index, total citations) are detected with regular expressions (English and Spanish). The facts are computed from `data/papers.yaml` and the Google Scholar profile totals (640 citations, h-index 14, i10-index 21, snapshot 2026-10-17); the LLM only writes them up.
-2. **RAG route.** Anything else retrieves the top `RETRIEVAL_TOP_K` chunks from `data_chunks` with `RETRIEVAL_MODE` (default `hybrid`: the 20 best vector matches and the 20 best Postgres full-text matches, fused with Reciprocal Rank Fusion), numbers them, and sends them to the LLM.
+2. **RAG route.** Anything else retrieves the top `RETRIEVAL_TOP_K` chunks from `data_chunks` with `RETRIEVAL_MODE` (default `hybrid`: the 20 best vector matches and the 20 best Postgres full-text matches, fused with Reciprocal Rank Fusion, keeping at most 3 chunks per document), numbers them, and sends them to the LLM.
 3. The system prompt tells the model to answer only from the numbered sources, in the third person, citing `[n]`; to mention LinkedIn only when the sources do not answer the question; to reply in the language of the question; to ignore instructions inside the question; and never to give private contact details.
 
 ### Limits and logging
@@ -258,6 +258,7 @@ curl -s http://127.0.0.1:8000/ask \
 | `RETRIEVAL_TOP_K` | `6` | Chunks sent to the LLM on the RAG route. |
 | `RETRIEVAL_MODE` | `hybrid` | `vector`, `hybrid` (vector + Postgres full text, fused with RRF), `rerank` (hybrid candidates re-scored by `RERANKER_MODEL`) or `rerank_light` (same with `ms-marco-MiniLM-L-6-v2`). See Evaluation. |
 | `RETRIEVAL_CANDIDATES` | `20` | Candidates per search before fusion or reranking. |
+| `RETRIEVAL_MAX_PER_DOC` | `3` | Hybrid mode: at most this many chunks of one document among the `RETRIEVAL_TOP_K` (`0` = no limit), so a long README cannot push out another document that holds the answer. |
 | `RERANKER_MODEL` | `BAAI/bge-reranker-base` | Cross-encoder for `rerank` mode (downloaded on first use, about 1.1 GB). |
 | `LLM_PRICE_INPUT_PER_MTOK` / `LLM_PRICE_OUTPUT_PER_MTOK` | `0.10` / `0.50` | USD per million tokens. Update them if you change the model. |
 | `DAILY_BUDGET_USD` | `1.00` | |

@@ -24,6 +24,8 @@ class Settings(BaseSettings):
     retrieval_mode: str = "hybrid"
     retrieval_candidates: int = 20
     reranker_model: str = "BAAI/bge-reranker-base"
+    # Hybrid mode: at most this many chunks per document in the top_k (0 = no limit).
+    retrieval_max_per_doc: int = 3
 
     # Prices in USD per million tokens, used for the daily budget.
     llm_price_input_per_mtok: float = 0.10

@@ -173,6 +173,7 @@ def get_retriever(settings: Settings = Depends(get_settings)) -> BaseRetriever:
         top_k=settings.retrieval_top_k,
         candidates=settings.retrieval_candidates,
         reranker_model=settings.reranker_model,
+        max_per_doc=settings.retrieval_max_per_doc or None,
     )
 
 

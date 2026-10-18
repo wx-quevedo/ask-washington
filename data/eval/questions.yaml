@@ -11,11 +11,11 @@ questions:
     notes: "cv-xr Skills and Selected XR Projects; linkedin Skills (HTC VIVE) and Inmersoft; cv-ai Skills/Inmersoft."
   - id: q02
     category: xr_vr
-    question: "Tell me about the synchronized multi-headset VR experience he built for a corporate wellness session."
-    expected_doc_ids: [cv-xr-ai-engineer, linkedin-profile]
-    expected_keywords: ["31", "Meta Quest", "8K"]
+    question: "Tell me about the group VR session he delivered on synchronized Meta Quest headsets for Laboratorios Bagó."
+    expected_doc_ids: [cv-ai-engineer, cv-xr-ai-engineer, linkedin-profile]
+    expected_keywords: ["30", "Meta Quest", "360"]
     should_refuse: false
-    notes: "cv-xr Selected XR Projects (31 headsets, 8K 360 meditation); linkedin Inmersoft bullet."
+    notes: "Bagó group VR session on 30 synchronized Meta Quest headsets (360 guided tour, meditation, interactive game) in both CVs and LinkedIn (updated 2026-10-18, U9)."
   - id: q03
     category: xr_vr
     question: "What did he work on at Sansar?"
@@ -68,11 +68,11 @@ questions:
     notes: "cv-ai Selected Projects: llama.cpp server with Gemma 26B QAT at 130-175 tokens/s on RTX 4090; llama.cpp also in cv-xr and linkedin."
   - id: q10
     category: ai_ml_production
-    question: "What did he build with LLMs at Laboratorios Bagó?"
+    question: "What did he build with AI for the product managers at Laboratorios Bagó?"
     expected_doc_ids: [cv-ai-engineer, cv-xr-ai-engineer, linkedin-profile]
-    expected_keywords: ["campaign builder", "MKT Attack"]
+    expected_keywords: ["MKT Attack", "8 product managers", "12 campaigns"]
     should_refuse: false
-    notes: "AI campaign builder for product managers, used at the MKT Attack creative event."
+    notes: "AI-assisted platform for the product managers' yearly creative event (MKT Attack): sessions, presenters, time left, product context; 8 product managers, 12 campaigns (updated 2026-10-18, U9)."
   # ---------------- papers_research ----------------
   - id: q11
     category: papers_research
@@ -142,9 +142,9 @@ questions:
     category: public_repos
     question: "What accuracy does his webcam gaze tracker achieve?"
     expected_doc_ids: [repo-focus, cv-ai-engineer]
-    expected_keywords: ["2.51", "ETH-XGaze"]
+    expected_keywords: ["3.97", "2.51"]
     should_refuse: false
-    notes: "repo-focus Results: center zone 105.3 px / 2.51 deg; cv-ai Gazetrack: 2.51 deg vs 3.2 deg for the ETH-XGaze reference."
+    notes: "cv-ai Gazetrack: 3.97 deg overall, 2.51 deg in the central region; repo-focus Results: center zone 105.3 px / 2.51 deg (updated 2026-10-18, U9)."
   # ---------------- career_companies ----------------
   - id: q21
     category: career_companies
